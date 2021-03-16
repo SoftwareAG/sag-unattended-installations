@@ -182,10 +182,10 @@ setupProductsAndFixes(){
                             RESULT_setupProductsAndFixes=6
                         else
                             d=`date +%y-%m-%dT%H.%M.%S_%3N`
-                            auditFolder=${3:-"/tmp/${d}"}
+                            auditFolder=${6:-"/tmp/${d}"}
                             mkdir -p ${auditFolder}
-                            installerLogFile=${4:-"${auditFolder}/script.log"}
-                            installerDebugLevel=${5:-"verbose"}
+                            installerLogFile=${8:-"${auditFolder}/script.log"}
+                            installerDebugLevel=${9:-"verbose"}
                             # Parameters - installProducts
                             # $1 installer binary file
                             # $2 script file for installer
@@ -236,3 +236,5 @@ setupProductsAndFixes(){
         fi
     fi
 }
+
+export SUIF_SETUP_FUNCTIONS_SOURCED=1
