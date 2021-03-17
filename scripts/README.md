@@ -8,7 +8,7 @@ The scripts themselves have minimal comments to keep them light.
 
 All files that require parameters are managed with gnu envsusbst. This means that all properties will be sourceable shell files.
 
-## Important notes:
+## Important notes
 
 It is the caller responsibility to:
 
