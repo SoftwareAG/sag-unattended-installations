@@ -8,8 +8,6 @@
 
 Collection of scripts to be "curled" during unattended cloud installations for Software AG products
 
-_WIP_
-
 ## Folders
 
 ### scripts
