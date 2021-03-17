@@ -25,7 +25,7 @@ export SUIF_AUDIT_BASE_FOLDER=${SUIF_AUDIT_BASE_FOLDER:-"/tmp/audit"}
 # for these the default values are hints
 export SUIF_INSTALL_TES_License_Path=${SUIF_INSTALL_TES_License_Path:-"/provide/path/to/terracotta-license.key"}
 export SUIF_INSTALL_imageFile=${SUIF_INSTALL_imageFile:-"/path/to/install/product.image.zip"}
-export SUIF_FIXES_imageFile=${SUIF_INSTALL_imageFile:-"/path/to/install/fixes.image.zip"}
+export SUIF_FIXES_imageFile=${SUIF_FIXES_imageFile:-"/path/to/install/fixes.image.zip"}
 export SUIF_INSTALLER_BIN=${SUIF_INSTALLER_BIN:-"/path/to/installer.bin"}
 export SUIF_SUM_BOOSTSTRAP_BIN=${SUIF_SUM_BOOSTSTRAP_BIN:-"/path/to/sum-boostrap.bin"}
 
