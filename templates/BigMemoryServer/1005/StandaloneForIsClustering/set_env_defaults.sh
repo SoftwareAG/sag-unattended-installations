@@ -6,6 +6,11 @@ if [ ! $SUIF_COMMON_SOURCED ]; then
     exit 1
 fi
 
+if [ ! $SUIF_SETUP_FUNCTIONS_SOURCED ]; then
+    echo "Source setup framework functions before the setup functions"
+    exit 2
+fi
+
 export SUIF_INSTALL_InstallDir=${SUIF_INSTALL_InstallDir:-"/opt/sag/products"}
 export SUIF_INSTALL_SPMHttpsPort=${SUIF_INSTALL_SPMHttpsPort:-"9083"}
 export SUIF_INSTALL_SPMHttpPort=${SUIF_INSTALL_SPMHttpPort:-"9082"}
