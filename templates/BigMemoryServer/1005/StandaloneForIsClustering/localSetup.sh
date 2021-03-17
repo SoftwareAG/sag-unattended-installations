@@ -86,10 +86,10 @@ fi
 mv "${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml" \
    "${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml.orig"
 
-envsubst < "./tc.config.template" > "${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml"
+envsubst < "./tc.config.template.xml" > "${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml"
 RESULT_TC_CONFIG_PREP=$?
 if [ "${RESULT_TC_CONFIG_PREP}" -ne 0 ]; then
     logE "Environment variable subtitutions for ./tc.config.template failed, code: ${RESULT_TC_CONFIG_PREP}"
     logFullEnv
-    return 101
+    exit 101
 fi

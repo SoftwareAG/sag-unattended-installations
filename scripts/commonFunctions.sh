@@ -21,7 +21,7 @@ init(){
     # For internal dependency checks, 
     export SUIF_COMMON_SOURCED=1
     export SUIF_DEBUG_ON=${SUIF_DEBUG_ON:-0}
-    export SUIF_LOG_TOKEN=${SUIF_LOG_TOKEN:-"SLS"}
+    export SUIF_LOG_TOKEN=${SUIF_LOG_TOKEN:-"SUIF"}
 
     # SUPPRESS_STDOUT means we will not produce STD OUT LINES
     # Normally we want the see the output when we prepare scripts, and suppress it when we finished
