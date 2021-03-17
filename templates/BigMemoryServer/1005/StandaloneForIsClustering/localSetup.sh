@@ -14,6 +14,7 @@ if [ ! $SUIF_COMMON_SOURCED ]; then
             exit 102
         fi
     fi
+    chmod u+x ./commonFunctions.sh
     . ./commonFunctions.sh
 fi
 
@@ -27,6 +28,7 @@ if [ ! $SUIF_SETUP_FUNCTIONS_SOURCED ]; then
             exit 102
         fi
     fi
+    chmod u+x ./setupFunctions.sh
     . ./setupFunctions.sh
 fi
 
@@ -38,6 +40,7 @@ if [ ! -f "./set_env_defaults.sh" ]; then
         exit 102
     fi
 fi
+chmod u+x ./set_env_defaults.sh
 . ./set_env_defaults.sh
 
 if [ ! -f "./tc.config.template.xml" ]; then
