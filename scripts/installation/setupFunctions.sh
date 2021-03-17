@@ -176,6 +176,7 @@ setupProductsAndFixes(){
             # $2 - script file for installer
             # $3 - OPIONAL: debugLevel for installer
             installProducts "${1}" "${2}"  "${installerDebugLevel}"
+            RESULT_installProducts=$?
             if [ ${RESULT_installProducts} -ne 0 ]; then
                 logE "installProducts failed, code ${RESULT_installProducts}!"
                 RESULT_setupProductsAndFixes=8
@@ -185,6 +186,7 @@ setupProductsAndFixes(){
                 # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
                 lSumHome=${5:-"/opt/sag/sum"}
                 bootstrapSum "${3}" "${lSumHome}"
+                RESULT_bootstrapSum=$?
                 if [ ${RESULT_bootstrapSum} -ne 0 ]; then
                     logE "Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
                     RESULT_setupProductsAndFixes=9
@@ -194,6 +196,7 @@ setupProductsAndFixes(){
                     # $2 - OTPIONAL SUM Home, default /opt/sag/sum
                     # $3 - OTPIONAL Products Home, default /opt/sag/products
                     patchInstallation "${4}" "${lSumHome}" "${lInstallDir}"
+                    RESULT_patchInstallation=$?
                     if [ ${RESULT_patchInstallation} -ne 0 ]; then
                         logE "Patch Installation failed, code ${RESULT_patchInstallation}!"
                         RESULT_setupProductsAndFixes=10
