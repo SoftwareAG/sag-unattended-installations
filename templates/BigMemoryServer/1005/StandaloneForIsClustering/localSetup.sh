@@ -97,3 +97,21 @@ if [ "${RESULT_TC_CONFIG_PREP}" -ne 0 ]; then
     logFullEnv
     exit 101
 fi
+
+logI "Generating default configuration for TMC"
+
+pushd . >/dev/null
+cd ~
+mkdir -p "./.tc/mgmt/client"
+mkdir -p "./.tc/mgmt/server"
+if [ -f "./.tc/mgmt/settings.ini" ]; then
+    logW "File ./.tc/mgmt/settings.ini already exists, overwriting..."
+    rm "./.tc/mgmt/settings.ini"
+fi
+
+touch "./.tc/mgmt/settings.ini"
+echo "#Template Settings, generated on "`date +%y-%m-%dT%H.%M.%S_%3N` >> "./.tc/mgmt/settings.ini"
+echo "authenticationEnabled=false" >> "./.tc/mgmt/settings.ini"
+echo "firstRun=false" >> "./.tc/mgmt/settings.ini"
+echo "" >> "./.tc/mgmt/settings.ini"
+popd >/dev/null
