@@ -39,31 +39,31 @@ logI(){
 }
 
 logW(){
-    if [ ! ${SUIF_SUPPRESS_STDOUT} ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -WARN - ${1}"; fi
+    if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -WARN - ${1}"; fi
     echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -WARN - ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
 }
 
 logE(){
-    if [ ! ${SUIF_SUPPRESS_STDOUT} ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR - ${1}"; fi
+    if [ ${SUIF_SUPPRESS_STDOUT} -eq 0]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR - ${1}"; fi
     echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
 }
 
 logD(){
-    if [ ${SUIF_DEBUG_ON} ]; then
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
         if [ ! ${SUIF_SUPPRESS_STDOUT} ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR - ${1}"; fi
         echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
 
 logEnv(){
-    if [ ${SUIF_DEBUG_ON} ]; then
+    if [ ${SUIF_DEBUG_ON} -ne 0  ]; then
         if [ ! ${SUIF_SUPPRESS_STDOUT} ]; then env | grep SUIF | sort; fi
         env | grep SUIF | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
 
 logFullEnv(){
-    if [ ${SUIF_DEBUG_ON} ]; then
+    if [ ${SUIF_DEBUG_ON} -ne 0  ]; then
         if [ ! ${SUIF_SUPPRESS_STDOUT} ]; then env | sort; fi
         env | grep SUIF | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi

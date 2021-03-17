@@ -104,15 +104,22 @@ patchInstallation(){
     controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
     RESULT_controlledExec=$?
     unset SUM_HOME PRODUCTS_HOME d
-    rm -f /dev/shm/fixes.wmscript.txt
     popd >/dev/null
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "Patch successful"
     else
         logE "Patch failed, code ${RESULT_controlledExec}"
+        if [ ${SUIF_DEBUG_ON} ]; then
+            logD "Recovering Update Manager logs for further investigations"
+            mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
+            cp -r ${SUM_HOME}/logs ${SUIF_AUDIT_SESSION_DIR}/
+            cp -r ${SUM_HOME}/UpdateManager/logs ${SUIF_AUDIT_SESSION_DIR}/UpdateManager/
+            cp /dev/shm/fixes.wmscript.txt ${SUIF_AUDIT_SESSION_DIR}/
+        fi
         return 2
     fi
+    rm -f /dev/shm/fixes.wmscript.txt
 }
 
 # Parameters - setupProductsAndFixes

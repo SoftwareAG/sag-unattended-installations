@@ -24,6 +24,7 @@ It is the caller responsibility to:
 |100|One of the expected files is missing from product installation|
 |101|Environment variables substitutions failed for a template file|
 |102|curl failed|
+|103|setupProductsAndFixes failed for local setup|
 
 ## Return codes
 

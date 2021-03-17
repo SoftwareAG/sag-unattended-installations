@@ -75,7 +75,11 @@ setupProductsAndFixes \
     "${SUIF_FIXES_imageFile}" \
     "${SUIF_SUM_HOME}" \
     "verbose" \
-    || exit $?
+RESULT_setupProductsAndFixes=$?
+if [ ${RESULT_setupProductsAndFixes} -ne 0 ]; then
+    logE "Local Setup failed, code ${RESULT_setupProductsAndFixes}"
+    exit 102
+fi 
 
 if [ ! -f "${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml" ]; then
     logE "Expected installation file ${SUIF_INSTALL_InstallDir}/Terracotta/server/wrapper/conf/tc-config.xml not found. Cannot continue."
