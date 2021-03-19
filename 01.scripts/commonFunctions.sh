@@ -159,7 +159,7 @@ huntForSuifFile(){
 # $1 - Setup template directory, relative to <repo_home>/02.templates/02.post-setup
 applyPostSetupTemplate(){
     logI "Applying post-setup template ${1}"
-    huntForSuifFile "/02.templates/02.post-setup/${1}" "apply.sh"
+    huntForSuifFile "02.templates/02.post-setup/${1}" "apply.sh"
     local RESULT_huntForSuifFile=$?
     if [ ${RESULT_huntForSuifFile} -ne 0 ]; then
         logE "File ${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh not found!"

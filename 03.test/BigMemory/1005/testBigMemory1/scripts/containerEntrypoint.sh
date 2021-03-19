@@ -2,27 +2,38 @@
 
 # This scripts sets up the local installation
 
+debug(){
+    echo "$1"
+    tail -f /dev/null
+}
+
 
 . "${SUIF_LOCAL_SCRIPTS_HOME}/set_env.sh" || exit 1
 
 if [ ! -d "${SUIF_INSTALL_InstallDir}/Terracotta" ]; then
     echo "Starting up for the first time, setting up ..."
 
+    # prepare local cache folders
     export SUIF_CACHE_HOME="/tmp/SUIF_CACHE"
     mkdir -p "${SUIF_CACHE_HOME}/01.scripts" || exit 2
-    export SUIF_HOME_URL=${SUIF_HOME_URL:-"https://raw.githubusercontent.com/Myhael76/sag-unattented-installations/main/"}
+
+    # source commonFunctions
+    export SUIF_HOME_URL=${SUIF_HOME_URL:-"https://raw.githubusercontent.com/Myhael76/sag-unattented-installations/main"}
     curl "${SUIF_HOME_URL}/01.scripts/commonFunctions.sh" -o "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" || exit 3
     chmod u+x "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
+    export SUIF_ONLINE_MODE=1 #tell the framework we work online
     . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" || exit 4
 
+    # sourse setup functions   
     logI "Sourcing setup functions..."
-    huntForSuifFile "01.scripts/installation/setupFunctions.sh" || exit 5
+    huntForSuifFile "01.scripts/installation" "setupFunctions.sh" || exit 5
     . "${SUIF_CACHE_HOME}/01.scripts/installation/setupFunctions.sh" || exit 6
 
     # Parameters - applySetupTemplate
     # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
     applySetupTemplate "BigMemoryServer/1005/default" || exit 4
 
+    # apply post-setup template
     applyPostSetupTemplate "BigMemoryServer/1005/StandaloneForIsClustering" || exit 5
 fi
 

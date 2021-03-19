@@ -49,6 +49,7 @@ services:
       - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       - SUIF_SUM_HOME=/app/sag/sumv11/
+      # even when not using SPM, installer / update manager are spinning it up nonetheless
       - SUIF_INSTALL_SPM_HTTPS_PORT=9082
       - SUIF_INSTALL_SPM_HTTP_PORT=9083
       # setup template specifics
@@ -62,7 +63,6 @@ services:
       - SUIF_POST_TC_SERVER_PORT=9510
       - SUIF_POST_TC_SERVER_GROUP_PORT=9540
       - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE=2048m
-      # even when not using SPM, installer / update manager are spiining it up nonetheless
     ports:
       # we only need TMC to check for the test result
       - "${H_SUIF_PORT_PREFIX}40:9889"
