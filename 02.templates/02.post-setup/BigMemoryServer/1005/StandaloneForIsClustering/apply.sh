@@ -3,8 +3,9 @@
 # This scripts apply the post-setup configuration for the current template
 
 # Dependency 1
-if [ ! ${SUIF_COMMON_SOURCED} ]; then
+if [ ${SUIF_COMMON_SOURCED} -ne 1 ]; then
     echo "SUIF commonFunctions.sh must be sourced before calling this"
+    env | grep SUIF
     exit 100
 fi
 

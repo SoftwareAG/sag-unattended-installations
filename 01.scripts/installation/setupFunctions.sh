@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Dependency
-if [ ! $SUIF_COMMON_SOURCED ]; then
+if [ ${SUIF_COMMON_SOURCED} -ne 1 ]; then
     echo "Source common framework functions before the setup functions"
     exit 1
 fi
