@@ -9,6 +9,14 @@ if [ ${SUIF_COMMON_SOURCED} -ne 1 ]; then
     exit 100
 fi
 
+if [ ! "`type -t huntForSuifFile`X" == "functionX" ]; then
+    echo "sourcing commonFunctions.sh again (lost?)"
+    if [ ! -f "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh" ]; then
+        echo "Panic, framework issue!"
+        exit 500
+    fi
+    . "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+fi
 thisFolder="02.templates/02.post-setup/BigMemoryServer/1005/StandaloneForIsClustering"
 
 huntForSuifFile "${thisFolder}" "setEnvDefaults.sh"
