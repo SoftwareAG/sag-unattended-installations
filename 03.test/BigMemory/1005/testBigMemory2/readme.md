@@ -2,12 +2,12 @@
 
 The purpose of this test is to validate the local setup scripts for BigMemory used for IS clustering with version 1005
 
-If not otherwise specified, the tested code is the one in the master branch, downloaded on demand using curl.
+The tested code is the one in the master branch, provided in "offline" mode.
 
 ## Prerequisites
 
 - Local docker and docker compose
-- Internet access, scripting assets are downloaded as needed
+- Full clone of the current repository
 - The following Software AG assets (cannot be downloaded publicly)
   - installer binary for linux 64 bit
   - update manager bootstrap for linux 64 bit
@@ -25,4 +25,4 @@ All prerequisite files are in mentioned in the file .env_example.
 4. Eventually change H_SUIF_PORT_PREFIX to avoid port conflicts
 5. Issue docker-compose up
    1. Note: first run will take some time as it installs everything necessary
-6. Open a browser to [TMC](http://localhost:47140) (or change port if you changed the port prefix)
+6. Open a browser to [TMC](http://localhost:47240) (or change port if you changed the port prefix)

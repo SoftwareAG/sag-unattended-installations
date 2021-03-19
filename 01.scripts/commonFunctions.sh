@@ -19,9 +19,24 @@ init(){
     newAuditSession || return $?
 
     # For internal dependency checks, 
-    export SUIF_COMMON_SOURCED=1
-    export SUIF_DEBUG_ON=${SUIF_DEBUG_ON:-0}
+    export SUIF_DEBUG_ON="${SUIF_DEBUG_ON:-0}"
     export SUIF_LOG_TOKEN=${SUIF_LOG_TOKEN:-"SUIF"}
+    # by default, we assume we are working connected to internet, put this on 0 for offline installations
+    export SUIF_ONLINE_MODE="${SUIF_ONLINE_MODE:-1}"
+
+    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+        # in offline mode the caller MUST provide the home folder for SUIF in the env var SUIF_HOME
+        if [ ! -f "${SUIF_HOME}/01.scripts/commonFunctions.sh" ]; then
+            return 104
+        else
+            export SUIF_CACHE_HOME="${SUIF_HOME}" # we already have everything
+        fi
+    else
+        # by default use master branch
+        export SUIF_HOME_URL=${SUIF_HOME_URL:-"https://raw.githubusercontent.com/Myhael76/sag-unattented-installations/main/"}
+        export SUIF_CACHE_HOME=${SUIF_CACHE_HOME:-"/tmp/suifCacheHome"}
+        mkdir -p "${SUIF_CACHE_HOME}"
+    fi
 
     # SUPPRESS_STDOUT means we will not produce STD OUT LINES
     # Normally we want the see the output when we prepare scripts, and suppress it when we finished
@@ -119,4 +134,51 @@ urldecode() {
     printf '%b' "${url_encoded//%/\\x}"
 }
 
+# Parameters - huntForSuifFile
+# $1 - relative Path to SUIF_HOME
+# $2 - filename
+huntForSuifFile(){
+    if [ ! -f "${SUIF_CACHE_HOME}/${1}/${2}" ]; then
+        if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+            logE "File ${SUIF_CACHE_HOME}/${1}/${2} not found!"
+            return 1 # File should exist, but it does not
+        fi
+        logI "File ${SUIF_CACHE_HOME}/${1}/${2} not found in local cache, attempting download"
+        mkdir -p "${SUIF_CACHE_HOME}/${1}"
+        curl "${SUIF_HOME_URL}/${1}/${2}" -o "${SUIF_CACHE_HOME}/${1}/${2}"
+        local RESULT_curl=$?
+        if [ ${RESULT_curl} -ne 0 ]; then
+            logE "curl failed, code ${RESULT_curl}"
+            return 2
+        fi
+        logI "File ${SUIF_CACHE_HOME}/${1}/${2} downloaded successfully"
+    fi
+}
+
+# Parameters - applyPostSetupTemplate
+# $1 - Setup template directory, relative to <repo_home>/02.templates/02.post-setup
+applyPostSetupTemplate(){
+    logI "Applying post-setup template ${1}"
+    huntForSuifFile "/02.templates/02.post-setup/${1}" "apply.sh"
+    local RESULT_huntForSuifFile=$?
+    if [ ${RESULT_huntForSuifFile} -ne 0 ]; then
+        logE "File ${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh not found!"
+        return 1
+    fi
+    chmod u+x "${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh"
+    local RESULT_chmod=$?
+    if [ ${RESULT_chmod} -ne 0 ]; then
+        logW "chmod command for apply.sh failed. This is not always a problem, continuing"
+    fi
+    logI "Calling apply.sh for template ${1}"
+    controlledExec "${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh" "PostSetupTemplateApply"
+    local RESULT_apply=$?
+    if [ ${RESULT_apply} -ne 0 ]; then 
+        logE "Application of post-setup template ${1} failed, code ${RESULT_apply}"
+        return 3
+    fi
+    logI "Post setup template ${1} applied successfully"
+}
+
+export SUIF_COMMON_SOURCED=1
 logI "SLS common framework functions initialized"

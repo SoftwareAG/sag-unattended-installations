@@ -25,6 +25,7 @@ It is the caller responsibility to:
 |101|Environment variables substitutions failed for a template file|
 |102|curl failed|
 |103|setupProductsAndFixes failed for local setup|
+|104|offline mode prerequisites not met|
 
 ## Return codes
 

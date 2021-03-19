@@ -6,6 +6,26 @@ if [ ! $SUIF_COMMON_SOURCED ]; then
     exit 1
 fi
 
+init(){
+    # Section 1 - the caller MUST provide
+    ## Framework - Install
+    export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/path/to/installer.bin"}
+    export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
+    ## Framework - Patch
+    export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/path/to/sum-boostrap.bin"}
+    export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
+
+    # Section 2 - the caller MAY provide
+    ## Framework - Install
+    export SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR:-"/opt/sag/products"}
+    export SUIF_INSTALL_SPM_HTTPS_PORT=${SUIF_INSTALL_SPM_HTTPS_PORT:-"9083"}
+    export SUIF_INSTALL_SPM_HTTP_PORT=${SUIF_INSTALL_SPM_HTTP_PORT:-"9082"}
+    ## Framework - Patch
+    export SUIF_SUM_HOME=${SUIF_SUM_HOME:-"/opt/sag/sum"}
+}
+
+init
+
 # Parameters - installProducts
 # $1 - installer binary file
 # $2 - script file for installer
@@ -52,18 +72,28 @@ installProducts(){
 
 # Parameters - bootstrapSum
 # $1 - Update Manager Boostrap file
-# $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+# $2 - Fixes image file, mandatory for offline mode
+# $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
 bootstrapSum(){
     if [ ! -f  ${1} ]; then
         logE "Software AG Update Manager boostrap file not found: ${1}"
         return 1
     fi
 
-    SUM_HOME=${2:-"/opt/sag/sum"}
+    if [ ! -f  ${2} ]; then
+        logE "Fixes image file not found: ${2}"
+        return 2
+    fi
+
+    SUM_HOME=${3:-"/opt/sag/sum"}
     d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
-    logI "Bootstrapping SUM from ${1} into ${SUM_HOME}..."
+    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+        bootstrapCmd="${bootstrapCmd=} -i ${2}"
+    fi
+    # note: everything is always offline excepti this, as it is not requiring empower credentials
+    logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
     controlledExec "${bootstrapCmd}" "${d}.sum-bootstrap"
     RESULT_controlledExec=$?
     unset SUM_HOME bootstrapCmd d
@@ -155,10 +185,10 @@ setupProductsAndFixes(){
     # Note: this is done twice for reusability reasons
     envsubst < "${2}" > /dev/shm/install.wmscript.tmp
 
-    lProductImageFile=$(grep imageFile /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+    local lProductImageFile=$(grep imageFile /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
 
     # note no inline returns from now as we need to clean locally allocated resources
-    if [ ! -f ${lProductImageFile} ]; then
+    if [ ! -f "${lProductImageFile}" ]; then
         logE "Product image file not found: ${lProductImageFile}"
         RESULT_setupProductsAndFixes=6
     else
@@ -182,7 +212,7 @@ setupProductsAndFixes(){
             # $1 - installer binary file
             # $2 - script file for installer
             # $3 - OPIONAL: debugLevel for installer
-            installProducts "${1}" "${2}"  "${installerDebugLevel}"
+            installProducts "${1}" "${2}" "${installerDebugLevel}"
             RESULT_installProducts=$?
             if [ ${RESULT_installProducts} -ne 0 ]; then
                 logE "installProducts failed, code ${RESULT_installProducts}!"
@@ -191,9 +221,9 @@ setupProductsAndFixes(){
                 # Parameters - bootstrapSum
                 # $1 - Update Manager Boostrap file
                 # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
-                lSumHome=${5:-"/opt/sag/sum"}
-                bootstrapSum "${3}" "${lSumHome}"
-                RESULT_bootstrapSum=$?
+                local lSumHome=${5:-"/opt/sag/sum"}
+                bootstrapSum "${3}" "${4}" "${lSumHome}"
+                local RESULT_bootstrapSum=$?
                 if [ ${RESULT_bootstrapSum} -ne 0 ]; then
                     logE "Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
                     RESULT_setupProductsAndFixes=9
@@ -220,6 +250,29 @@ setupProductsAndFixes(){
     fi
     unset lProductImageFile
     return ${RESULT_setupProductsAndFixes}
+}
+
+# Parameters - applySetupTemplate
+# $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
+applySetupTemplate(){
+    logI "Applying Setup Template ${1}"
+    huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript" || return 1
+    huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
+    logI "Sourcing variable values for template ${1}"
+    . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
+    logI "Setting up products and fixes for template ${1}"
+    setupProductsAndFixes \
+        "${SUIF_INSTALL_INSTALLER_BIN}" \
+        "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" \
+        "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" \
+        "${SUIF_PATCH_FIXES_IMAGE_FILE}" \
+        "${SUIF_SUM_HOME}" \
+        "verbose"
+    local RESULT_setupProductsAndFixes=$?
+    if [ ${RESULT_setupProductsAndFixes} -ne 0 ]; then
+        logE "Setup for template ${1} failed, code ${RESULT_setupProductsAndFixes}"
+        return 3
+    fi
 }
 
 export SUIF_SETUP_FUNCTIONS_SOURCED=1

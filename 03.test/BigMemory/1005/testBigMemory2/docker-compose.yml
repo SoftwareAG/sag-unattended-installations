@@ -1,0 +1,69 @@
+version: "3.5"
+
+volumes:
+  tsa1-install-home: {}
+  tsa1-sum-home: {}
+  tsa1-user-home: {}
+  tsa1-runs: {}
+  tsa1-tcdata: {}
+  tsa1-tclogs: {}
+  tsa1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  tsa-big-memory-test-2:
+    build: ./build
+    image: tsa-big-memory-test-2
+    container_name: tsa-big-memory-test-2-1
+    hostname: tsa-big-memory-test-2-1
+    # this test is about an offline installation
+    network_mode: none
+    volumes:
+      - tsa1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - tsa1-install-home:/app/sag/1005/BigM43/
+      - tsa1-user-home:/home/sag/
+      - tsa1-sum-home:/app/sag/sumv11/
+      - tsa1-runs:/app/audit/
+      - tsa1-tcdata:/mnt/tc/data/
+      - tsa1-tclogs:/mnt/tc/logs/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_TC_LICENSE_FILE}:/tmp/terracotta-license.key
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      - SUIF_ONLINE_MODE=0
+      - SUIF_HOME=/mnt/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/BigM43
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      - SUIF_INSTALL_SPM_HTTPS_PORT=9082
+      - SUIF_INSTALL_SPM_HTTP_PORT=9083
+      # setup template specifics
+      - SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE=/tmp/terracotta-license.key
+      # post setup template specifics
+      # The following are optional as the scripts have default values.
+      # However as a minimum the folders must match the volume mounts and the Dockerfile permissions
+      - SUIF_POST_TC_SERVER_LOGS_DIR=/mnt/tc/logs
+      - SUIF_POST_TC_SERVER_DATA_DIR=/mnt/tc/data
+      # Ports (TMC's ports are not considered yet, we have the defaults)
+      - SUIF_POST_TC_SERVER_PORT=9510
+      - SUIF_POST_TC_SERVER_GROUP_PORT=9540
+      - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE=2048m
+      # even when not using SPM, installer / update manager are spiining it up nonetheless
+    ports:
+      # we only need TMC to check for the test result
+      - "${H_SUIF_PORT_PREFIX}40:9889"
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
