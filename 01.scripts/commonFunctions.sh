@@ -171,7 +171,8 @@ applyPostSetupTemplate(){
         logW "chmod command for apply.sh failed. This is not always a problem, continuing"
     fi
     logI "Calling apply.sh for template ${1}"
-    controlledExec "${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh" "PostSetupTemplateApply"
+    #controlledExec "${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh" "PostSetupTemplateApply"
+    "${SUIF_CACHE_HOME}/02.templates/02.post-setup/${1}/apply.sh"
     local RESULT_apply=$?
     if [ ${RESULT_apply} -ne 0 ]; then 
         logE "Application of post-setup template ${1} failed, code ${RESULT_apply}"
