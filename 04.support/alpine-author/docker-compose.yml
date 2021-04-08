@@ -1,0 +1,11 @@
+version: "3.5"
+
+services:
+  sag-scripts-authoring-centos:
+    build: ./build
+    image: sag-scripts-authoring-alpine
+    container_name: alpine-author
+    hostname: alpine-author
+    volumes:
+      - ../../scripts/:/home/author/scripts/
+    entrypoint: tail -f /dev/null

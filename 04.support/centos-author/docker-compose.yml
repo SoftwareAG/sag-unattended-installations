@@ -1,0 +1,11 @@
+version: "3.5"
+
+services:
+  sag-scripts-authoring-centos:
+    build: ./build
+    image: sag-scripts-authoring-centos
+    container_name: centos-author
+    hostname: centos-author
+    volumes:
+      - ../../scripts/:/home/author/scripts/
+    entrypoint: tail -f /dev/null
