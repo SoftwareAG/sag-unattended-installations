@@ -1,0 +1,9 @@
+version: "3.5"
+
+services:
+  alpine-set-elk-kernel-params:
+    image: alpine
+    container_name: alpine-set-elk-kernel-params
+    privileged: true
+    volumes:
+      - ./scripts/:/root/scripts/
