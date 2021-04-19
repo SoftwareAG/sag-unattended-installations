@@ -161,7 +161,7 @@ patchInstallation(){
 # $6 - OPTIONAL: debugLevel for installer
 setupProductsAndFixes(){
 
-    if [ ! -f ${1} ]; then
+    if [ ! -f "${1}" ]; then
         logE "Installer binary file not found: ${1}"
         return 1
     fi
@@ -258,9 +258,12 @@ applySetupTemplate(){
     logI "Applying Setup Template ${1}"
     huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript" || return 1
     huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
-    logI "Sourcing variable values for template ${1}"
+    huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || return 4
+    logI "Sourcing variable values for template ${1} ..."
     . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
-    logI "Setting up products and fixes for template ${1}"
+    logI "Checking installation prerequisites for template ${1} ..."
+    "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
+    logI "Setting up products and fixes for template ${1} ..."
     setupProductsAndFixes \
         "${SUIF_INSTALL_INSTALLER_BIN}" \
         "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" \

@@ -1,0 +1,65 @@
+version: "3.5"
+
+volumes:
+  apigw1-install-home: {}
+  apigw1-sum-home: {}
+  apigw1-runs: {}
+  apigw1-archives: {}
+  apigw1-config: {}
+  apigw1-data: {}
+  apigw1-logs: {}
+  apigw1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  apigw1:
+    build: ./build
+    image: test-api-gw-1
+    container_name: test-api-gw-1-1
+    hostname: test-api-gw-1-1
+    ulimits:
+      nproc: 4096
+      nofile: 65536
+    volumes:
+      - apigw1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - apigw1-install-home:/app/sag/1005/ApiGwTest1/
+      - apigw1-sum-home:/app/sag/sumv11/
+      - apigw1-runs:/app/audit/
+      # volumes for the changing folders for ES ...
+      - apigw1-archives:/app/sag/1005/ApiGwTest1/InternalDataStore/archives/
+      - apigw1-config:/app/sag/1005/ApiGwTest1/InternalDataStore/config/
+      - apigw1-data:/app/sag/1005/ApiGwTest1/InternalDataStore/data/
+      - apigw1-logs:/app/sag/1005/ApiGwTest1/InternalDataStore/logs/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_API_GW_LICENSE_FILE}:/tmp/API_Gateway_license.xml
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      # this test runs online
+      - SUIF_ONLINE_MODE=0
+      - SUIF_HOME=/mnt/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # providing only the must haves + install dir
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/ApiGwTest1
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      # setup template specifics
+      - SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE=/tmp/API_Gateway_license.xml
+    ports:
+      - "${H_SUIF_PORT_PREFIX}20:9240"
+      - "${H_SUIF_PORT_PREFIX}73:9073"
+      - "${H_SUIF_PORT_PREFIX}72:9072"
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+    entrypoint: /mnt/scripts/containerEntrypoint.sh

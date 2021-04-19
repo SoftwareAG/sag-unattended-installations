@@ -65,7 +65,7 @@ logE(){
 
 logD(){
     if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
-        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR - ${1}"; fi
+        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR - ${1}"; fi
         echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
@@ -179,6 +179,24 @@ applyPostSetupTemplate(){
         return 3
     fi
     logI "Post setup template ${1} applied successfully"
+}
+
+logEnv4Debug(){
+    logD "Dumping environment variables for debugging purposes"
+
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then
+            env | grep SUIF_ | grep -v PASS | sort;
+        fi
+        echo env | grep SUIF_ | grep -v PASS | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+    fi
+}
+
+debugSuspend(){
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        logD "Suspending for debug"
+        tail -f /dev/null
+    fi
 }
 
 export SUIF_COMMON_SOURCED=1
