@@ -41,16 +41,16 @@ URL="${SUIF_APIGW_URL_PROTOCOL}://${SUIF_APIGW_DOMAINNAME}:${SUIF_APIGW_SERVICE_
 curl -u "Administrator:${SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD}" \
     "${URL}" \
     -H "Accept: application/json" \
-    -o "/dev/shm/admin1.json"
+    --silent -o "/dev/shm/admin1.json"
 
 if [ ! -f "/dev/shm/admin1.json" ]; then
     logE "Password declared as <<OLD>> is not currently valid. Checking if the new one is ..."
-    curl -u "Administrator:${SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD}" \
+    curl -u "Administrator:${SUIF_APIGW_NEW_ADMINISTRATOR_PASSWORD}" \
         "${URL}" \
         -H "Accept: application/json" \
-        -o "/dev/shm/admin1.json"
+        --silent -o "/dev/shm/admin1.json"
     if [ -f "/dev/shm/admin1.json" ]; then
-        logI "The new password is already effective, no need to change. Exitting."
+        logI "The new password is already effective, no need to change. Exiting."
         exit 0
     else
         logE "Neither of the provided passwords match the current one. Cannot continue."
@@ -79,14 +79,11 @@ curlCmd=${curlCmd}' -d "@/dev/shm/AdministratorUser.json"'
 curlCmd="${curlCmd} -w '%{http_code}'"
 curlCmd="${curlCmd} ${URL}"
 
-
-logI "command is ${curlCmd}"
-
 RESULT_change=`eval "${curlCmd}"`
 
 if [[ "${RESULT_change}" == "200" ]]; then
     logI "Password changed successfully"
 else
     logE "Error changing password, result is ${RESULT_change}"
-    exit 3
+    exit 4
 fi

@@ -41,7 +41,7 @@ logI "Checking if the given password is valid"
 curl -u "Administrator:${SUIF_APIGW_ADMINISTRATOR_PASSWORD}" \
     "${URL}" \
     -H "Accept: application/json" \
-    -o "/dev/shm/LB1.json"
+    --silent -o "/dev/shm/LB1.json"
 
 if [ ! -f "/dev/shm/LB1.json" ]; then
     logE "Given Administrator password is not currently valid. Cannot continue"
@@ -53,13 +53,11 @@ if [ ! -f "${SUIF_APIGW_LB_JSON_FILE}" ]; then
     exit 4
 fi
 
-huntForSuifFile "${thisFolder}" "AdministratorUser.json"
-
 envsubst \
     < "${SUIF_APIGW_LB_JSON_FILE}" \
     > "/dev/shm/LB.json"
 
-logI "Changing the password for Administrator"
+logI "Changing the load balancer configuration"
 # TODO: this is rather brutal, we should just replace the password in the received json, however this approach is not tested
 
 logI "URL to invoke ${URL}"
@@ -74,13 +72,11 @@ curlCmd=${curlCmd}' -d "@/dev/shm/LB.json"'
 curlCmd="${curlCmd} -w '%{http_code}'"
 curlCmd="${curlCmd} ${URL}"
 
-logI "command is ${curlCmd}"
-
 RESULT_change=`eval "${curlCmd}"`
 
 if [[ "${RESULT_change}" == "200" ]]; then
-    logI "Password changed successfully"
+    logI "Load balancer configuration changed successfully"
 else
-    logE "Error changing password, result is ${RESULT_change}"
-    exit 3
+    logE "Error changing load balancer configuration, result is ${RESULT_change}"
+    exit 5
 fi
