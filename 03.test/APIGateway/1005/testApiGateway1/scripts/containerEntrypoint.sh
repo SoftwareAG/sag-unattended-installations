@@ -90,7 +90,7 @@ logI "Waiting for API Gateway to come up"
 
 p=`portIsReachable localhost 9072`
 while [ $p -eq 0 ]; do
-    logI "Sleep 5..."
+    logI "Waiting for API Gateway to come up, sleeping 5..."
     sleep 5
     p=`portIsReachable localhost 9072`
 done
