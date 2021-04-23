@@ -198,5 +198,23 @@ debugSuspend(){
     fi
 }
 
+readSecretFromUser(){
+    # params
+    # $1 - message -> what to input
+    secret="0"
+    while [ "${secret}" == "0" ]; do
+        read -sp "Please input ${1}: " s1
+        echo ""
+        read -sp "Please input ${1} again: " s2
+        echo ""
+        if [ "${s1}" == "${s2}" ]; then
+            secret=${s1}
+        else
+            echo "Input do not match, retry"
+        fi
+        unset s1 s2
+    done
+}
+
 export SUIF_COMMON_SOURCED=1
 logI "SLS common framework functions initialized"
