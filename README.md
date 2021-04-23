@@ -7,6 +7,7 @@
       - [02.templates.01.setup](#02templates01setup)
       - [02.templates.02.post-setup](#02templates02post-setup)
     - [03.test](#03test)
+    - [04.support](#04support)
   - [Important notes](#important-notes)
 
 Collection of scripts to be "curled" during unattended cloud installations for Software AG products
@@ -28,6 +29,10 @@ Contains templates for installations which leverage the core functions in the sc
 ### 03.test
 
 Contain test harnesses for the scripts and templates
+
+### 04.support
+
+Utilities supporting the considered use cases, e.g. a kernel properties setter for Elasticsearch.
 
 ## Important notes
 

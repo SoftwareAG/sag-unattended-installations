@@ -1,0 +1,18 @@
+{
+    "preferredSettings": {
+        "wattKeys": {},
+        "extendedKeys": {}
+    },
+    "savedSettings": {
+        "wattKeys": {
+            "watt.server.thread.usage.limit": "1000",
+            "watt.debug2.facList": "",
+            "watt.debug2.logstringfile": "lib\\logstr.txt",
+            "watt.debug.level": "Info",
+            "watt.debug.layout": "legacy"
+        },
+        "extendedKeys": {
+            "apiKeyExpirationPeriod": ""
+        }
+    }
+}

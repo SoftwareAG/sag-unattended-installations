@@ -26,4 +26,5 @@ All prerequisite files are in mentioned in the file .env_example.
 5. Issue docker-compose up
    1. Note: first run will take some time as it installs everything necessary
 6. Open a browser to [API Gateway UI](http://localhost:48172) (or change port if you changed the port prefix)
-7. Yous should observe Administrator password has been changed to manage1 and LB are set appropriately
+7. You should observe Administrator password has been changed to manage1 and LB are set appropriately
+8. You should observe the fact extended settings were altered as per the provided json configuration.

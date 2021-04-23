@@ -24,7 +24,7 @@ fi
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh" || exit 4
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
 
-
+# If the installation is not present, do it now
 if [ ! -d "${SUIF_INSTALL_InstallDir}/IntegrationServer" ]; then
     echo "Starting up for the first time, setting up ..."
 
@@ -68,6 +68,7 @@ afterStartConfig(){
     logI "Applying afterStartConfig"
     applyPostSetupTemplate ApiGateway/1005/ChangeAdministratorPassword
     applyPostSetupTemplate ApiGateway/1005/SetLoadBalancerConfiguration
+    applyPostSetupTemplate ApiGateway/1005/PutSettings
 }
 
 trap "onInterrupt" SIGINT SIGTERM
