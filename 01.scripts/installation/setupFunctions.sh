@@ -49,19 +49,18 @@ installProducts(){
 
     logI "Installing according to script ${2}"
 
-    debugLevel=${3:-"verbose"}
-    d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local debugLevel=${3:-"verbose"}
+    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     # apply environment substitutions
     envsubst < "${2}" > /dev/shm/install.wmscript || return 5
 
-    installCmd="${1} -readScript /dev/shm/install.wmscript"
-    installCmd="${installCmd} -debugLvl ${debugLevel}"
-    installCmd="${installCmd} -debugFile "'"'"${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"'"'
+    local installCmd="${1} -readScript /dev/shm/install.wmscript"
+    local installCmd="${installCmd} -debugLvl ${debugLevel}"
+    local installCmd="${installCmd} -debugFile "'"'"${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"'"'
     controlledExec "${installCmd}" "${d}.product-install"
     
     RESULT_installProducts=$?
-    unset debugLevel d installCmd
     if [ ${RESULT_installProducts} -eq 0 ] ; then
         logI "Product installation successful"
     else
@@ -85,10 +84,10 @@ bootstrapSum(){
         return 2
     fi
 
-    SUM_HOME=${3:-"/opt/sag/sum"}
-    d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local SUM_HOME=${3:-"/opt/sag/sum"}
+    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
-    bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
+    local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
     if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
         bootstrapCmd="${bootstrapCmd=} -i ${2}"
     fi
@@ -96,7 +95,6 @@ bootstrapSum(){
     logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
     controlledExec "${bootstrapCmd}" "${d}.sum-bootstrap"
     RESULT_controlledExec=$?
-    unset SUM_HOME bootstrapCmd d
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "SUM Bootstrap successful"
@@ -116,9 +114,9 @@ patchInstallation(){
         return 1
     fi
 
-    SUM_HOME=${2:-"/opt/sag/sum"}
-    PRODUCTS_HOME=${3:-"/opt/sag/products"}
-    d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local SUM_HOME=${2:-"/opt/sag/sum"}
+    local PRODUCTS_HOME=${3:-"/opt/sag/products"}
+    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
 
@@ -133,7 +131,6 @@ patchInstallation(){
 
     controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
     RESULT_controlledExec=$?
-    unset SUM_HOME PRODUCTS_HOME d
     popd >/dev/null
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
@@ -192,7 +189,7 @@ setupProductsAndFixes(){
         logE "Product image file not found: ${lProductImageFile}"
         RESULT_setupProductsAndFixes=6
     else
-        lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+        local lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
         if [ -d ${lInstallDir} ]; then 
             logW "Install folder already present..."
             if [ $(ls -1A ${lInstallDir} | wc -l) -gt 0 ]; then 
@@ -205,8 +202,8 @@ setupProductsAndFixes(){
             logE "Cannot create the installation directory!"
             RESULT_setupProductsAndFixes=7
         else
-            d=`date +%y-%m-%dT%H.%M.%S_%3N`
-            installerDebugLevel=${6:-"verbose"}
+            local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+            local installerDebugLevel=${6:-"verbose"}
 
             # Parameters - installProducts
             # $1 - installer binary file
@@ -242,13 +239,9 @@ setupProductsAndFixes(){
                         RESULT_setupProductsAndFixes=0
                     fi
                 fi
-                unset lSumHome
             fi
-            unset d installerDebugLevel
         fi
-        unset lInstallDir
     fi
-    unset lProductImageFile
     return ${RESULT_setupProductsAndFixes}
 }
 
@@ -262,6 +255,7 @@ applySetupTemplate(){
     logI "Sourcing variable values for template ${1} ..."
     . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
     logI "Checking installation prerequisites for template ${1} ..."
+    chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" > /dev/null
     "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
     logI "Setting up products and fixes for template ${1} ..."
     setupProductsAndFixes \

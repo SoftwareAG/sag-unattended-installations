@@ -110,7 +110,7 @@ urlencode() {
     # urlencode <string>
     # usage A_ENC=$(urlencode ${A})
 
-    old_lc_collate=$LC_COLLATE
+    local old_lc_collate=$LC_COLLATE
     LC_COLLATE=C
 
     local length="${#1}"
@@ -123,7 +123,6 @@ urlencode() {
     done
 
     LC_COLLATE=$old_lc_collate
-    unset ld_lc_collate
 }
 
 urldecode() {
@@ -145,7 +144,7 @@ huntForSuifFile(){
         fi
         logI "File ${SUIF_CACHE_HOME}/${1}/${2} not found in local cache, attempting download"
         mkdir -p "${SUIF_CACHE_HOME}/${1}"
-        curl "${SUIF_HOME_URL}/${1}/${2}" -o "${SUIF_CACHE_HOME}/${1}/${2}"
+        curl "${SUIF_HOME_URL}/${1}/${2}" --silent -o "${SUIF_CACHE_HOME}/${1}/${2}"
         local RESULT_curl=$?
         if [ ${RESULT_curl} -ne 0 ]; then
             logE "curl failed, code ${RESULT_curl}"
