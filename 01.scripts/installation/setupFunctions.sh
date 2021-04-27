@@ -108,6 +108,8 @@ bootstrapSum(){
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 # $3 - OTPIONAL Products Home, default /opt/sag/products
+# $4 - OTPIONAL Engineering patch modifier (default "N")
+# $5 - OTPIONAL Engineering patch diagnoser key (default "5437713_PIE-68082_5", however user must provide if $4=Y)
 patchInstallation(){
     if [ ! -f ${1} ]; then
         logE "Fixes image file not found: ${1}"
@@ -117,14 +119,20 @@ patchInstallation(){
     local SUM_HOME=${2:-"/opt/sag/sum"}
     local PRODUCTS_HOME=${3:-"/opt/sag/products"}
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local epm=${4:-"N"}
 
     logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
 
-    echo "installSP=N" >/dev/shm/fixes.wmscript.txt
+    echo "installSP=${epm}" >/dev/shm/fixes.wmscript.txt
     echo "installDir=${PRODUCTS_HOME}" >>/dev/shm/fixes.wmscript.txt
     echo "selectedFixes=spro:all" >>/dev/shm/fixes.wmscript.txt
     echo "action=Install fixes from image" >> /dev/shm/fixes.wmscript.txt
     echo "imageFile=${1}" >> /dev/shm/fixes.wmscript.txt
+
+    if [ "${epm}" == "Y" ]; then
+        local dKey=${5:-"5437713_PIE-68082_5"}
+        echo "diagnoserKey=${dKey}" >> /dev/shm/fixes.wmscript.txt
+    fi
 
     pushd . >/dev/null
     cd "${SUM_HOME}/bin"
@@ -146,6 +154,12 @@ patchInstallation(){
         fi
         return 2
     fi
+
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        # if we are debugging, we want to see the generated script
+        cp /dev/shm/fixes.wmscript.txt "${SUIF_AUDIT_SESSION_DIR}/fixes.${d}.wmscript.txt"
+    fi
+    
     rm -f /dev/shm/fixes.wmscript.txt
 }
 
