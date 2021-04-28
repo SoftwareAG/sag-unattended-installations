@@ -1,14 +1,13 @@
 #!/bin/sh
 
 # Depends on framework commons
-if [ ! $SUIF_COMMON_SOURCED ]; then
-    echo "Source common framework functions before the setup functions"
-    exit 1
-fi
-
-if [ ! $SUIF_SETUP_FUNCTIONS_SOURCED ]; then
-    echo "Source setup framework functions before the setup functions"
-    exit 2
+if [ ! "`type -t urlencode`X" == "functionX" ]; then
+    echo "Need the function urlencode(), sourcing commonFunctions.sh "
+    if [ ! -f "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh" ]; then
+        echo "Panic, framework issue!"
+        exit 500
+    fi
+    . "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
 fi
 
 # Section 1 - the caller MUST provide

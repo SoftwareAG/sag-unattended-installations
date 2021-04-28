@@ -216,5 +216,4 @@ readSecretFromUser(){
     done
 }
 
-export SUIF_COMMON_SOURCED=1
 logI "SLS common framework functions initialized"

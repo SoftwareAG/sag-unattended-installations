@@ -3,12 +3,6 @@
 # This scripts apply the post-setup configuration for the current template
 
 # Dependency 1
-if [ ${SUIF_COMMON_SOURCED} -ne 1 ]; then
-    echo "SUIF commonFunctions.sh must be sourced before calling this"
-    env | grep SUIF
-    exit 100
-fi
-
 if [ ! "`type -t huntForSuifFile`X" == "functionX" ]; then
     echo "sourcing commonFunctions.sh again (lost?)"
     if [ ! -f "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh" ]; then

@@ -1,9 +1,13 @@
 #!/bin/sh
 
 # Dependency
-if [ ${SUIF_COMMON_SOURCED} -ne 1 ]; then
-    echo "Source common framework functions before the setup functions"
-    exit 1
+if [ ! "`type -t logI`X" == "functionX" ]; then
+    echo "sourcing commonFunctions.sh ..."
+    if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
+        echo "Panic, framework issue!"
+        exit 500
+    fi
+    . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
 fi
 
 init(){
@@ -104,6 +108,70 @@ bootstrapSum(){
     fi
 }
 
+# Parameters - removeDiagnoserPatch
+# $1 - Engineering patch diagnoser key (e.g. "5437713_PIE-68082_5")
+# $2 - Engineering patch ids list (expected one id only, but we never know e.g. "5437713_PIE-68082_1.0.0.0005-0001")
+# $3 - OTPIONAL SUM Home, default /opt/sag/sum
+# $4 - OTPIONAL Products Home, default /opt/sag/products
+removeDiagnoserPatch(){
+    local SUM_HOME=${3:-"/opt/sag/sum"}
+    if [ ! -f "${SUM_HOME}/bin/UpdateManagerCMD.sh" ]; then
+        logE "Update manager not found at the inficated location ${SUM_HOME}"
+        return 1
+    fi
+    local PRODUCTS_HOME=${4:-"/opt/sag/products"}
+    if [ ! -d "${PRODUCTS_HOME}" ]; then
+        logE "Product installation folder is missing: ${PRODUCTS_HOME}"
+        return 2
+    fi
+
+    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local tmpScriptFile="/dev/shm/fixes.${d}.wmscript.txt"
+
+    logI "Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
+
+    echo "installSP=Y" > "${tmpScriptFile}"
+    echo "diagnoserKey=${1}" >> "${tmpScriptFile}"
+    echo "installDir=${PRODUCTS_HOME}" >>"${tmpScriptFile}"
+    echo "selectedFixes=${2}" >>"${tmpScriptFile}"
+    echo "action=Uninstall fixes" >> "${tmpScriptFile}"
+
+    pushd . >/dev/null
+    cd "${SUM_HOME}/bin"
+
+    logI "Taking a snapshot of existing fixes"
+    controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforeSPRemoval"
+
+    controlledExec "./UpdateManagerCMD.sh -readScript "${tmpScriptFile}"" "${d}.SPFixRemoval"
+    RESULT_controlledExec=$?
+
+    logI "Taking a snapshot of fixes after the execution of SP removal"
+    controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterSPRemoval"
+
+    popd >/dev/null
+
+    if [ ${RESULT_controlledExec} -eq 0 ]; then
+        logI "Support patch removal was successful"
+    else
+        logE "Support patch removal failed, code ${RESULT_controlledExec}"
+        if [ ${SUIF_DEBUG_ON} ]; then
+            logD "Recovering Update Manager logs for further investigations"
+            mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
+            cp -r ${SUM_HOME}/logs ${SUIF_AUDIT_SESSION_DIR}/
+            cp -r ${SUM_HOME}/UpdateManager/logs ${SUIF_AUDIT_SESSION_DIR}/UpdateManager/
+            cp "${tmpScriptFile}" ${SUIF_AUDIT_SESSION_DIR}/
+        fi
+        return 3
+    fi
+
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        # if we are debugging, we want to see the generated script
+        cp "${tmpScriptFile}" "${SUIF_AUDIT_SESSION_DIR}/fixes.D.${d}.wmscript.txt"
+    fi
+
+    rm -f "${tmpScriptFile}"
+}
+
 # Parameters - patchInstallation
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
@@ -137,8 +205,15 @@ patchInstallation(){
     pushd . >/dev/null
     cd "${SUM_HOME}/bin"
 
+    logI "Taking a snapshot of existing fixes"
+    controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
+
     controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
     RESULT_controlledExec=$?
+
+    logI "Taking a snapshot of fixes after the execution of SP removal"
+    controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterPatching"
+
     popd >/dev/null
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
@@ -286,4 +361,4 @@ applySetupTemplate(){
     fi
 }
 
-export SUIF_SETUP_FUNCTIONS_SOURCED=1
+logI "Setup Functions sourced"

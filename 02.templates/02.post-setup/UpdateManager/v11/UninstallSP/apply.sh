@@ -11,7 +11,6 @@ if [ ! "`type -t huntForSuifFile`X" == "functionX" ]; then
 fi
 
 # Dependency 2
-
 if [ ! "`type -t patchInstallation`X" == "functionX" ]; then
     huntForSuifFile "01.scripts/installation" "setupFunctions.sh"
 
@@ -24,7 +23,8 @@ if [ ! "`type -t patchInstallation`X" == "functionX" ]; then
     . "$SUIF_CACHE_HOME/01.scripts/installation/setupFunctions.sh"
 fi
 
-thisFolder="02.templates/02.post-setup/UpdateManager/v11/PatchInstallation/default"
+
+thisFolder="02.templates/02.post-setup/UpdateManager/v11/UninstallSP"
 
 huntForSuifFile "${thisFolder}" "setEnvDefaults.sh"
 
@@ -35,8 +35,9 @@ fi
 
 . "${SUIF_CACHE_HOME}/${thisFolder}/setEnvDefaults.sh"
 
-# Parameters - patchInstallation
-# $1 - Fixes Image (this will allways happen offline in this framework)
-# $2 - OTPIONAL SUM Home, default /opt/sag/sum
-# $3 - OTPIONAL Products Home, default /opt/sag/products
-patchInstallation "${SUIF_PATCH_FIXES_IMAGE_FILE}" "${SUIF_SUM_HOME}" "${SUIF_INSTALL_INSTALL_DIR}" "${SUIF_ENG_PATCH_MODE}" "${SUIF_ENG_PATCH_DIAGS_KEY}"
+# Parameters - removeDiagnoserPatch
+# $1 - Engineering patch diagnoser key (e.g. "5437713_PIE-68082_5")
+# $2 - Engineering patch ids list (expected one id only, but we never know e.g. "5437713_PIE-68082_1.0.0.0005-0001")
+# $3 - OTPIONAL SUM Home, default /opt/sag/sum
+# $4 - OTPIONAL Products Home, default /opt/sag/products
+removeDiagnoserPatch "${SUIF_ENG_PATCH_DIAGS_KEY}" "${SUIF_ENG_PATCH_FIX_ID_LIST}" "${SUIF_SUM_HOME}" "${SUIF_INSTALL_INSTALL_DIR}"
