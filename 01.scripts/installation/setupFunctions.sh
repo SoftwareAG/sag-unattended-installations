@@ -83,9 +83,11 @@ bootstrapSum(){
         return 1
     fi
 
-    if [ ! -f  ${2} ]; then
-        logE "Fixes image file not found: ${2}"
-        return 2
+    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+        if [ ! -f  ${2} ]; then
+            logE "Fixes image file not found: ${2}"
+            return 2
+        fi
     fi
 
     local SUM_HOME=${3:-"/opt/sag/sum"}
@@ -94,9 +96,11 @@ bootstrapSum(){
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
     if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
         bootstrapCmd="${bootstrapCmd=} -i ${2}"
+        # note: everything is always offline except this, as it is not requiring empower credentials
+        logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
+    else
+        logI "Bootstrapping SUM from ${1} into ${SUM_HOME} using ONLINE mode"
     fi
-    # note: everything is always offline excepti this, as it is not requiring empower credentials
-    logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
     controlledExec "${bootstrapCmd}" "${d}.sum-bootstrap"
     RESULT_controlledExec=$?
 
