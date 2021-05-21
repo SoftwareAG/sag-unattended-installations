@@ -1,0 +1,47 @@
+version: "3.5"
+
+volumes:
+  sum-home: {}
+  user-home: {}
+  runs: {}
+  temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  img-gen:
+    build: ./build
+    image: suif-images-generator
+    container_name: suif-images-generator
+    hostname: suif-images-generator
+    volumes:
+      - temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - user-home:/home/sag/
+      - sum-home:/app/sag/sum/
+      - runs:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ${H_SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/:/mnt/products-out-dir/
+      - ${H_SUIF_FIX_IMAGES_OUTPUT_DIRECTORY}/:/mnt/fixes-out-dir/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=0
+      # this test runs online, it must be able to download the fixes
+      - SUIF_ONLINE_MODE=1
+      - SUIF_HOME=/tmp/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_SUM_HOME=/app/sag/sum/
+      - SUIF_FIXES_DATE_TAG=${H_SUIF_FIXES_DATE_TAG}
+      - SUIF_PLATFORM_STRING=${H_SUIF_PLATFORM_STRING}
+      - SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY=/mnt/products-out-dir
+      - SUIF_FIX_IMAGES_OUTPUT_DIRECTORY=/mnt/fixes-out-dir
+      # credentials
+      - SUIF_EMPOWER_USER=${H_SUIF_EMPOWER_USER}
+      - SUIF_EMPOWER_PASSWORD=${H_SUIF_EMPOWER_PASSWORD}
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
