@@ -4,8 +4,6 @@ param (${file}, ${outFile}, ${sumVersionString}="10.5.0", ${sumPlatformString}="
 
 ${lProductsCsv} = (Select-String -path "${file}" -pattern "InstallProducts=(.*)").Matches[0].Groups[1].Value
 
-Write-Output "Products csv: ${lProductsCsv}"
-
 if ( -not ${lProductsCsv} ){
     Write-Error "No product to install found in file ${file}, exiting"
     exit 1

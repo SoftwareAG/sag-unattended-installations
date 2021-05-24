@@ -17,6 +17,7 @@ export SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR:-"/app/audit"}
 
 export SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY=${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY:-"/tmp/images/products"}
 export SUIF_FIX_IMAGES_OUTPUT_DIRECTORY=${SUIF_FIX_IMAGES_OUTPUT_DIRECTORY:-"/tmp/images/fixes"}
+export SUIF_FIXES_DATE_TAG=${SUIF_FIXES_DATE_TAG:-"latest"}
 
 export SUIF_EMPOWER_USER=${SUIF_EMPOWER_USER:-"Must provide a valid empower user here!"}
 export SUIF_EMPOWER_PASSWORD=${SUIF_EMPOWER_PASSWORD:-"Must provide a valid empower user password here!"}
