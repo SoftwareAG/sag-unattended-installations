@@ -30,3 +30,7 @@ It is the caller responsibility to:
 ## Return codes
 
 By convention all functions must return 0 if successful. Return codes then will be specific to each function
+
+## Notes
+
+For the moment everything works with version 10.5 and Update Manager v11. The scripts are also follwoing a "use before reuse" principle, reusability with other versions will be evaluated when the need manifests.

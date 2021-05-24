@@ -10,8 +10,12 @@ ENV SUIF_USER_HOME=/home/sag \
     SUIF_AUDIT_BASE_DIR=/app/audit
 
 RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_GPG_KEYS_FILE_1}" ; fi &&\ 
+    curl -sSL https://packages.microsoft.com/keys/microsoft.asc > ./microsoft.asc &&\
+    rpm --import ./microsoft.asc &&\
+    curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo &&\
     yum -y update &&\
-    yum -y install which less gettext telnet git &&\
+    yum -y install which less gettext telnet git powershell &&\
+    yum -y update &&\
     yum clean all &&\
     rm -rf /var/cache/yum &&\
     groupadd -g 1803 saggroup &&\
