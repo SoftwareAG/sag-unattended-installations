@@ -18,21 +18,13 @@ onKill(){
 trap "onInterrupt" SIGINT SIGTERM
 trap "onKill" SIGKILL
 
-if [ -d "${SUIF_USER_HOME}/SUIF" ];then
-    echo "SUIF already cloned previously, pulling the latest version"
-    cd "${SUIF_USER_HOME}/SUIF/sag-unattented-installations"
-    git pull
-else
-    echo "Cloning SUIF..."
-    mkdir "${SUIF_USER_HOME}/SUIF"
-    cd "${SUIF_USER_HOME}/SUIF"
-    git clone https://github.com/Myhael76/sag-unattented-installations.git
+if [ ! -d "${SUIF_HOME}/02.templates/01.setup" ];then
+    echo "SUIF not mounted, cannot continue"
+    exit 3
 fi
 
-
-find . -type f -name *.sh -exec chmod u+x "{}" \;
-. "${SUIF_USER_HOME}/SUIF/sag-unattented-installations/01.scripts/commonFunctions.sh"
-. "${SUIF_USER_HOME}/SUIF/sag-unattented-installations/01.scripts/installation/setupFunctions.sh"
+. "${SUIF_HOME}/01.scripts/commonFunctions.sh"
+. "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh"
 
 
 if [ -d "${SUIF_SUM_HOME}/bin" ];then
@@ -56,7 +48,7 @@ else
 fi
 
 logI "Inspecting SUIF for setup templates"
-cd "${SUIF_USER_HOME}/SUIF/sag-unattented-installations/02.templates/01.setup"
+cd "${SUIF_HOME}/02.templates/01.setup"
 lTemplateFiles=(`find . -type f -name template.wmscript`)
 
 for wmsfile in "${lTemplateFiles[@]}"
