@@ -15,7 +15,7 @@ export SUIF_CACHE_HOME=${SUIF_CACHE_HOME:-"/tmp/SUIF_CACHE"}
 export SUIF_INSTALL_InstallDir=${SUIF_INSTALL_InstallDir-:"/opt/sag/products"}
 # 0 means DB was not created, thus create now
 export SUIF_DATABASE_ALREADY_CREATED=${SUIF_DATABASE_ALREADY_CREATED:-"0"}
-export SUIF_SQLSERVER_PORT=${SUIF_SQLSERVER_PORT-:"1433"}
+export SUIF_SQLSERVER_PORT=${SUIF_SQLSERVER_PORT:-"1433"}
 # By default create all components
 export SUIF_DBC_COMPONENT_NAME=${SUIF_DBC_COMPONENT_NAME:-"All"}
 # By default create the latest version
