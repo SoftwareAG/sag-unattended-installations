@@ -91,7 +91,8 @@ logFullEnv(){
 controlledExec(){
     # Param $1 - command to execute in a controlled manner
     # Param $2 - tag for trace files
-    eval "${1}" >"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${2}.out" 2>"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${2}.err"
+    local lCrtEpoch=`date +%s`
+    eval "${1}" >"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.out" 2>"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.err"
     return $?
 }
 

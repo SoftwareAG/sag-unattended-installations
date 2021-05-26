@@ -91,6 +91,12 @@ bootstrapSum(){
     fi
 
     local SUM_HOME=${3:-"/opt/sag/sum"}
+
+    if [ -d "${SUM_HOME}/UpdateManager" ]; then
+        logI "Update manager already present, skipping bootstrap..."
+        return 0
+    fi
+
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
@@ -108,7 +114,7 @@ bootstrapSum(){
         logI "SUM Bootstrap successful"
     else
         logE "SUM Boostrap failed, code ${RESULT_controlledExec}"
-        return 2
+        return 3
     fi
 }
 
