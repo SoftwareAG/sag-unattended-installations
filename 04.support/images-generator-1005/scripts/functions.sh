@@ -76,6 +76,12 @@ generateProductsImageFromTemplate(){
 
             local lPlatformString=${2:-LNXAMD64}
 
+            # TODO: streamline
+            local lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+            if [[ ${1} == *"/1005/"* ]]; then
+                lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
+            fi
+
             mkdir -p "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/${1}"
             echo "###Generated" > "${lPermanentScriptFile}"
             echo "LicenseAgree=Accept" >> "${lPermanentScriptFile}"
@@ -84,6 +90,7 @@ generateProductsImageFromTemplate(){
                 grep "InstallProducts" >> "${lPermanentScriptFile}"
             echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
             echo "imageFile=${lProductsImageFile}" >> "${lPermanentScriptFile}"
+            echo "ServerURL=${lSdcServerUrl}" >> "${lPermanentScriptFile}"
 
             logI "Permanent product image creation script file created"
         fi
