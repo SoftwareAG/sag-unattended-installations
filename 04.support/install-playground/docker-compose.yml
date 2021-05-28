@@ -1,0 +1,49 @@
+version: "3.5"
+
+volumes:
+  ipg1-install-home: {}
+  ipg1-sum-home: {}
+  ipg1-user-home: {}
+  ipg1-runs: {}
+  ipg1-tcdata: {}
+  ipg1-tclogs: {}
+  ipg1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  ipg1:
+    build: ./build
+    image: install-playground-1
+    container_name: install-playground-1-1
+    hostname: install-playground-1-1
+    volumes:
+      - ipg1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - ipg1-install-home:/app/sag/1005/products/
+      - ipg1-user-home:/home/sag/
+      - ipg1-sum-home:/app/sag/sumv11/
+      - ipg1-runs:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      - ../../:/mnt/SUIF_HOME/
+      # These must be provided, they are prerequisites
+      - ${H_LICENSES_FOLDER}/:/mnt/sag-licenses/
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ${H_OUTPUT_FOLDER}/:/mnt/output/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      # this test runs online
+      - SUIF_ONLINE_MODE=1
+      - SUIF_HOME=/mnt/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/products
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      # even when not using SPM, installer / update manager are spinning it up nonetheless
+    entrypoint: /mnt/scripts/containerEntrypoint.sh

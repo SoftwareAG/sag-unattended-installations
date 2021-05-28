@@ -1,0 +1,72 @@
+version: "3.8"
+
+volumes:
+  mftgw1-install-home: {}
+  mftgw1-sum-home: {}
+  mftgw1-runs: {}
+  mftgw1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+networks:
+  n1:
+    external: false
+services:
+  mftgw1:
+    build: ./build
+    image: test-mft-gw-1
+    container_name: test-mft-gw-1-1
+    hostname: test-mft-gw-1-1
+    networks:
+      n1:
+        aliases:
+          - mftgw1
+    #depends_on:
+    #  - "sql-server1"
+    volumes:
+      - mftgw1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - mftgw1-install-home:/app/sag/1005/mftGWTest1/
+      - mftgw1-sum-home:/app/sag/sumv11/
+      - mftgw1-runs:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_MFTSERVER_LICENSE_FILE}:/tmp/MFT_GW_license.xml
+      - ${H_IS_LICENSE_FILE}:/tmp/IS_license.xml
+      #- ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      #- ${H_SUIF_DBC4AT_INSTALL_IMAGE_FILE}:/tmp/dbc4at.product.image.zip
+      - ${H_SUIF_AT_INSTALL_IMAGE_FILE}:/tmp/at.product.image.zip
+      #- ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      #- ${H_SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE}:/tmp/dbc4at.fixes.image.zip
+      - ${H_SUIF_AT_PATCH_FIXES_IMAGE_FILE}:/tmp/at.fixes.image.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      # SUIF provided - this exact branch
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      # this test runs offline
+      - SUIF_ONLINE_MODE=0
+      - SUIF_HOME=/mnt/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # providing only the must haves + install dir
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/mftgwTest1
+      #- SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      #- SUIF_DBC4AT_INSTALL_IMAGE_FILE=/tmp/dbc4at.product.image.zip
+      - SUIF_AT_INSTALL_IMAGE_FILE=/tmp/at.product.image.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      #- SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      #- SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE=/tmp/dbc4at.fixes.image.zip
+      - SUIF_AT_PATCH_FIXES_IMAGE_FILE=/tmp/at.fixes.image.zip
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      # setup template specifics
+      - SUIF_SETUP_TEMPLATE_MFTSERVER_LICENSE_FILE=/tmp/MFT_GW_license.xml
+      - SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE=/tmp/IS_license.xml
+    ports:
+      - "${H_SUIF_PORT_PREFIX}20:9240"
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+      - "${H_SUIF_PORT_PREFIX}85:8500"
+    entrypoint: /mnt/scripts/containerEntrypoint.sh

@@ -23,7 +23,7 @@ generateFixesImageFromTemplate(){
             logI "Inventory file ${lPermanentInventoryFile} already exists, skipping creation."
         else
             logI "Inventory file ${lPermanentInventoryFile} does not exists, creating now."
-            pwsh "${SUIF_USER_HOME}/SUIF/sag-unattented-installations/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
+            pwsh "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
                 -file "${wmsfile}" -outfile "${lPermanentInventoryFile}" \
                 -sumPlatformString "${lPlatformString}"
         fi
@@ -76,14 +76,21 @@ generateProductsImageFromTemplate(){
 
             local lPlatformString=${2:-LNXAMD64}
 
+            # TODO: streamline
+            local lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+            if [[ ${1} == *"/1005/"* ]]; then
+                lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
+            fi
+
             mkdir -p "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/${1}"
             echo "###Generated" > "${lPermanentScriptFile}"
             echo "LicenseAgree=Accept" >> "${lPermanentScriptFile}"
             echo "InstallLocProducts=" >> "${lPermanentScriptFile}"
-            cat "${SUIF_USER_HOME}/SUIF/sag-unattented-installations/02.templates/01.setup/${1}/template.wmscript" | \
+            cat "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" | \
                 grep "InstallProducts" >> "${lPermanentScriptFile}"
             echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
             echo "imageFile=${lProductsImageFile}" >> "${lPermanentScriptFile}"
+            echo "ServerURL=${lSdcServerUrl}" >> "${lPermanentScriptFile}"
 
             logI "Permanent product image creation script file created"
         fi
@@ -94,7 +101,7 @@ generateProductsImageFromTemplate(){
         cp "${lPermanentScriptFile}" "${lVolatileScriptFile}"
         echo "Username=${SUIF_EMPOWER_USER}" >> "${lVolatileScriptFile}"
         echo "Password=${SUIF_EMPOWER_PASSWORD}" >> "${lVolatileScriptFile}"
-        logI "Volatile script created..."
+        logI "Volatile script created."
         ## TODO: check if error management enforcement is needed: what if the grep produced nothing?
 
         ## TODO: not space safe, but it shouldn't matter for now

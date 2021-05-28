@@ -91,6 +91,12 @@ bootstrapSum(){
     fi
 
     local SUM_HOME=${3:-"/opt/sag/sum"}
+
+    if [ -d "${SUM_HOME}/UpdateManager" ]; then
+        logI "Update manager already present, skipping bootstrap..."
+        return 0
+    fi
+
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
@@ -108,7 +114,7 @@ bootstrapSum(){
         logI "SUM Bootstrap successful"
     else
         logE "SUM Boostrap failed, code ${RESULT_controlledExec}"
-        return 2
+        return 3
     fi
 }
 
@@ -132,8 +138,6 @@ removeDiagnoserPatch(){
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
     local tmpScriptFile="/dev/shm/fixes.${d}.wmscript.txt"
 
-    logI "Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
-
     echo "installSP=Y" > "${tmpScriptFile}"
     echo "diagnoserKey=${1}" >> "${tmpScriptFile}"
     echo "installDir=${PRODUCTS_HOME}" >>"${tmpScriptFile}"
@@ -143,13 +147,14 @@ removeDiagnoserPatch(){
     pushd . >/dev/null
     cd "${SUM_HOME}/bin"
 
-    logI "Taking a snapshot of existing fixes"
+    logI "Taking a snapshot of existing fixes..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforeSPRemoval"
 
+    logI "Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
     controlledExec "./UpdateManagerCMD.sh -readScript "${tmpScriptFile}"" "${d}.SPFixRemoval"
     RESULT_controlledExec=$?
 
-    logI "Taking a snapshot of fixes after the execution of SP removal"
+    logI "Taking a snapshot of fixes after the execution of SP removal..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterSPRemoval"
 
     popd >/dev/null
@@ -193,8 +198,6 @@ patchInstallation(){
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
     local epm=${4:-"N"}
 
-    logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
-
     echo "installSP=${epm}" >/dev/shm/fixes.wmscript.txt
     echo "installDir=${PRODUCTS_HOME}" >>/dev/shm/fixes.wmscript.txt
     echo "selectedFixes=spro:all" >>/dev/shm/fixes.wmscript.txt
@@ -209,13 +212,15 @@ patchInstallation(){
     pushd . >/dev/null
     cd "${SUM_HOME}/bin"
 
-    logI "Taking a snapshot of existing fixes"
+    logI "Taking a snapshot of existing fixes..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
+
+    logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
 
     controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
     RESULT_controlledExec=$?
 
-    logI "Taking a snapshot of fixes after the execution of SP removal"
+    logI "Taking a snapshot of fixes after the patching..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterPatching"
 
     popd >/dev/null

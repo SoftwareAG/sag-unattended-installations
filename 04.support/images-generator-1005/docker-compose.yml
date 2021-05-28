@@ -26,12 +26,14 @@ services:
       - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
       - ${H_SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/:/mnt/products-out-dir/
       - ${H_SUIF_FIX_IMAGES_OUTPUT_DIRECTORY}/:/mnt/fixes-out-dir/
+      # Work against current local branch too
+      - ../../:/mnt/SUIF_HOME/
     environment:
       # commonFunctions
-      - SUIF_DEBUG_ON=0
+      - SUIF_DEBUG_ON=1
       # this test runs online, it must be able to download the fixes
       - SUIF_ONLINE_MODE=1
-      - SUIF_HOME=/tmp/SUIF_HOME
+      - SUIF_HOME=/mnt/SUIF_HOME
       - SUIF_AUDIT_BASE_DIR=/app/audit
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin

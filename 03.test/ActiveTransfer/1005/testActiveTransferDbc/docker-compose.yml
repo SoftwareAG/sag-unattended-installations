@@ -1,0 +1,46 @@
+version: "3.8"
+
+volumes:
+  test-mft-dbc-1-install-home: {}
+  test-mft-dbc-1-sum-home: {}
+  test-mft-dbc-1-runs: {}
+  test-mft-dbc-1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  test-mft-dbc-1:
+    build: ./build
+    image: test-mft-dbc-1
+    container_name: test-mft-dbc-1-1
+    hostname: test-mft-dbc-1-1
+    volumes:
+      - test-mft-dbc-1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - test-mft-dbc-1-install-home:/app/sag/1005/mftServerTest1/
+      - test-mft-dbc-1-sum-home:/app/sag/sumv11/
+      - test-mft-dbc-1-runs:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      # SUIF provided - this exact branch
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      # this test runs offline
+      - SUIF_ONLINE_MODE=0
+      - SUIF_HOME=/mnt/SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # providing only the must haves + install dir
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/mftServerTest1
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
