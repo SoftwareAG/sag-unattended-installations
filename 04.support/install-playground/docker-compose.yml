@@ -5,8 +5,6 @@ volumes:
   ipg1-sum-home: {}
   ipg1-user-home: {}
   ipg1-runs: {}
-  ipg1-tcdata: {}
-  ipg1-tclogs: {}
   ipg1-temp:
     driver_opts:
       type: tmpfs
