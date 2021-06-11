@@ -99,4 +99,5 @@ services:
       - "${H_SUIF_PORT_PREFIX}20:9240"
       - "${H_SUIF_PORT_PREFIX}55:5555"
       - "${H_SUIF_PORT_PREFIX}85:8500"
+      - "${H_SUIF_PORT_PREFIX}91:9102"
     entrypoint: /mnt/scripts/containerEntrypoint.sh
