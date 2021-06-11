@@ -4,12 +4,9 @@
 :: Run script to....
 :: 
 :: TODO: 
-::  - Ignore .git files/dirs in upload
+::  - Ignore .git files/dirs in upload - no support but "file globbing" 
 ::  - Ability to refresh file/directory if changes made (e.g. remove and upload)
 ::  - Store sensitive assets in vault
-::  - 
-:: 
-:: 
 :: ------------------------------
 
 :: ------------------------------
@@ -24,12 +21,12 @@ if "%errorlevel%" NEQ "0" (
 :: ------------------------------
 :: Create Storage Volumes
 :: ------------------------------
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createVolume('AZ_VOLUME_APPLICATION') $LastExitCode}" 
-if "%errorlevel%" NEQ "0" (
-    echo Unable to create the Application Storage Volume ... exiting
-    goto end
-)
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createVolume('AZ_VOLUME_ASSETS') $LastExitCode}" 
+:: powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createVolume('AZ_VOLUME_APPLICATION') $LastExitCode}" 
+:: if "%errorlevel%" NEQ "0" (
+::     echo Unable to create the Application Storage Volume ... exiting
+::     goto end
+:: )
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createVolume('SUIF_AZ_VOLUME_ASSETS') $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Unable to create the Assets Storage Volume ... exiting
     goto end
@@ -39,25 +36,25 @@ if "%errorlevel%" NEQ "0" (
 :: Create Assets Directories
 :: ------------------------------
 :: Root /assets directory
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'VOL_ASSETS_HOME' $LastExitCode}" 
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS' $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Unable to create Directory ... exiting
     goto end
 )
 :: /assets/media directory
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_MEDIA' $LastExitCode}" 
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_MEDIA' $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Unable to create Directory ... exiting
     goto end
 )
 :: /assets/licenses directory
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_LICENCES' $LastExitCode}" 
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_LICENCES' $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Unable to create Directory ... exiting
     goto end
 )
 :: /assets/suif scripts directory
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_SUIF' $LastExitCode}" 
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createDirectory -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_SUIF' $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Unable to create Directory ... exiting
     goto end
@@ -67,37 +64,37 @@ if "%errorlevel%" NEQ "0" (
 :: Upload Files to Azure fs
 :: ------------------------------
 :: License key
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_LICENCES' -az_local_file_handle 'H_TC_LICENSE_FILE' -az_target_path_handle 'SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_LICENCES' -az_local_file_handle 'H_SAG_TC_LICENSE_FILE' -az_target_path_handle 'SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
 :: Product Installer
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SUIF_INSTALLER_BIN' -az_target_path_handle 'SUIF_INSTALL_INSTALLER_BIN' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_INSTALLER_BIN' -az_target_path_handle 'SUIF_INSTALL_INSTALLER_BIN' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
 :: Product Image
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SUIF_PRODUCTS_IMAGE_FILE' -az_target_path_handle 'SUIF_INSTALL_IMAGE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_PRODUCTS_IMAGE_FILE' -az_target_path_handle 'SUIF_INSTALL_IMAGE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
 :: SUM installer
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SUIF_SUM_BOOTSTRAP_BIN' -az_target_path_handle 'SUIF_PATCH_SUM_BOOSTSTRAP_BIN' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_SUM_BOOTSTRAP_BIN' -az_target_path_handle 'SUIF_PATCH_SUM_BOOSTSTRAP_BIN' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
 :: Fix Image
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SUIF_FIXES_IMAGE_FILE' -az_target_path_handle 'SUIF_PATCH_FIXES_IMAGE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_FIXES_IMAGE_FILE' -az_target_path_handle 'SUIF_PATCH_FIXES_IMAGE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
 :: SUIF scripts
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'AZ_VOLUME_ASSETS' -az_dir_handle 'AZ_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_AZ_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload files ... exiting
     goto end
