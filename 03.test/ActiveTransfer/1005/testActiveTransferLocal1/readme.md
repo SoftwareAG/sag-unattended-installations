@@ -11,9 +11,9 @@ The tested code is the one in the master branch, provided in "offline" mode.
 - The following Software AG assets (cannot be downloaded publicly)
   - installer binary for linux 64 bit
   - update manager bootstrap for linux 64 bit
-  - product image containing BigMemory 4.3 (packaged with webmethods version 10.5)
+  - product image containing Active Transfer 10.5
   - product fix image containing the latest relevant fixes
-  - licenses for Active Transfer Server ( IS and MFT)
+  - licenses for Active Transfer Server ( IS and MFT )
 
 ## Quickstart
 
@@ -27,3 +27,5 @@ All prerequisite files are in mentioned in the file .env_example.
    1. Note: first run will take some time as it installs everything necessary
 6. Open a browser to [IS Administration](http://localhost:48155) (or change port if you changed the port prefix)
    1. Test the jdbc pools, they should work
+7. Open a browser to [Active Transfer Administration](http://localhost:48191) (or change port if you changed the port prefix)
+   1. Begin exploring Active Transfer functionality...
