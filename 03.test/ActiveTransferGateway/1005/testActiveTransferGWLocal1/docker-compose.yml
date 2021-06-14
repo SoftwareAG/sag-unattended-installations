@@ -21,8 +21,6 @@ services:
       n1:
         aliases:
           - mftgw1
-    #depends_on:
-    #  - "sql-server1"
     volumes:
       - mftgw1-temp:/tmp/
       # the following must match the Dokerfile folders, otherwise permissions on FS will not work
@@ -33,12 +31,8 @@ services:
       # These must be provided, they are prerequisites
       - ${H_MFTSERVER_LICENSE_FILE}:/tmp/MFT_GW_license.xml
       - ${H_IS_LICENSE_FILE}:/tmp/IS_license.xml
-      #- ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
-      #- ${H_SUIF_DBC4AT_INSTALL_IMAGE_FILE}:/tmp/dbc4at.product.image.zip
-      - ${H_SUIF_AT_INSTALL_IMAGE_FILE}:/tmp/at.product.image.zip
-      #- ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
-      #- ${H_SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE}:/tmp/dbc4at.fixes.image.zip
-      - ${H_SUIF_AT_PATCH_FIXES_IMAGE_FILE}:/tmp/at.fixes.image.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:/tmp/fixes.zip
       - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
       - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
       # SUIF provided - this exact branch
@@ -53,14 +47,10 @@ services:
       # providing only the must haves + install dir
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
-      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/mftgwTest1
-      #- SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
-      #- SUIF_DBC4AT_INSTALL_IMAGE_FILE=/tmp/dbc4at.product.image.zip
-      - SUIF_AT_INSTALL_IMAGE_FILE=/tmp/at.product.image.zip
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/mftGWTest1
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
       - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
-      #- SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
-      #- SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE=/tmp/dbc4at.fixes.image.zip
-      - SUIF_AT_PATCH_FIXES_IMAGE_FILE=/tmp/at.fixes.image.zip
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       - SUIF_SUM_HOME=/app/sag/sumv11/
       # setup template specifics
       - SUIF_SETUP_TEMPLATE_MFTSERVER_LICENSE_FILE=/tmp/MFT_GW_license.xml
@@ -69,4 +59,5 @@ services:
       - "${H_SUIF_PORT_PREFIX}20:9240"
       - "${H_SUIF_PORT_PREFIX}55:5555"
       - "${H_SUIF_PORT_PREFIX}85:8500"
+      - "${H_SUIF_PORT_PREFIX}91:9102"
     entrypoint: /mnt/scripts/containerEntrypoint.sh
