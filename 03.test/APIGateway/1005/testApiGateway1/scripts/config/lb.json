@@ -1,10 +1,12 @@
 {
-    "webAppUrl": null,
-    "websocketUrls": [],
+    "webAppUrl": "http://host.docker.internal:48172",
+    "websocketUrls": [
+        "ws://host.docker.internal:48157"
+    ],
     "httpsUrls": [
-        "https://host.docker.internal:48173"
+        "https://host.docker.internal:48156"
     ],
     "httpUrls": [
-        "http://host.docker.internal:48172"
+        "http://host.docker.internal:48155"
     ]
 }
