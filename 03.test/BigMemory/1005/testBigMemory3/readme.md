@@ -36,9 +36,8 @@ All prerequisite files and Azure information are in mentioned in the file .env_e
 
 1. Procure prerequisite Software AG files (installers, images, license file)
 2. Copy .env_example into .env
-3. Modify .env to identify where SAG components are located
-4. Modify .env to identify Azure related properties
+3. Modify .env to identify where local SAG components are located
+4. Modify .env to identify Azure related properties (refer to prerequisites above)
 5. Execute run.bat
-6. Open a browser to [TMC] http://<azure_ip>:9889
-
-
+6. Open a browser to [TMC] http://<azure_ip>:9889, alt https://<azure_ip>:9443
+7. When finished testing, remove the complete resource group in Azure Portal.
