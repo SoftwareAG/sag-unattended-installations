@@ -8,6 +8,10 @@
 #       - License key
 #       - The complete suif script directories
 # ---------------------------------------------------------------------------------
+LOC_AZ_PUBLIC_IP=$1 
+echo " ----------------------------------------------------------"
+echo " - Running entrypoint.sh script on VM :: $LOC_AZ_PUBLIC_IP"
+echo " ----------------------------------------------------------"
 
 # ----------------------------------------
 # Current location
@@ -44,17 +48,16 @@ fi
 # Start Terracotta (or install if not present)
 # ----------------------------------------
 if [ ! -d "${SUIF_INSTALL_DIR}/Terracotta" ]; then
-    echo "Starting up for the first time, setting up ..."
+    echo " - Starting up for the first time, setting up application ..."
 
     # Parameters - applySetupTemplate
     # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
     applySetupTemplate "BigMemoryServer/1005/default" || exit 4
-
     applyPostSetupTemplate "BigMemoryServer/1005/StandaloneForIsClustering" || exit 5
 fi
 
-onInterrupt(){
-	echo "Interrupted! Shutting down TMC & TSA"
+onInterrupt() {
+	echo " - Interrupted! Shutting down TMC & TSA"
 	${SUIF_INSTALL_INSTALL_DIR}/Terracotta/tools/management-console/bin/stop-tmc.sh
     pushd . >/dev/null
     cd "${SUIF_INSTALL_INSTALL_DIR}/Terracotta/server/wrapper/bin/"
@@ -63,21 +66,21 @@ onInterrupt(){
 	exit 0 # managed expected exit
 }
 
-onKill(){
-	logW "Killed!"
+onKill() {
+	logW "Application Killed!"
 }
 
 trap "onInterrupt" SIGINT SIGTERM
 trap "onKill" SIGKILL
 
-echo "Starting up Terracotta Server"
+echo " - Starting up Terracotta Server ..."
 pushd . >/dev/null
 cd "${SUIF_INSTALL_INSTALL_DIR}/Terracotta/server/wrapper/bin/"
-./startup.sh
+./startup.sh > /dev/null 2>&1 &
 popd >/dev/null
 
-echo "Starting up TMC"
-controlledExec "${SUIF_INSTALL_INSTALL_DIR}/Terracotta/tools/management-console/bin/start-tmc.sh" "Start TMC" &
+echo " - Starting up TMC ..."
+"${SUIF_INSTALL_INSTALL_DIR}/Terracotta/tools/management-console/bin/start-tmc.sh" > /dev/null 2>&1 &
 
 logI "waiting 20 seconds"
 sleep 20
@@ -109,8 +112,8 @@ fi
 
 logI "Total errors found: ${errorsCount}"
 
-# logI "Stopping servers"
-
-# onInterrupt
-
-exit ${errorsCount}
+echo " ----------------------------------------------------------------"
+echo " - Access TMS via browser ::                                     "
+echo "     a) http://$LOC_AZ_PUBLIC_IP:9889/tmc                        "
+echo "     b) https://$LOC_AZ_PUBLIC_IP:9443/tmc                       "
+echo " ----------------------------------------------------------------"
