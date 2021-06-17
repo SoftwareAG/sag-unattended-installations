@@ -5,7 +5,6 @@
 #  - Azure shared file system is mounted,
 #  - Shared file system contains:
 #       - Product and fix images, installers
-#       - License key
 #       - The complete suif script directories
 # ---------------------------------------------------------------------------------
 LOC_AZ_PUBLIC_IP=$1 
