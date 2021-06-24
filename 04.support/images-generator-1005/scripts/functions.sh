@@ -65,6 +65,7 @@ generateFixesImageFromTemplate(){
 generateProductsImageFromTemplate(){
     logI "Addressing products image for setup template ${1}..."
     local lProductsImageFile="${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/${1}/products.zip"
+    local lDebugLogFile="${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/${1}/debug.log"
     if [ -f "${lProductsImageFile}" ]; then
         logI "Products image for template ${1} already exists, nothing to do."
     else
@@ -104,16 +105,22 @@ generateProductsImageFromTemplate(){
         logI "Volatile script created."
         ## TODO: check if error management enforcement is needed: what if the grep produced nothing?
 
+        local lDebugOn=${SUIF_DEBUG_ON:-0}
+
         ## TODO: not space safe, but it shouldn't matter for now
         local lCmd="${SUIF_INSTALL_INSTALLER_BIN} -readScript ${lVolatileScriptFile}"
+        if [ "${lDebugOn}" -ne 0 ]; then
+            lCmd="${lCmd} -debugFile '${lDebugLogFile}' -debugLvl verbose"
+        fi
         lCmd="${lCmd} -writeImage ${lProductsImageFile}"
 
         # avoid downloading what we already have
-        if [ -f /dev/shm/productsImagesList.txt ];then
+        if [ -f /dev/shm/productsImagesList.txt ]; then
             lCmd="${lCmd} -existingImages /dev/shm/productsImagesList.txt"
         fi
 
         logI "Creating the product image ${lProductsImageFile}... "
+        logD "Command is ${lCmd}"
         controlledExec "${lCmd}" "Create-products-image-for-template-${1//\//-}"
         logI "Image ${lProductsImageFile} creation completed, result: $?"
         rm -f "${lVolatileScriptFile}"

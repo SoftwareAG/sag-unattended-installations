@@ -59,7 +59,7 @@ installProducts(){
     # apply environment substitutions
     envsubst < "${2}" > /dev/shm/install.wmscript || return 5
 
-    local installCmd="${1} -readScript /dev/shm/install.wmscript"
+    local installCmd="${1} -readScript /dev/shm/install.wmscript -console"
     local installCmd="${installCmd} -debugLvl ${debugLevel}"
     local installCmd="${installCmd} -debugFile "'"'"${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"'"'
     controlledExec "${installCmd}" "${d}.product-install"

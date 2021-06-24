@@ -24,33 +24,22 @@ fi
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh" || exit 4
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
 
-
-
-# If the DBC installation is not present, do it now
-#if [ ! -f "${SUIF_INSTALL_InstallDir}/common/db/bin/dbConfigurator.sh" ]; then
-#    echo "Database configurator is not present, setting up ..."
-
-#    export SUIF_INSTALL_IMAGE_FILE=${SUIF_DBC4AT_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
-#    export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
-
-    # Parameters - applySetupTemplate
-    # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-#   applySetupTemplate "AT/1005/DBC4AT" || exit 6
-
-#fi
-# we need to set up the database
-#applyPostSetupTemplate "DBC/1005/Sql-server-create" || exit 7
-
 # If the installation is not present, do it now
 if [ ! -d "${SUIF_INSTALL_InstallDir}/IntegrationServer" ]; then
     echo "Integration server not present, setting up ..."
 
-    export SUIF_INSTALL_IMAGE_FILE=${SUIF_AT_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
-    export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_AT_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
-
     # Parameters - applySetupTemplate
     # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-    applySetupTemplate "AT/1005/default" || exit 8
+    applySetupTemplate "ATG/1005/default"
+
+    if [ $? -ne 0 ]; then
+        logE "setup failed, copying over the ephemeral scritps"
+        cp /dev/shm/* "${SUIF_AUDIT_SESSION_DIR}/"
+
+        logW "Stopping for debug"
+        tail -f /dev/null
+    fi
+    # || exit 8
 fi
 
 onInterrupt(){

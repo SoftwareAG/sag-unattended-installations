@@ -1,10 +1,22 @@
 #!/bin/sh
 
+# The values in this file reflect the purpose of the current test harness
+
 # commonFunctions variables
-export SUIF_ONLINE_MODE=${SUIF_ONLINE_MODE:-0}
+export SUIF_ONLINE_MODE=0                   # we are running offline
+export SUIF_DEBUG_ON=1                      # we want to see details
+
+# expect these values to match the mounts
 export SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR:-"/app/audit"}
 
-# setupFunctions Variables
+export SUIF_HOME=${SUIF_HOME."/mnt/SUIF_HOME"} # must have this, we are running offline
+
+if [ ! -f "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" ]; then
+    echo "PANIC! Working in offline mode, but SUIF dependency not present! declared SUIF_HOME is ${SUIF_HOME}"
+    exit 1
+fi
+
+# setupFunctions Variables - for this test they are provided with docker-compose mounts
 export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/tmp/installer.bin"}
 export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/tmp/product.image.zip"}
 export SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR:-"/opt/sag/products"}
@@ -22,7 +34,6 @@ export SUIF_APIGW_ADMINISTRATOR_PASSWORD=${SUIF_APIGW_ADMINISTRATOR_PASSWORD:-"m
 export SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD=${SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD:-"manage"}
 export SUIF_APIGW_NEW_ADMINISTRATOR_PASSWORD="${SUIF_APIGW_ADMINISTRATOR_PASSWORD}"
 export SUIF_INSTALL_DECLARED_HOSTNAME=${SUIF_INSTALL_DECLARED_HOSTNAME:-"localhost"}
-
 
 export SUIF_INSTALL_IS_MAIN_HTTP_PORT=${SUIF_INSTALL_IS_MAIN_HTTP_PORT:-"5555"}
 

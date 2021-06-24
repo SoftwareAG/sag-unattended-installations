@@ -41,21 +41,19 @@ services:
       - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
       - ../../../../:/mnt/SUIF_HOME/
     environment:
-      # commonFunctions
-      - SUIF_DEBUG_ON=1
-      # this test runs online
-      - SUIF_ONLINE_MODE=0
+      # we declare SUIF_HOME because we mount it here
       - SUIF_HOME=/mnt/SUIF_HOME
+      # we declare SUIF_AUDIT_BASE_DIR because we mount it here
       - SUIF_AUDIT_BASE_DIR=/app/audit
-      # providing only the must haves + install dir
-      # setupFunctions
+      # setupFunctions prerequisites map, declared here because provided by host
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
-      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/ApiGwTest1
       - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
       - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      # declare install dir and SUM dir because they are mounted here
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/ApiGwTest1
       - SUIF_SUM_HOME=/app/sag/sumv11/
-      # setup template specifics
+      # setup template specifics - license provided by host
       - SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE=/tmp/API_Gateway_license.xml
     ports:
       - "${H_SUIF_PORT_PREFIX}20:9240"
