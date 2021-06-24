@@ -48,8 +48,32 @@ fi
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
 
 # ----------------------------------------
+# Start Terracotta (or install if not present)
+# Note: retaining variable names here to avoid changing common functions
+# ----------------------------------------
+export SUIF_INSTALL_INSTALL_DIR=${SUIF_ROOT_INSTALL_DIR}/TSA
+export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_TSA_IMAGE_FILE}
+export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_TSA_FIXES_IMAGE_FILE}
+export SUIF_INSTALL_SPM_HTTP_PORT=${SUIF_INSTALL_TSA_SPM_HTTP_PORT}
+export SUIF_INSTALL_SPM_HTTPS_PORT=${SUIF_INSTALL_TSA_SPM_HTTPS_PORT}
+if [ ! -d "${SUIF_INSTALL_INSTALL_DIR}/Terracotta" ]; then
+    echo " - Starting up for the first time, setting up application ..."
+
+    # Parameters - applySetupTemplate
+    # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
+    applySetupTemplate "BigMemoryServer/1005/default" || exit 4
+    applyPostSetupTemplate "BigMemoryServer/1005/StandaloneForIsClustering" || exit 5
+fi
+
+# ----------------------------------------
 # Start API Gateway (or install if not present)
 # ----------------------------------------
+export SUIF_INSTALL_INSTALL_DIR=${SUIF_ROOT_INSTALL_DIR}/APIGW
+export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_APIGW_IMAGE_FILE}
+export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_APIGW_FIXES_IMAGE_FILE}
+export SUIF_INSTALL_SPM_HTTP_PORT=${SUIF_INSTALL_APIGW_SPM_HTTP_PORT}
+export SUIF_INSTALL_SPM_HTTPS_PORT=${SUIF_INSTALL_APIGW_SPM_HTTPS_PORT}
+export SUIF_APIGW_ADMINISTRATOR_PASSWORD=${H_APIGW_ADMIN_PASSWORD}
 if [ ! -d "${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer" ]; then
     echo "Starting up for the first time, setting up ..."
 
@@ -59,18 +83,33 @@ if [ ! -d "${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer" ]; then
 fi
 
 onInterrupt(){
+    # API Gateway
 	echo "Interrupted! Shutting down API Gateway"
     pushd . >/dev/null
 	echo "Shutting down Integration server ..."
-    cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/IS_default/bin"
+    cd "${SUIF_ROOT_INSTALL_DIR}/APIGW/profiles/IS_default/bin"
     ./shutdown.sh
 	echo "Shutting down Platform manager ..."
-    cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/SPM/bin"
+    cd "${SUIF_ROOT_INSTALL_DIR}/APIGW/profiles/SPM/bin"
     ./shutdown.sh
 	echo "Shutting down Elasticsearch ..."
-    cd "${SUIF_INSTALL_INSTALL_DIR}/InternalDataStore/bin"
+    cd "${SUIF_ROOT_INSTALL_DIR}/APIGW/InternalDataStore/bin"
     ./shutdown.sh
-    #popd >/dev/null
+    popd >/dev/null
+
+    # Terracotta Server
+	echo " - Interrupted! Shutting down TMC & TSA"
+    pushd . >/dev/null
+	echo "Shutting down TMC ..."
+    cd "${SUIF_ROOT_INSTALL_DIR}/TSA/Terracotta/tools/management-console/bin"
+	./stop-tmc.sh
+	echo "Shutting down Platform manager ..."
+    cd "${SUIF_ROOT_INSTALL_DIR}/TSA/profiles/SPM/bin"
+    ./shutdown.sh
+    cd "${SUIF_ROOT_INSTALL_DIR}/TSA/Terracotta/server/wrapper/bin"
+    ./shutdown.sh
+    popd >/dev/null
+
 	exit 0 # managed expected exit
 }
 
@@ -99,15 +138,29 @@ afterStartConfig(){
 trap "onInterrupt" SIGINT SIGTERM
 trap "onKill" SIGKILL
 
+# Terracotta Server
+echo " - Starting up Terracotta Server ..."
+pushd . >/dev/null
+cd "${SUIF_ROOT_INSTALL_DIR}/TSA/Terracotta/server/wrapper/bin/"
+./startup.sh > /dev/null 2>&1 &
+popd >/dev/null
+
+echo " - Starting up TMC ..."
+pushd . >/dev/null
+cd "${SUIF_ROOT_INSTALL_DIR}/TSA/Terracotta/tools/management-console/bin"
+./start-tmc.sh > /dev/null 2>&1 &
+popd >/dev/null
+
+# API Gateway
 echo "Starting up API Gateway server"
 echo "Checking prerequisites ..."
 checkPrerequisites || exit 7
 pushd . >/dev/null
 echo "Starting Elasticsearch ..."
-cd "${SUIF_INSTALL_INSTALL_DIR}/InternalDataStore/bin"
+cd "${SUIF_ROOT_INSTALL_DIR}/APIGW/InternalDataStore/bin"
 ./startup.sh
 echo "Starting Integration Server"
-cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/IS_default/bin"
+cd "${SUIF_ROOT_INSTALL_DIR}/APIGW/profiles/IS_default/bin"
 ./console.sh & 
 
 WPID=$!
@@ -122,10 +175,6 @@ while [ $p -eq 0 ]; do
 done
 
 afterStartConfig
-
-echo " ----------------------------------------------------------------------"
-echo " - Access via browser ?? ::                                            "
-echo " ----------------------------------------------------------------------"
 
 wait ${WPID}
 

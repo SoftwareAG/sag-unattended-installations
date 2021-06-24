@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<SoftwareAG_License>
+<Component Id="SalesInfo">
+<SerialNumber>0000490163</SerialNumber>
+<LicenseKey>ECAC9C0EFD7FE211EBFE69937701DB5C</LicenseKey>
+<CustomerID>3150000</CustomerID>
+<CustomerName>Software AG for Solution Book Internal USE ONLY</CustomerName>
+<ContractDetails>SOFTWARE AG internal license solely for sales promotion and internal training purposes. Please note that this access key is for your personal use only. Access and software shall not be forwarded to anybody else</ContractDetails>
+<ContractPosNumber>10</ContractPosNumber>
+<LicenseTypeDetails>Internal</LicenseTypeDetails>
+<AutoCallHome>No</AutoCallHome>
+</Component>
+<Component Id="ProductInfo">
+<ExpirationDate>2021/10/31</ExpirationDate>
+<OS>win, Linux</OS>
+<ProductCode>TDBFX</ProductCode>
+<ProductName>Terracotta</ProductName>
+<ProductVersion>10.1</ProductVersion>
+<Usage/>
+<RenewalDate/>
+<HigherLevPosNr/>
+<HigherLevProdCode/>
+<HigherLevProdName/>
+</Component>
+<Component Id="LicenseInfo">
+<PriceUnit>GBS</PriceUnit>
+<PriceQuantity>100</PriceQuantity>
+<TypeOfInstallation/>
+<LicenseType/>
+<ExtendedRights/>
+<LicenseVersion>1.2</LicenseVersion>
+<Metering>MNO</Metering>
+</Component>
+<Component Id="Terracotta">
+<ProductCode>TDB</ProductCode>
+<ProductVersion>10.1</ProductVersion>
+<Caching>yes</Caching>
+<TMC>yes</TMC>
+<MultiStripe>yes</MultiStripe>
+<Security>yes</Security>
+<TCStore>yes</TCStore>
+<SearchCompute>yes</SearchCompute>
+<Websessions>no</Websessions>
+</Component>
+</SoftwareAG_License>

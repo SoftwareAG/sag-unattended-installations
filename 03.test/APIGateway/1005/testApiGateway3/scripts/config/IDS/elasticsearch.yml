@@ -1,0 +1,12 @@
+cluster.name: SAG_EventDataStore
+node.name: ${WMLAB_HOSTNAME}
+path.logs: /opt/sag/products/InternalDataStore/logs
+network.host: 0.0.0.0
+
+http.port: 9240
+
+discovery.seed_hosts: ["vmbgbper01:9340","vmbgbper02:9340","vmbgbper03:9340"]
+transport.tcp.port: 9340
+path.repo: ['/opt/sag/products/InternalDataStore/archives']
+
+cluster.initial_master_nodes: ["vmbgbper01","vmbgbper02","vmbgbper03"]

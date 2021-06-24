@@ -2,9 +2,9 @@
     "webAppUrl": null,
     "websocketUrls": [],
     "httpsUrls": [
-        "https://${LOC_AZ_PUBLIC_IP}:${SUIF_INSTALL_YAI_HTTPS_PORT}"
+        "https://${AZ_VM_HOST_NAME}:${SUIF_INSTALL_YAI_HTTPS_PORT}"
     ],
     "httpUrls": [
-        "http://${LOC_AZ_PUBLIC_IP}:${SUIF_INSTALL_YAI_HTTP_PORT}"
+        "http://${AZ_VM_HOST_NAME}:${SUIF_INSTALL_YAI_HTTP_PORT}"
     ]
 }

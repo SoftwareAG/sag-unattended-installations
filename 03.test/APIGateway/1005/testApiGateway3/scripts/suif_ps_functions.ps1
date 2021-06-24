@@ -505,7 +505,7 @@ function provisionVMforBastion() {
     $SUIF_AZ_VM_SUBNET = $suif_env.Get_Item('SUIF_AZ_VM_SUBNET')
 
     $SUIF_AZ_VM_USER = $suif_env.Get_Item('SUIF_AZ_VM_USER')
-    $SUIF_AZ_VM_USER_PASSWORD = $suif_env.Get_Item('SUIF_AZ_VM_USER_PASSWORD')
+    $LOC_AZ_VM_USER_PASSWORD = $suif_host_env.Get_Item('H_APIGW_ADMIN_PASSWORD')
 
     Write-Host "-------------------------------------------------------"
     Write-Host " Provisioning VM $LOC_VM_NAME (hostname: $LOC_HOST_NAME) ...."
@@ -525,7 +525,7 @@ function provisionVMforBastion() {
        --image $LOC_AZ_VM_IMAGE `
        --size $LOC_AZ_VM_SIZE `
        --admin-username $SUIF_AZ_VM_USER `
-       --admin-password $SUIF_AZ_VM_USER_PASSWORD `
+       --admin-password $LOC_AZ_VM_USER_PASSWORD `
        --vnet-name $SUIF_AZ_VNET_NAME `
        --asgs $SUIF_AZ_ASG_NAME `
        --nsg $SUIF_AZ_NSG_NAME `
@@ -600,11 +600,13 @@ function grantKeyVaultPermission() {
 ## ---------------------------------------------------------------------
 ## Run init prepare script on remote VM (using CLI)
 ## ---------------------------------------------------------------------
-function prepareVMCCLI() {
+function initializeVM() {
     param (
-        [string] $az_vm_name
+        [string] $az_vm_name,
+        [string] $az_host_name
     )
     $LOC_VM_NAME = $az_vm_name
+    $LOC_HOST_NAME = $az_host_name
 
     $H_AZ_SUBSCRIPTION_ID = $suif_host_env.Get_Item('H_AZ_SUBSCRIPTION_ID')
     $SUIF_AZ_RESOURCE_GROUP = $suif_env.Get_Item('SUIF_AZ_RESOURCE_GROUP')
@@ -622,7 +624,7 @@ function prepareVMCCLI() {
     $SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE = $suif_env.Get_Item('SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE')
 
     Write-Host "-------------------------------------------------------"
-    Write-Host " Preparing VM $LOC_VM_NAME on Azure ...."
+    Write-Host " Initializing VM $LOC_VM_NAME on Azure ...."
     Write-Host "-------------------------------------------------------"
 
     # ----------------------------------------------
@@ -633,7 +635,7 @@ function prepareVMCCLI() {
        --resource-group $H_AZ_RESOURCE_GROUP_STORAGE `
        --account-name $H_AZ_STORAGE_ACCOUNT
     if (!$?) {
-        Write-Host " - prepareVMCCLI :: Unable to get the Storage Key :: $az_cmd_response"
+        Write-Host " - initializeVM :: Unable to get the Storage Key :: $az_cmd_response"
         exit -1
     }
     $LOC_AZ_STORAGE_ACCOUNT_KEY = (ConvertFrom-Json -InputObject "$az_cmd_response")[0].value
@@ -646,11 +648,11 @@ function prepareVMCCLI() {
       --name $H_AZ_STORAGE_ACCOUNT `
       --query "primaryEndpoints.file" -o tsv
     if (!$?) {
-        Write-Host " - prepareVMCCLI :: Unable to get the Storage Location :: $az_cmd_response"
+        Write-Host " - initializeVM :: Unable to get the Storage Location :: $az_cmd_response"
         exit -1
     }
     $LOC_AZ_STORAGE_LOCATION = $az_cmd_response.Substring($az_cmd_response.IndexOf(":")+1)
-    Write-Host " - prepareVMCCLI :: Storage location identified: $LOC_AZ_STORAGE_LOCATION ..."
+    Write-Host " - initializeVM :: Storage location identified: $LOC_AZ_STORAGE_LOCATION ..."
 	$az_cmd = az vm run-command invoke --command-id RunShellScript `
        --subscription $H_AZ_SUBSCRIPTION_ID `
        --resource-group $SUIF_AZ_RESOURCE_GROUP `
@@ -658,6 +660,7 @@ function prepareVMCCLI() {
        --parameters SUIF_DIR_ASSETS=$SUIF_DIR_ASSETS `
                     SUIF_APP_HOME=$SUIF_APP_HOME `
                     SUIF_HOME=$SUIF_HOME `
+                    AZ_VM_HOST_NAME=$LOC_HOST_NAME `
                     SUIF_AZ_VM_USER=$SUIF_AZ_VM_USER `
                     LOC_AZ_STORAGE_LOCATION=$LOC_AZ_STORAGE_LOCATION `
                     SUIF_AZ_VOLUME_ASSETS=$SUIF_AZ_VOLUME_ASSETS `
@@ -669,46 +672,10 @@ function prepareVMCCLI() {
        --scripts '@.\scripts\vm_init.sh'
 
     if (!$?) {
-        Write-Host " - prepareVMCCLI :: Unable to prepare VM :: $az_cmd"
+        Write-Host " - initializeVM :: Unable to initialize VM :: $az_cmd"
         exit -1
     }
-    Write-Host " - prepareVMCCLI :: VM successfully prepared."
+    Write-Host " - initializeVM :: VM successfully initialized."
     exit 0
 
-}
-
-## ---------------------------------------------------------------------
-## Run entrypoint script to provision wM application
-## ---------------------------------------------------------------------
-function entryPointVMviaCLI() {
-    param (
-        [string] $az_vm_name
-    )
-    $LOC_VM_NAME = $az_vm_name
-
-    $H_AZ_SUBSCRIPTION_ID = $suif_host_env.Get_Item('H_AZ_SUBSCRIPTION_ID')
-    $SUIF_AZ_RESOURCE_GROUP = $suif_env.Get_Item('SUIF_AZ_RESOURCE_GROUP')
-    $SUIF_AZ_VM_USER = $suif_env.Get_Item('SUIF_AZ_VM_USER')
-    $SUIF_LOCAL_SCRIPTS_HOME = $suif_env.Get_Item('SUIF_LOCAL_SCRIPTS_HOME')
-
-    Write-Host "-------------------------------------------------------"
-    Write-Host " Starting Application on $LOC_VM_NAME ...."
-    Write-Host "-------------------------------------------------------"
-    # ----------------------------------------------
-    # Run entryPoint script
-    # ----------------------------------------------
-	$az_cmd = az vm run-command invoke --command-id RunShellScript `
-       --subscription $H_AZ_SUBSCRIPTION_ID `
-       --resource-group $SUIF_AZ_RESOURCE_GROUP `
-       --name $LOC_VM_NAME `
-       --parameters SUIF_AZ_VM_USER=$SUIF_AZ_VM_USER `
-                    SUIF_LOCAL_SCRIPTS_HOME=$SUIF_LOCAL_SCRIPTS_HOME `
-       --scripts '@.\scripts\entryPoint.sh'
-
-    if (!$?) {
-        Write-Host " - entryPointVMviaCLI :: Unable to run entryPoint script :: $az_cmd"
-        exit -1
-    }
-    Write-Host " - entryPointVMviaCLI :: entryPoint script successfully executed."
-    exit 0
 }

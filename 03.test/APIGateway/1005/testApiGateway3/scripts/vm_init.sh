@@ -23,7 +23,6 @@
 #   - $LOC_AZ_STORAGE_ACCOUNT_KEY
 #   - $SUIF_AUDIT_BASE_DIR
 #   - $SUIF_LOCAL_SCRIPTS_HOME
-#   - $SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE
 # -------------------------------------------------------------------------------------------------------
 if [ ! -d "${SUIF_APP_HOME}" ]; then 
     mkdir -p ${SUIF_APP_HOME}
@@ -74,6 +73,11 @@ if [ ! -d "${SUIF_HOME}" ]; then
     sudo -iu ${SUIF_AZ_VM_USER} echo " - init VM :: Mounting file share to mount point ${SUIF_DIR_ASSETS} ..." >> ${LOG_FILE}
     mount -t cifs ${LOC_AZ_STORAGE_LOCATION}${SUIF_AZ_VOLUME_ASSETS}${SUIF_DIR_ASSETS} ${SUIF_DIR_ASSETS} -o username=${H_AZ_STORAGE_ACCOUNT},password=${LOC_AZ_STORAGE_ACCOUNT_KEY},uid=1000,gid=1000,serverino
 fi
+
+# ----------------------------------------
+# Source environment variables from suif.env
+# ----------------------------------------
+export $(grep -v '^#' $SUIF_LOCAL_SCRIPTS_HOME/suif.env | xargs)
 
 # ==============================================
 # Ensure APIGW OS level settings
@@ -138,15 +142,19 @@ fi
 # store in local VM directory
 # ----------------------------------------------
 # 
-echo " - init VM :: Getting License Key from Key Vault and storing to ${SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE}" >> ${LOG_FILE}
-VAULT_SECRET=`${SUIF_LOCAL_SCRIPTS_HOME}/getVaultSecret.sh "APIGW-KEYVAULT" "API-Gateway-LicenseKey"`
+echo " - init VM :: Getting TES License Key from Key Vault and storing to ${SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE}" >> ${LOG_FILE}
+VAULT_SECRET=`${SUIF_LOCAL_SCRIPTS_HOME}/getVaultSecret.sh "${SUIF_AZ_KEYVAULT_NAME}" "${SUIF_AZ_TES_LICENSE_VAULT_NAME}"`
+echo ${VAULT_SECRET} > ${SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE} && chown ${SUIF_AZ_VM_USER}:${SUIF_AZ_VM_USER} ${SUIF_SETUP_TEMPLATE_TES_LICENSE_FILE}
+
+echo " - init VM :: Getting APIGW License Key from Key Vault and storing to ${SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE}" >> ${LOG_FILE}
+VAULT_SECRET=`${SUIF_LOCAL_SCRIPTS_HOME}/getVaultSecret.sh "${SUIF_AZ_KEYVAULT_NAME}" "${SUIF_AZ_YAI_LICENSE_VAULT_NAME}"`
 echo ${VAULT_SECRET} > ${SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE} && chown ${SUIF_AZ_VM_USER}:${SUIF_AZ_VM_USER} ${SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE}
 
 # ----------------------------------------------
 # Start Application
 # ----------------------------------------------
 # 
-echo " - init VM :: Starting Application script ..." >> ${LOG_FILE}
+echo " - init VM :: Starting Application EntryPoint script ..." >> ${LOG_FILE}
 sudo -iu ${SUIF_AZ_VM_USER} ${SUIF_LOCAL_SCRIPTS_HOME}/entryPoint.sh > /dev/null 2>&1 &
 
 exit 0

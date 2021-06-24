@@ -60,8 +60,14 @@ if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
-:: Product Image
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_PRODUCTS_IMAGE_FILE' -az_target_path_handle 'SUIF_INSTALL_IMAGE_FILE' $LastExitCode}"
+:: Product Image - TSA
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_PRODUCTS_TSA_IMAGE_FILE' -az_target_path_handle 'SUIF_INSTALL_TSA_IMAGE_FILE' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to upload file ... exiting
+    goto end
+)
+:: Product Image - APIGW
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_PRODUCTS_APIGW_IMAGE_FILE' -az_target_path_handle 'SUIF_INSTALL_APIGW_IMAGE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
@@ -72,8 +78,14 @@ if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
 )
-:: Fix Image
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_FIXES_IMAGE_FILE' -az_target_path_handle 'SUIF_PATCH_FIXES_IMAGE_FILE' $LastExitCode}"
+:: Fix Image - TSA
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_FIXES_TSA_IMAGE_FILE' -az_target_path_handle 'SUIF_PATCH_TSA_FIXES_IMAGE_FILE' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to upload file ... exiting
+    goto end
+)
+:: Fix Image - APIGW
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFile -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_MEDIA' -az_local_file_handle 'H_SAG_FIXES_APIGW_IMAGE_FILE' -az_target_path_handle 'SUIF_PATCH_APIGW_FIXES_IMAGE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload file ... exiting
     goto end
@@ -237,7 +249,14 @@ if "%errorlevel%" NEQ "0" (
 :: ------------------------------
 :: Add License File to Key Vault
 :: ------------------------------
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_SETUP_TEMPLATE_YAI_LICENSE_VAULT_NAME' -az_file_handle 'H_API_GW_LICENSE_FILE' $LastExitCode}"
+:: TSA
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_TES_LICENSE_VAULT_NAME' -az_file_handle 'H_SAG_TC_LICENSE_FILE' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to create secret in Key Vault ... exiting
+    goto end
+)
+:: APIGW
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_YAI_LICENSE_VAULT_NAME' -az_file_handle 'H_API_GW_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to create secret in Key Vault ... exiting
     goto end
@@ -291,22 +310,22 @@ if "%errorlevel%" NEQ "0" (
 )
 
 :: --------------------------------------------------------------------------
-:: Prepare the VM (mount shares, etc.) and starts application entry script
+:: Initialize the VM (mount shares, etc.) and start application entry script
 :: --------------------------------------------------------------------------
 :: APIGW 01
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; prepareVMCCLI -az_vm_name 'APIGW_01' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; initializeVM -az_vm_name 'APIGW_01' -az_host_name 'apigw01' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to prepare the VM ... exiting
     goto end
 )
 :: APIGW 02
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; prepareVMCCLI -az_vm_name 'APIGW_02' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; initializeVM -az_vm_name 'APIGW_02' -az_host_name 'apigw02' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to prepare the VM ... exiting
     goto end
 )
 :: APIGW 03
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; prepareVMCCLI -az_vm_name 'APIGW_03' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; initializeVM -az_vm_name 'APIGW_03' -az_host_name 'apigw03' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to prepare the VM ... exiting
     goto end
