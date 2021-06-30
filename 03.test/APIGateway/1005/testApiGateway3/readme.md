@@ -1,6 +1,6 @@
 # API GAteway test 3
-- Based on API Gateway test 2 - a standalone APIGW installation version 10.5 provisioned on Azure
-- This is now a three-way cluster with a dedicated subnet without public IP access (accessed via Bastion)
+- Based on API Gateway test 2 (a standalone APIGW installation version 10.5 provisioned on Azure)
+- This is now a three-node cluster with a dedicated subnet without public IP access (accessed via Bastion)
 - These scripts are developed for a local Windows machine (using MS batch and Powershell scripts) with target Linux VMs
 
 ## Prerequisites
@@ -29,11 +29,12 @@ In above resource group, the following will be provisioned:
 6. A Virtual Network
 7. A Bastion host service with a public IP
 8. A subnet for the below APIGW cluster
-9. Three API Gateway nodes, and a separate administration VM for accessing the cluster
-10. Each VM will then be "prepared" by mounting the above storage file share
-11. The uploaded (to the file share and mounted on the VM) suif script entrypoint.sh will be execute on the VM
-12. The script will install the SAG component listed above for this project (it not already installed)
-13. Fixes will be applied and the components will start up
+9. A Load Balancer with associated address pool and rules
+10. Three API Gateway VM nodes, and a separate administration VM for accessing the cluster
+11. Each VM will then be "prepared" by mounting the above storage file share
+12. The uploaded (to the file share and mounted on the VM) suif script entrypoint.sh will be execute on the VM
+13. The script will install the SAG component listed above for this project (it not already installed)
+14. Fixes will be applied and the components will start up
 
 
 ## Quickstart
@@ -53,7 +54,7 @@ For browser access to the APIGW cluster:
 9. Open an Edge browser and enter in to [APIGW] http://apigw01:9072, alt https://apigw01:9073 (or apigw02/apigw03)
 
 Notes:
-10. You should observe Administrator password has been changed to pwd define in suif.env and LB are set appropriately
+10. You should observe Administrator password has been changed to pwd define in .env and LB are set appropriately
 11. You should observe the fact extended settings were altered as per the provided json configuration.
 
 12. When finished testing, remove the complete resource group in Azure Portal.

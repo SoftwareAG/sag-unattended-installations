@@ -1,12 +1,12 @@
 cluster.name: SAG_EventDataStore
-node.name: ${WMLAB_HOSTNAME}
-path.logs: /opt/sag/products/InternalDataStore/logs
+node.name: ${AZ_VM_HOST_NAME}
+path.logs: ${SUIF_ROOT_INSTALL_DIR}/APIGW/InternalDataStore/logs
 network.host: 0.0.0.0
 
 http.port: 9240
 
-discovery.seed_hosts: ["vmbgbper01:9340","vmbgbper02:9340","vmbgbper03:9340"]
+discovery.seed_hosts: ["apigw01:9340","apigw02:9340","apigw03:9340"]
 transport.tcp.port: 9340
-path.repo: ['/opt/sag/products/InternalDataStore/archives']
+path.repo: ['${SUIF_ROOT_INSTALL_DIR}/APIGW/InternalDataStore/archives']
 
-cluster.initial_master_nodes: ["vmbgbper01","vmbgbper02","vmbgbper03"]
+cluster.initial_master_nodes: ["apigw01","apigw02","apigw03"]

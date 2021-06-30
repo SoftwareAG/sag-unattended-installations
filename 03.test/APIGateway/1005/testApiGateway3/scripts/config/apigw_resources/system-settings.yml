@@ -2,7 +2,7 @@
 apigw:
   elasticsearch:
     tenantId: default
-    hosts: vmbgbper01:9240,vmbgbper02:9240,vmbgbper03:9240
+    hosts: apigw01:9240,apigw02:9240,apigw03:9240
     autostart: false
     http:
       keepAlive: true
@@ -23,10 +23,10 @@ apigw:
   cluster:
     aware: true
     name: APIGatewayTSAcluster
-    tsaUrls: vmbgbper04:9510
+    tsaUrls: apigw01:9510,apigw02:9510,apigw03:9510
     terracottaLicenseFileName: terracotta-license.key
     sessTimeout: 60
     actionOnStartupError: standalone
     esClusterName: SAG_EventDataStore
-    discoverySeedHosts: vmbgbper01:9340,vmbgbper02:9340,vmbgbper03:9340
+    discoverySeedHosts: apigw01:9340,apigw02:9340,apigw03:9340
     pendingRestart: false

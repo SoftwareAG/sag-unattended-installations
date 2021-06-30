@@ -8,14 +8,14 @@
 # --------------------------------------------------------
 import sys
 from azure.keyvault.secrets import SecretClient
-from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 
 keyvault_name = sys.argv[1]
 secret_name = sys.argv[2]
 
 KVUri = f"https://{keyvault_name}.vault.azure.net"
 
-credential = DefaultAzureCredential()
+credential = ManagedIdentityCredential()
 client = SecretClient(vault_url=KVUri, credential=credential)
 retrieved_secret = client.get_secret(secret_name)
 

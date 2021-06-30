@@ -20,4 +20,4 @@ Get-Content ".\scripts\suif.env" | foreach-object -begin {$suif_env=@{}} -proces
 ## ---------------------------------------------------------------------
 ## Source common powershell functions
 ## ---------------------------------------------------------------------
-. "..\..\..\..\01.scripts\commonFunctions.ps1"
+. "..\..\..\..\01.scripts\pwsh\azureFunctions.ps1"

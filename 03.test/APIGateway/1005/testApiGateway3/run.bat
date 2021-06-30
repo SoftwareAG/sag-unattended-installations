@@ -91,8 +91,20 @@ if "%errorlevel%" NEQ "0" (
     goto end
 )
 
-:: SUIF scripts
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_include_pattern '0*/**' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
+:: SUIF scripts - 01.scripts
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_include_pattern '01.scripts/**' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to upload files ... exiting
+    goto end
+)
+:: SUIF scripts - 02.templates
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_include_pattern '02.templates/**' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to upload files ... exiting
+    goto end
+)
+:: SUIF scripts - 03.test (scripts only)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; uploadFiles -az_volume_handle 'SUIF_AZ_VOLUME_ASSETS' -az_dir_handle 'SUIF_DIR_ASSETS_SUIF' -az_source_handle '../../../..' -az_include_pattern '03.test/**/scripts/**' -az_ver_dir_handle 'SUIF_LOCAL_SCRIPTS_HOME' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to upload files ... exiting
     goto end
@@ -250,13 +262,13 @@ if "%errorlevel%" NEQ "0" (
 :: Add License File to Key Vault
 :: ------------------------------
 :: TSA
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_TES_LICENSE_VAULT_NAME' -az_file_handle 'H_SAG_TC_LICENSE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_TES_LICENSE_SECRET_NAME' -az_file_handle 'H_SAG_TC_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to create secret in Key Vault ... exiting
     goto end
 )
 :: APIGW
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_YAI_LICENSE_VAULT_NAME' -az_file_handle 'H_API_GW_LICENSE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_YAI_LICENSE_SECRET_NAME' -az_file_handle 'H_API_GW_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to create secret in Key Vault ... exiting
     goto end
@@ -266,25 +278,25 @@ if "%errorlevel%" NEQ "0" (
 :: Provision VM 01 
 :: ------------------------------
 :: APIGW 01
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_01' -az_host_name 'apigw01' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_01' -az_host_name 'apigw01' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE' -az_job_wait false $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to provision the VM ... exiting
     goto end
 )
 :: APIGW 02
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_02' -az_host_name 'apigw02' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_02' -az_host_name 'apigw02' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE'  -az_job_wait false $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to provision the VM ... exiting
     goto end
 )
 :: APIGW 03
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_03' -az_host_name 'apigw03' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_03' -az_host_name 'apigw03' -az_image_handle 'H_AZ_VM_IMAGE' -az_size_handle 'H_AZ_VM_SIZE' -az_job_wait false $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to provision the VM ... exiting
     goto end
 )
 :: Admin
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_ADMIN' -az_host_name 'admin' -az_image_handle 'SUIF_AZ_VM_ADMIN_IMAGE' -az_size_handle 'SUIF_AZ_VM_ADMIN_SIZE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; provisionVMforBastion -az_vm_name 'APIGW_ADMIN' -az_host_name 'admin' -az_image_handle 'SUIF_AZ_VM_ADMIN_IMAGE' -az_size_handle 'SUIF_AZ_VM_ADMIN_SIZE' -az_job_wait true $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to provision the VM ... exiting
     goto end
@@ -306,6 +318,56 @@ if "%errorlevel%" NEQ "0" (
 powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; grantKeyVaultPermission -az_vm_name 'APIGW_03' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to grant permission to Key Vault ... exiting
+    goto end
+)
+
+:: ------------------------------
+:: Set up Load Balancer config
+:: ------------------------------
+:: Create Load Balancer
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createLoadBalancer $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to create Load Balancer ... exiting
+    goto end
+)
+:: Create Health Probes
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createLoadBalancerProbe -az_vm_be_probe 'PROBE_9072' -az_vm_be_port 9072 $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to create Load Balancer Probe ... exiting
+    goto end
+)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createLoadBalancerProbe -az_vm_be_probe 'PROBE_9073' -az_vm_be_port 9073 $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to create Load Balancer Probe ... exiting
+    goto end
+)
+:: Add VM Addresses to Backend Pool
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addBackEndToAddressPool -az_vm_name 'APIGW_01' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to add IP to backend pool ... exiting
+    goto end
+)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addBackEndToAddressPool -az_vm_name 'APIGW_02' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to add IP to backend pool ... exiting
+    goto end
+)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addBackEndToAddressPool -az_vm_name 'APIGW_03' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to add IP to backend pool ... exiting
+    goto end
+)
+
+:: Create Rule for HTTP (port 80 -> 9072)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createLoadBalancerRule -az_vm_rule_name 'LB_RULE_HTTP' -az_vm_fe_port 80 -az_vm_be_port 9072 -az_vm_be_probe 'PROBE_9072' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to add IP to backend pool ... exiting
+    goto end
+)
+:: Create Rule for HTTPS (port 443 -> 9073)
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; createLoadBalancerRule -az_vm_rule_name 'LB_RULE_HTTPS' -az_vm_fe_port 443 -az_vm_be_port 9073 -az_vm_be_probe 'PROBE_9073' $LastExitCode}"
+if "%errorlevel%" NEQ "0" (
+    echo Unable to add IP to backend pool ... exiting
     goto end
 )
 
@@ -332,17 +394,20 @@ if "%errorlevel%" NEQ "0" (
 )
 
 :: ===============================================================================================
-:: ------------------------------
-:: Add Secret (refer to admin password and not stored on shared suif directories)
-:: ------------------------------
-:: powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addSecretToKeyVault -az_name_handle '' -az_secret_handle '' $LastExitCode}"
-:: if "%errorlevel%" NEQ "0" (
-::     echo Unable to create secret in Key Vault ... exiting
-::     goto end
-:: )
-
-:: ===============================================================================================
-
+echo -----------------------------------------------------
+echo --                 testApiGateway3 
+echo -- Provisioning completed. Use Azure Portal to access
+echo -- APIGW_ADMIN server to access individual cluster
+echo -- nodes user interfaces (via Bastion RDP).
+echo --  a) http://apigw01:9072 or https://apigw01:9073
+echo --  b) http://apigw02:9072 or https://apigw02:9073
+echo --  c) http://apigw03:9072 or https://apigw03:9073
+echo -- 
+echo -- Load Balancer front end addresses: 
+echo --  a) http://10.0.1.100:80    (APIGW HTTP)
+echo --  b) https://10.0.1.100:443  (APIGW HTTPS)
+echo -- 
+echo -----------------------------------------------------
 :end
 :: ------------------------------
 :: Exit
