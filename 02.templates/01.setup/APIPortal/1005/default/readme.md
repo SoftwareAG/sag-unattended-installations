@@ -1,3 +1,3 @@
-# API Gateway default installation
+# API Portal default installation
 
-Default installation includes the OOTB Elasticsearch as IDS (Internal Data Store)
+Default installation includes the API Portal bundle , fixes etc.
