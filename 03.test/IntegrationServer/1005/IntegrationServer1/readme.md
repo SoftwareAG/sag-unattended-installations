@@ -1,6 +1,6 @@
-# BigMemory test 1
+# Integration Server test 1
 
-The purpose of this test is to validate the local setup scripts for API Gateway version 1005
+The purpose of this test is to validate the local setup scripts for Integration Server version 1005
 
 The tested code is the one in the current branch, mounted locally.
 
@@ -13,7 +13,7 @@ The tested code is the one in the current branch, mounted locally.
   - update manager bootstrap for linux 64 bit
   - product image containing BigMemory 4.3 (packaged with webmethods version 10.5)
   - product fix image containing the latest relevant fixes
-  - license for API Gateway
+  - license for Integration Server
 
 ## Quickstart
 
@@ -25,10 +25,8 @@ All prerequisite files are in mentioned in the file .env_example.
 4. Eventually change H_SUIF_PORT_PREFIX to avoid port conflicts
 5. Issue docker-compose up
    1. Note: first run will take some time as it installs everything necessary
-6. Open a browser to [localhost API Gateway UI](http://localhost:48172) or [load balancer set API Gateway UI](http://host.docker.internal:48172) (or change port if you changed the port prefix)
-   1. Note LB is iset according to docker-desktop conventions if you are using another system adapt as required the file scripts/config/lb.json
-7. You should observe Administrator password has been changed to manage1 and LB are set appropriately
-8. You should observe the fact extended settings were altered as per the provided json configuration.
+6. Open a browser to [localhost Integration Server](http://localhost:5555) 
+7. You should observe the fact extended settings were altered as per the provided json configuration.
 
 ## Reusing the scripts for other environments
 
@@ -43,5 +41,5 @@ This test is given as an example of on-premise installation. In a classical envi
    1. set_env.sh will contain all the variables specific to your environment
       1. Hint: don't forget to properly declare SUIF_HOME :)
    2. containerEntrypoint.sh must be adapted to your environment specifics, follow the provided sequence
-      1. to install, first set the necessary env variables as shown, then apply the template "APIGateway/1005/default"
+      1. to install, first set the necessary env variables as shown, then apply the template "AIntegrationServer/1005/default"
       2. to configure post install, apply the post installation templates as shown in the example

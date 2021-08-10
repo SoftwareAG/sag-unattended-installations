@@ -2,7 +2,7 @@ ARG SRC_IMAGE=centos:7
 FROM centos:7
 
 ARG SUIF_TEST_GPG_KEYS_FILE_1=/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-ARG SUIF_INSTALL_InstallDir=/app/sag/1005/ApiGwTest1
+ARG SUIF_INSTALL_InstallDir=/app/sag/1005/IntgTest1
 
 ENV SUIF_INSTALL_InstallDir=${SUIF_INSTALL_InstallDir} \
     JAVA_HOME=${SUIF_INSTALL_InstallDir}/jvm/jvm/ \
@@ -18,11 +18,7 @@ RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_
     yum clean all &&\
     rm -rf /var/cache/yum &&\
     mkdir -p "${SUIF_SUM_HOME}" "${SUIF_AUDIT_BASE_DIR}" \
-      "${SUIF_LOCAL_SCRIPTS_HOME}" \
-      "${SUIF_INSTALL_InstallDir}/InternalDataStore/archives" \
-      "${SUIF_INSTALL_InstallDir}/InternalDataStore/config" \
-      "${SUIF_INSTALL_InstallDir}/InternalDataStore/data" \
-      "${SUIF_INSTALL_InstallDir}/InternalDataStore/logs" &&\
+      "${SUIF_LOCAL_SCRIPTS_HOME}" &&\
     touch "/tmp/products.zip" "/tmp/fixes.zip" &&\
     groupadd -g 1804 saggroup &&\
     useradd -u 1804 -m -g saggroup sag &&\
@@ -30,10 +26,6 @@ RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_
     chown -R sag:saggroup "${SUIF_LOCAL_SCRIPTS_HOME}" &&\
     chown -R sag:saggroup "${SUIF_SUM_HOME}" &&\
     chown -R sag:saggroup "${SUIF_AUDIT_BASE_DIR}" &&\
-    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}" &&\
-    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}/InternalDataStore/archives" &&\
-    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}/InternalDataStore/config" &&\
-    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}/InternalDataStore/data" &&\
-    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}/InternalDataStore/logs"
+    chown -R sag:saggroup "${SUIF_INSTALL_InstallDir}"
 
 USER sag

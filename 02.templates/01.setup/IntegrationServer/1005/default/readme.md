@@ -1,3 +1,3 @@
-# API Gateway default installation
+# Integration Server default installation
 
-Default installation includes the OOTB Elasticsearch as IDS (Internal Data Store)
+Default installation

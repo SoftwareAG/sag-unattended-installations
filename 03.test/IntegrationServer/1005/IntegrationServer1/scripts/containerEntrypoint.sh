@@ -50,12 +50,6 @@ onKill(){
 	logW "Killed!"
 }
 
-afterStartConfig(){
-    logI "Applying afterStartConfig"
-    applyPostSetupTemplate IntegrationServer/1005/ChangeAdministratorPassword
-
-}
-
 trap "onInterrupt" SIGINT SIGTERM
 trap "onKill" SIGKILL
 
