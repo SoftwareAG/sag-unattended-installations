@@ -966,7 +966,8 @@ function createKeyVault() {
     # ----------------------------------------------
     # Purge soft-deleted Key Vault when purge protection is enabled...
     # ----------------------------------------------
-   	$az_cmd_response = az keyvault purge --name $SUIF_AZ_KEYVAULT_NAME --subscription $H_AZ_SUBSCRIPTION_ID --location $H_AZ_GEO_LOCATION 2>&1 | out-null
+   	# $az_cmd_response = az keyvault purge --name $SUIF_AZ_KEYVAULT_NAME --subscription $H_AZ_SUBSCRIPTION_ID --location $H_AZ_GEO_LOCATION 2>&1 | out-null
+    
     # ----------------------------------------------
     # Create Key Vault ...
     # ----------------------------------------------
