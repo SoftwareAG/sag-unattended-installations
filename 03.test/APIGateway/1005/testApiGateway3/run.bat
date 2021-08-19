@@ -262,13 +262,13 @@ if "%errorlevel%" NEQ "0" (
 :: Add License File to Key Vault
 :: ------------------------------
 :: TSA
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_TES_LICENSE_SECRET_NAME' -az_file_handle 'H_SAG_TC_LICENSE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_TES_LICENSE_SECRET_NAME' -az_file_handle 'H_SAG_BM_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to create secret in Key Vault ... exiting
     goto end
 )
 :: APIGW
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_YAI_LICENSE_SECRET_NAME' -az_file_handle 'H_API_GW_LICENSE_FILE' $LastExitCode}"
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; addFileToKeyVault -az_name_handle 'SUIF_AZ_YAI_LICENSE_SECRET_NAME' -az_file_handle 'H_SAG_APIGW_LICENSE_FILE' $LastExitCode}"
 if "%errorlevel%" NEQ "0" (
     echo Unable to create secret in Key Vault ... exiting
     goto end
