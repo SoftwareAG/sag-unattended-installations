@@ -113,6 +113,8 @@ generateProductsImageFromTemplate(){
             lCmd="${lCmd} -debugFile '${lDebugLogFile}' -debugLvl verbose"
         fi
         lCmd="${lCmd} -writeImage ${lProductsImageFile}"
+        #explictly tell installer we are running unattended
+        lCmd="${lCmd} -scriptErrorInteract no"
 
         # avoid downloading what we already have
         if [ -f /dev/shm/productsImagesList.txt ]; then
