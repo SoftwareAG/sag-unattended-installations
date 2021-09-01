@@ -1,0 +1,10 @@
+{
+    "webAppUrl": null,
+    "websocketUrls": [],
+    "httpsUrls": [
+        "https://${SUIF_AZ_LOAD_BALANCER_IP}:${SUIF_INSTALL_YAI_HTTPS_PORT}"
+    ],
+    "httpUrls": [
+        "http://${SUIF_AZ_LOAD_BALANCER_IP}:${SUIF_INSTALL_YAI_HTTP_PORT}"
+    ]
+}

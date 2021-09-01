@@ -1,0 +1,14 @@
+{
+    "preferredSettings": {
+        "wattKeys": {
+            "watt.net.socketpool.debug": "true"
+        },
+        "extendedKeys": {}
+    },
+    "savedSettings": {
+        "wattKeys": {
+            "watt.net.socketpool.debug": "true"
+        },
+        "extendedKeys": {}
+    }
+}

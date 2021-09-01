@@ -1,0 +1,32 @@
+---
+apigw:
+  elasticsearch:
+    tenantId: default
+    hosts: apigw01:9240,apigw02:9240,apigw03:9240
+    autostart: false
+    http:
+      keepAlive: true
+      keepAliveMaxConnections: 50
+      keepAliveMaxConnectionsPerRoute: 15
+      connectionTimeout: 10000
+      socketTimeout: 30000
+      maxRetryTimeout: 100000
+    https:
+      enabled: false
+    sniff:
+      enable: true
+      timeInterval: 60000
+    clientHttpResponseSize: 100
+  kibana:
+    dashboardInstance: http://localhost:9405
+    autostart: true
+  cluster:
+    aware: true
+    name: APIGatewayTSAcluster
+    tsaUrls: apigw01:9510,apigw02:9510,apigw03:9510
+    terracottaLicenseFileName: terracotta-license.key
+    sessTimeout: 60
+    actionOnStartupError: standalone
+    esClusterName: SAG_EventDataStore
+    discoverySeedHosts: apigw01:9340,apigw02:9340,apigw03:9340
+    pendingRestart: false

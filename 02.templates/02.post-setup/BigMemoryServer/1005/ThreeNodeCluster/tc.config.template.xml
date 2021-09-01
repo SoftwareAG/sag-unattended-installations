@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<con:tc-config xmlns:con="http://www.terracotta.org/config">
+    <tc-properties>
+        <property name="ehcache.storageStrategy.dcv2.perElementTTITTL.enabled" value="true"/>
+    </tc-properties>
+    <servers>
+        <server host="${SUIF_POST_TC_SERVER_HOST_01}" name="${SUIF_POST_TC_SERVER_HOST_01}" bind="0.0.0.0" jmx-enabled="false">
+            <logs>${SUIF_POST_TC_SERVER_LOGS_DIR}</logs>
+            <tsa-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_PORT}</tsa-port>
+            <!--tsa-group-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_GROUP_PORT}</tsa-group-port-->
+            <data>${SUIF_POST_TC_SERVER_DATA_DIR}</data>
+            <offheap>
+                <enabled>true</enabled>
+                <maxDataSize>${SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE}</maxDataSize>
+            </offheap>
+        </server>
+        <server host="${SUIF_POST_TC_SERVER_HOST_02}" name="${SUIF_POST_TC_SERVER_HOST_02}" bind="0.0.0.0" jmx-enabled="false">
+            <logs>${SUIF_POST_TC_SERVER_LOGS_DIR}</logs>
+            <tsa-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_PORT}</tsa-port>
+            <!--tsa-group-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_GROUP_PORT}</tsa-group-port-->
+            <data>${SUIF_POST_TC_SERVER_DATA_DIR}</data>
+            <offheap>
+                <enabled>true</enabled>
+                <maxDataSize>${SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE}</maxDataSize>
+            </offheap>
+        </server>
+        <server host="${SUIF_POST_TC_SERVER_HOST_03}" name="${SUIF_POST_TC_SERVER_HOST_03}" bind="0.0.0.0" jmx-enabled="false">
+            <logs>${SUIF_POST_TC_SERVER_LOGS_DIR}</logs>
+            <tsa-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_PORT}</tsa-port>
+            <!--tsa-group-port bind="0.0.0.0">${SUIF_POST_TC_SERVER_GROUP_PORT}</tsa-group-port-->
+            <data>${SUIF_POST_TC_SERVER_DATA_DIR}</data>
+            <offheap>
+                <enabled>true</enabled>
+                <maxDataSize>${SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE}</maxDataSize>
+            </offheap>
+        </server>
+        <restartable enabled="true"/>
+    </servers>
+    <clients>
+        <logs>%(com.softwareag.tc.client.logs.directory)</logs>
+    </clients>
+</con:tc-config>
