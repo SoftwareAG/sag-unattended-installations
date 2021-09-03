@@ -78,9 +78,22 @@ generateProductsImageFromTemplate(){
             local lPlatformString=${2:-LNXAMD64}
 
             # TODO: streamline
-            local lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+
+            # current default
+            local lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
             if [[ ${1} == *"/1005/"* ]]; then
-                lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
+                lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
+            else
+                if [[ ${1} == *"/1011/"* ]]; then
+                    logW "10.11 is not yet public..."
+                    # Exception for preview mode
+
+                    SUIF_EMPOWER_USER=${SUIF_SDC_1011_USER_NAME:-${SUIF_EMPOWER_USER}}
+                    SUIF_EMPOWER_PASSWORD=${SUIF_SDC_1011_USER_PASSWORD:-${SUIF_EMPOWER_PASSWORD}}
+
+                    logI "Installer download user set to ${SUIF_EMPOWER_USER}"
+                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
+                fi
             fi
 
             mkdir -p "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}/${1}"

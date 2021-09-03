@@ -46,4 +46,9 @@ services:
       # credentials
       - SUIF_EMPOWER_USER=${H_SUIF_EMPOWER_USER}
       - SUIF_EMPOWER_PASSWORD=${H_SUIF_EMPOWER_PASSWORD}
+      - SUIF_SDC_SERVER_URL_1005
+      - SUIF_SDC_SERVER_URL_1007
+      - SUIF_SDC_SERVER_URL_1011
+      - SUIF_SDC_1011_USER_NAME
+      - SUIF_SDC_1011_USER_PASSWORD
     entrypoint: /mnt/scripts/containerEntrypoint.sh
