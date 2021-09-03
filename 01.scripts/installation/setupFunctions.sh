@@ -15,6 +15,7 @@ init(){
     ## Framework - Install
     export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/path/to/installer.bin"}
     export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
+    export SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE:-"0"}
     ## Framework - Patch
     export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/path/to/sum-boostrap.bin"}
     export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
@@ -24,6 +25,7 @@ init(){
     export SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR:-"/opt/sag/products"}
     export SUIF_INSTALL_SPM_HTTPS_PORT=${SUIF_INSTALL_SPM_HTTPS_PORT:-"9083"}
     export SUIF_INSTALL_SPM_HTTP_PORT=${SUIF_INSTALL_SPM_HTTP_PORT:-"9082"}
+    export SUIF_INSTALL_DECLARED_HOSTNAME=${SUIF_INSTALL_DECLARED_HOSTNAME:-"localhost"}
     ## Framework - Patch
     export SUIF_SUM_HOME=${SUIF_SUM_HOME:-"/opt/sag/sum"}
 }
@@ -69,6 +71,10 @@ installProducts(){
         logI "Product installation successful"
     else
         logE "Product installation failed, code ${RESULT_installProducts}"
+        logD "Dumping the install.wmscript file into the session audit folder..."
+        if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+            cp /dev/shm/install.wmscript "${SUIF_AUDIT_SESSION_DIR}/"
+        fi
         return 4
     fi
 }
@@ -264,13 +270,16 @@ setupProductsAndFixes(){
         logE "Installer script file not found: ${2}"
         return 2
     fi
-    if [ ! -f ${3} ]; then
-        logE "Update Manager bootstrap binary file not found: ${3}"
-        return 3
-    fi
-    if [ ! -f ${4} ]; then
-        logE "Fixes image file not found: ${3}"
-        return 4
+
+    if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ];  then 
+        if [ ! -f ${3} ]; then
+                logE "Update Manager bootstrap binary file not found: ${3}"
+                return 3
+        fi
+        if [ ! -f ${4} ]; then
+            logE "Fixes image file not found: ${3}"
+            return 4
+        fi
     fi
     if [ ! $(which envsubst) ]; then
         logE "Product installation requires envsubst to be installed!"
@@ -313,29 +322,35 @@ setupProductsAndFixes(){
                 logE "installProducts failed, code ${RESULT_installProducts}!"
                 RESULT_setupProductsAndFixes=8
             else
-                # Parameters - bootstrapSum
-                # $1 - Update Manager Boostrap file
-                # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
-                local lSumHome=${5:-"/opt/sag/sum"}
-                bootstrapSum "${3}" "${4}" "${lSumHome}"
-                local RESULT_bootstrapSum=$?
-                if [ ${RESULT_bootstrapSum} -ne 0 ]; then
-                    logE "Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
-                    RESULT_setupProductsAndFixes=9
-                else
-                    # Parameters - patchInstallation
-                    # $1 - Fixes Image (this will allways happen offline in this framework)
-                    # $2 - OTPIONAL SUM Home, default /opt/sag/sum
-                    # $3 - OTPIONAL Products Home, default /opt/sag/products
-                    patchInstallation "${4}" "${lSumHome}" "${lInstallDir}"
-                    RESULT_patchInstallation=$?
-                    if [ ${RESULT_patchInstallation} -ne 0 ]; then
-                        logE "Patch Installation failed, code ${RESULT_patchInstallation}!"
-                        RESULT_setupProductsAndFixes=10
+
+                if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ];  then 
+
+                    # Parameters - bootstrapSum
+                    # $1 - Update Manager Boostrap file
+                    # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+                    local lSumHome=${5:-"/opt/sag/sum"}
+                    bootstrapSum "${3}" "${4}" "${lSumHome}"
+                    local RESULT_bootstrapSum=$?
+                    if [ ${RESULT_bootstrapSum} -ne 0 ]; then
+                        logE "Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
+                        RESULT_setupProductsAndFixes=9
                     else
-                        logI "Product and Fixes setup completed successfully"
-                        RESULT_setupProductsAndFixes=0
+                        # Parameters - patchInstallation
+                        # $1 - Fixes Image (this will allways happen offline in this framework)
+                        # $2 - OTPIONAL SUM Home, default /opt/sag/sum
+                        # $3 - OTPIONAL Products Home, default /opt/sag/products
+                        patchInstallation "${4}" "${lSumHome}" "${lInstallDir}"
+                        RESULT_patchInstallation=$?
+                        if [ ${RESULT_patchInstallation} -ne 0 ]; then
+                            logE "Patch Installation failed, code ${RESULT_patchInstallation}!"
+                            RESULT_setupProductsAndFixes=10
+                        else
+                            logI "Product and Fixes setup completed successfully"
+                            RESULT_setupProductsAndFixes=0
+                        fi
                     fi
+                else
+                    logI "Skipping patch installation, fixes not available."
                 fi
             fi
         fi
