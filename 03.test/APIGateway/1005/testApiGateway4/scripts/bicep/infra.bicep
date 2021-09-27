@@ -185,11 +185,13 @@ param loadBalancerFrontEndAddress string = '10.1.0.100'
 param lbProfiles array = [
   {
     name: 'PublicHTTP'
+    protocol: 'Tcp'
     frontendPort: 80
     backendPort: 9072
   }
   {
     name: 'PublicHTTPS'
+    protocol: 'Tcp'
     frontendPort: 443
     backendPort: 9073
   }
@@ -202,8 +204,9 @@ module loadBalancer '../../../../../../01.scripts/bicep/loadBalancer.bicep' = {
     loadBalancerName: 'LoadBalancer-${identifier}'
     privateFrontEndIP: loadBalancerFrontEndAddress
     vmProperties: workLoadVMs.outputs.vmProperties
+    vNetId: bastionService.outputs.vNetId
     subNetId: bastionService.outputs.workLoadSubNetId
-    profiles: lbProfiles
+    lbProfiles: lbProfiles
   }
 }
 

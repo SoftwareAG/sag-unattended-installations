@@ -200,6 +200,26 @@ resource VNET 'Microsoft.Network/virtualNetworks@2021-02-01' = {
     NSG
   ]
   properties: {
+    subnets:[
+      {
+        name: 'AzureBastionSubnet'
+        properties: {
+          addressPrefix: bastionSubnetIpPrefix
+          networkSecurityGroup: {
+            id: NSG.id
+          }
+        }
+      }
+      {
+        name: 'WorkLoadSubnet'
+        properties: {
+          networkSecurityGroup: {
+            id: NSG.id
+          }
+          addressPrefix: workLoadSubnetIpPrefix
+        }
+      }
+    ]
     addressSpace: {
       addressPrefixes: [
         vNetIpPrefix
@@ -208,45 +228,13 @@ resource VNET 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
-// SubNet for Bastion
-resource BastionSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
-  name: 'AzureBastionSubnet'
-  parent: VNET
-  dependsOn: [
-    NSG
-    VNET
-  ]
-  properties: {
-    networkSecurityGroup: {
-      id: NSG.id
-    }
-    addressPrefix: bastionSubnetIpPrefix
-  }
-}
-
-// SubNet for Work Load VMs
-resource workLoadSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
-  name: 'WorkLoadSubnet'
-  parent: VNET
-  dependsOn: [
-    NSG
-    VNET
-  ]
-  properties: {
-    networkSecurityGroup: {
-      id: NSG.id
-    }
-    addressPrefix: workLoadSubnetIpPrefix
-  }
-}
-
 // Bastion Host
 resource bastionHost 'Microsoft.Network/bastionHosts@2021-02-01' = {
   name: bastionHostName
   location: location
   dependsOn: [
-    BastionSubNet
     PublicIP
+    VNET
   ]
   properties: {
     ipConfigurations: [
@@ -254,7 +242,7 @@ resource bastionHost 'Microsoft.Network/bastionHosts@2021-02-01' = {
         name: 'IpConf'
         properties: {
           subnet: {
-            id: BastionSubNet.id
+            id: VNET.properties.subnets[0].id
           }
           publicIPAddress: {
             id: PublicIP.id
@@ -266,4 +254,4 @@ resource bastionHost 'Microsoft.Network/bastionHosts@2021-02-01' = {
 }
 
 output vNetId string = VNET.id
-output workLoadSubNetId string = workLoadSubNet.id
+output workLoadSubNetId string = VNET.properties.subnets[1].id

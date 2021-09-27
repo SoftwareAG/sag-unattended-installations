@@ -7,12 +7,11 @@
 :: - Environment variables used are derived from .env and scripts/suif.env
 ::
 :: ----------------------------------------------------------------------------------
-goto resume
 
 :: ------------------------------
 :: Log on to Azure interactively
 :: ------------------------------
-powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; loginAzure $LastExitCode}" 
+powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -Command "& {. '.\scripts\suif_ps_functions.ps1'; azLogin $LastExitCode}" 
 if "%errorlevel%" NEQ "0" (
     echo Azure Login not successful ... exiting
     goto end
@@ -137,7 +136,6 @@ if "%errorlevel%" NEQ "0" (
     goto end
 )
 
-:resume
 :: --------------------------------------------------------------------------
 :: Initialize the VM (mount shares, etc.) and start application entry script
 :: --------------------------------------------------------------------------

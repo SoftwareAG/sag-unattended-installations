@@ -15,7 +15,6 @@
 @description('KeyVault Name')
 param keyVaultName string
 param identities array
-// param userId string
 
 resource KeyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
   name: keyVaultName
@@ -47,45 +46,7 @@ resource KeyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
       tenantId: subscription().tenantId
     }]
     tenantId: subscription().tenantId
-    enableSoftDelete: false
+    enableSoftDelete: true
   }
 }
-/*
-resource AccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: '${KeyVault.name}/UserPolicy'
-  dependsOn:[
-    KeyVault
-  ]
-  properties: {
-    accessPolicies: [
-      {
-        objectId: userId
-        permissions: {
-          certificates: [
-            'create'
-            'get'
-            'list'
-          ]
-          keys: [
-            'create'
-            'get'
-            'list'
-          ]
-          secrets: [
-            'get'
-            'list'
-            'set'
-          ]
-          storage: [
-            'get'
-            'list'
-            'set'
-          ]
-        }
-        tenantId: subscription().tenantId
-      }
-    ]
-  }
-}
-*/
 output keyVaultName string = KeyVault.name
