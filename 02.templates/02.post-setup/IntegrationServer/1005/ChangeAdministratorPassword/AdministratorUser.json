@@ -1,0 +1,12 @@
+{
+    "id": "Administrator",
+    "loginId": "Administrator",
+    "firstName": "",
+    "lastName": "",
+    "language": "",
+    "password": "${SUIF_IS_NEW_ADMINISTRATOR_PASSWORD}",
+    "type": "local",
+    "allowDigestAuth": true,
+    "active": true,
+    "emailAddresses": []
+}

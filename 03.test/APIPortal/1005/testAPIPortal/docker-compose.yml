@@ -1,0 +1,55 @@
+version: "3.5"
+
+volumes:
+  apiportal1-install-home: {}
+  apiportal1-sum-home: {}
+  apiportal1-runs: {}
+  apiportal1-archives: {}
+  apiportal1-config: {}
+  apiportal1-data: {}
+  apiportal1-logs: {}
+  apiportal1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  apiportal1:
+    build: ./build
+    image: test-api-portal-1
+    container_name: test-api-portal-1-1
+    hostname: test-api-portal-1-1
+    ulimits:
+      nproc: 4096
+      nofile: 65536
+    volumes:
+      - apiportal1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - apiportal1-install-home:/app/sag/1005/ApiPortalTest1/
+      - apiportal1-sum-home:/app/sag/sumv11/
+      - apiportal1-runs:/app/audit/
+      # These must be provided, they are prerequisites
+      - ${H_API_PORTAL_LICENSE_FILE}:/tmp/API_Portal_license.xml
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # we declare SUIF_HOME because we mount it here
+      - SUIF_HOME=/mnt/SUIF_HOME
+      # we declare SUIF_AUDIT_BASE_DIR because we mount it here
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      # setupFunctions prerequisites map, declared here because provided by host
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      # declare install dir and SUM dir because they are mounted here
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1005/ApiPortalTest1
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      # setup template specifics - license provided by host
+      - SUIF_SETUP_TEMPLATE_YAP_LICENSE_FILE=/tmp/API_Portal_license.xml
+    ports:
+      - "${H_SUIF_PORT_PREFIX}01:18101"
+      - "${H_SUIF_PORT_PREFIX}02:18102"
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
