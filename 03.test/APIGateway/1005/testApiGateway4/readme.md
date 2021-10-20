@@ -1,6 +1,7 @@
 # API GAteway test 4
 - Based on API Gateway test 3 (a 3 node APIGW installation version 10.5 provisioned on Azure)
 - Instead of provisioning infrastructure with Azure CLI commands, deployment is now done using ARM Bicep scripts.
+- Additionally, the workload VMs (the API Gateways and Terracotta Servers) are placed within an Azure Avaliability Set.
 
 ## Prerequisites
 

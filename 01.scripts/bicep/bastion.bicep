@@ -6,12 +6,10 @@
 //  - Virtual Network
 //  - Subnet
 // ------------------------------------------------------------------------------------------------
-@description('Identifier suffix for resource name')
-param identifier string = ''
 @description('Optional Bastion Hostname')
-param bastionHostName string = 'BastionHost-${identifier}'
+param bastionHostName string = 'BastionHost'
 @description('Optional VNET name')
-param virtualNetworkName string = 'Bastion-VNET-${identifier}'
+param virtualNetworkName string = 'Bastion-VNET'
 @description('Optional VNET IP address range')
 param vNetIpPrefix string = '10.1.0.0/16'
 @description('Optional Subnet address range for Bastion Subnet')
@@ -24,7 +22,7 @@ param location string = resourceGroup().location
 
 // Network security group
 resource NSG 'Microsoft.Network/networkSecurityGroups@2021-02-01' = {
-  name: 'Bastion-VNET-NSG-${identifier}'
+  name: 'Bastion-VNET-NSG'
   location: location
   properties: {
     securityRules: [
@@ -179,7 +177,7 @@ resource NSG 'Microsoft.Network/networkSecurityGroups@2021-02-01' = {
 
 // Public IP
 resource PublicIP 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
-  name: 'Bastion-IP-${identifier}'
+  name: 'Bastion-PublicIP'
   location: location
   sku: {
     name: 'Standard'
