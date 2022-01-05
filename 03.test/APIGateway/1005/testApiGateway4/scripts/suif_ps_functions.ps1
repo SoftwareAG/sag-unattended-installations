@@ -23,6 +23,17 @@ Get-Content ".\scripts\suif.env" | foreach-object -begin {$suif_env=@{}} -proces
 . "..\..\..\..\01.scripts\pwsh\azureFunctions.ps1"
 
 ## ---------------------------------------------------------------------
+## Login to Azure (interactively via Browser) - if needed
+## ---------------------------------------------------------------------
+function azLogin() {
+    Write-Host "-------------------------------------------------------"
+    Write-Host " Login to Azure ...."
+    Write-Host "-------------------------------------------------------"
+    $az_cmd_response = az login 2>&1 | out-null
+    exit 0
+}
+
+## ---------------------------------------------------------------------
 ## Run ARM bicep template for file share
 ## ---------------------------------------------------------------------
 function deployFileShare() {
@@ -162,7 +173,7 @@ function addFileToDeployedKeyVault() {
     # ----------------------------------------------
     # Get deployed KeyVault name
     # ----------------------------------------------
-    $SUIF_AZ_KEYVAULT_NAME = az deployment group list -g $SUIF_AZ_RESOURCE_GROUP --query [].properties.parameters.keyVaultName.value -o tsv
+    $SUIF_AZ_KEYVAULT_NAME = az deployment group list --subscription $H_AZ_SUBSCRIPTION_ID -g $SUIF_AZ_RESOURCE_GROUP --query [].properties.parameters.keyVaultName.value -o tsv
     if (!$?) {
         Write-Host " - addFileToDeployedKeyVault :: Unable to get the deployed keyvault :: $SUIF_AZ_KEYVAULT_NAME"
         exit -1
@@ -238,7 +249,7 @@ function runInitVM() {
     # ----------------------------------------------
     # Get deployed KeyVault name
     # ----------------------------------------------
-    $SUIF_AZ_KEYVAULT_NAME = az deployment group list -g $SUIF_AZ_RESOURCE_GROUP --query [].properties.parameters.keyVaultName.value -o tsv
+    $SUIF_AZ_KEYVAULT_NAME = az deployment group list --subscription $H_AZ_SUBSCRIPTION_ID -g $SUIF_AZ_RESOURCE_GROUP --query [].properties.parameters.keyVaultName.value -o tsv
     if (!$?) {
         Write-Host " - initializeVM :: Unable to get the deployed keyvault :: $SUIF_AZ_KEYVAULT_NAME"
         exit -1
@@ -249,6 +260,7 @@ function runInitVM() {
     # Get the storage location
     # ----------------------------------------------
    	$az_cmd_response = az storage account show `
+      --subscription $H_AZ_SUBSCRIPTION_ID `
       --resource-group $H_AZ_RESOURCE_GROUP_STORAGE `
       --name $H_AZ_STORAGE_ACCOUNT `
       --query "primaryEndpoints.file" -o tsv

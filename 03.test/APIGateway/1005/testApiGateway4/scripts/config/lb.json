@@ -2,9 +2,9 @@
     "webAppUrl": null,
     "websocketUrls": [],
     "httpsUrls": [
-        "https://${SUIF_AZ_LOAD_BALANCER_IP}:${SUIF_INSTALL_YAI_HTTPS_PORT}"
+        "https://${SUIF_AZ_LOAD_BALANCER_IP}:443"
     ],
     "httpUrls": [
-        "http://${SUIF_AZ_LOAD_BALANCER_IP}:${SUIF_INSTALL_YAI_HTTP_PORT}"
+        "http://${SUIF_AZ_LOAD_BALANCER_IP}:80"
     ]
 }

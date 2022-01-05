@@ -14,7 +14,7 @@ resource fileService 'Microsoft.Storage/storageAccounts/fileServices@2021-04-01'
   name: 'default'
   parent: Storage
 }
-resource symbolicname 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01' = {
+resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01' = {
   name: fileShareName
   parent: fileService
   properties: {

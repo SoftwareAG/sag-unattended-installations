@@ -5,10 +5,6 @@
 //  - Upload files to target directories
 // ===========================================================================================
 targetScope = 'resourceGroup'
-// --------------------------------------------------------------
-// Identifier used for suffixing resources and deployments
-// --------------------------------------------------------------
-param identifier string
 
 // --------------------------------------------------------------
 // Parameters
@@ -16,13 +12,12 @@ param identifier string
 param storageAccountName string
 param fileShareName string
 
-
 // --------------------------------------------------------------
 // Creates a File share on existing storage account
 // --------------------------------------------------------------
 module fileShare '../../../../../../01.scripts/bicep/fileShare.bicep' = {
   scope: resourceGroup()
-  name: 'FileShare-${identifier}'
+  name: 'FileShare'
   params: {
     storageAccountName: storageAccountName
     fileShareName: fileShareName

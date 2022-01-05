@@ -2,6 +2,7 @@
    Main bicep template for setting up a 3-node API Gateway cluster
     - Creates a Resource Group
     - Creates a Bastion Host Service (with associated virtual network, subnets, security rules)
+    - Creates an availability Set for below workload nodes
     - Creates a VM x 3 workload nodes (APIGW + TSA)
     - Creates a VM for Admin (Windows)
     - Creates a KeyVault
@@ -30,11 +31,22 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 // --------------------------------------------------------------
 module bastionService '../../../../../../01.scripts/bicep/bastion.bicep' = {
   scope: resourceGroup
-  name: 'BastionService-${identifier}'
+  name: 'BastionService'
+}
+
+// --------------------------------------------------------------
+// Create an availability Set
+// --------------------------------------------------------------
+module availabilitySet '../../../../../../01.scripts/bicep/availabilitySet.bicep' = {
+  scope: resourceGroup
+  name: 'AvailabilitySet'
   params: {
-    identifier: identifier
+    availabilitySetName: 'AvailabilitySet'
+    numFaultDomains: 3
+    numUpdateDomains: 5
   }
 }
+
 // --------------------------------------------------------------
 // Creates the workload vm's
 // --------------------------------------------------------------
@@ -52,22 +64,6 @@ param workLoadStorageProfile object = {
     sku: vmSKU
     version: vmVersion
   }
-  // Include additional disk options if needed
-  /* 
-  osDisk: {
-    createOption: 'FromImage'
-    managedDisk: {
-      storageAccountType: 'StandardSSD_LRS'
-    }
-  }
-  dataDisks: [
-    {
-      diskSizeGB: 256
-      lun: 0
-      createOption: 'Empty'
-    }
-  ]
-  */
 }
 
 param userName string = 'sag'
@@ -79,10 +75,11 @@ param wlNodes array = [
   'apigw02'
   'apigw03'
 ]
-module workLoadVMs '../../../../../../01.scripts/bicep/virtualMachine.bicep' = {
+module workLoadVMs '../../../../../../01.scripts/bicep/virtualMachineAvSet.bicep' = {
   scope: resourceGroup
-  name: 'VM-WorkLoad-${identifier}'
+  name: 'VM-WorkLoad'
   params: {
+    availabilitySetId: availabilitySet.outputs.id
     virtualMachineNames: wlNodes
     adminUsername: userName
     adminPassword: userPass
@@ -106,9 +103,9 @@ param adminStorageProfile object = {
     version: 'latest'
   }
 }
-module virtualMachine '../../../../../../01.scripts/bicep/virtualMachine.bicep' = {
+module virtualMachine '../../../../../../01.scripts/bicep/virtualMachineSimple.bicep' = {
   scope: resourceGroup
-  name: 'VM-Admin-${identifier}'
+  name: 'VM-Admin'
   params: {
     virtualMachineNames: adminNodes
     adminUsername: userName
@@ -139,44 +136,6 @@ module keyVault '../../../../../../01.scripts/bicep/keyVault.bicep' = {
   }
 }
 
-/*
-// --------------------------------------------------------------
-// Add TSA License key to key vault
-// --------------------------------------------------------------
-@secure()
-param secretValueBMLicense string
-param secretNameBMLicense string = 'Terracotta-LicenseKey-v105'
-module keyVaultSecretBM '../../../../../../01.scripts/bicep/keyVaultSecret.bicep' = {
-  scope: resourceGroup
-  name: 'KV-Secret-BM-${identifier}'
-  dependsOn: [
-    keyVault
-  ]
-  params: {
-    keyVaultName: 'KeyVault-${identifier}'
-    secretName: secretNameBMLicense
-    secretValue: secretValueBMLicense
-  }
-}
-// --------------------------------------------------------------
-// Add APIGW License key to key vault
-// --------------------------------------------------------------
-@secure()
-param secretValueAPIGWLicense string
-param secretNameAPIGWLicense string = 'API-Gateway-LicenseKey-v105'
-module keyVaultSecretAPIGW '../../../../../../01.scripts/bicep/keyVaultSecret.bicep' = {
-  scope: resourceGroup
-  name: 'KV-Secret-APIGW-${identifier}'
-  dependsOn: [
-    keyVault
-  ]
-  params: {
-    keyVaultName: 'KeyVault-${identifier}'
-    secretName: secretNameAPIGWLicense
-    secretValue: secretValueAPIGWLicense
-  }
-}
-*/
 
 // --------------------------------------------------------------
 // Creates the internal Load Balancer with associated rules
@@ -185,11 +144,13 @@ param loadBalancerFrontEndAddress string = '10.1.0.100'
 param lbProfiles array = [
   {
     name: 'PublicHTTP'
+    protocol: 'Tcp'
     frontendPort: 80
     backendPort: 9072
   }
   {
     name: 'PublicHTTPS'
+    protocol: 'Tcp'
     frontendPort: 443
     backendPort: 9073
   }
@@ -197,13 +158,14 @@ param lbProfiles array = [
 
 module loadBalancer '../../../../../../01.scripts/bicep/loadBalancer.bicep' = {
   scope: resourceGroup
-  name: 'LoadBalancer-${identifier}'
+  name: 'LoadBalancer'
   params: {
-    loadBalancerName: 'LoadBalancer-${identifier}'
+    loadBalancerName: 'LoadBalancer'
     privateFrontEndIP: loadBalancerFrontEndAddress
     vmProperties: workLoadVMs.outputs.vmProperties
+    vNetId: bastionService.outputs.vNetId
     subNetId: bastionService.outputs.workLoadSubNetId
-    profiles: lbProfiles
+    lbProfiles: lbProfiles
   }
 }
 
