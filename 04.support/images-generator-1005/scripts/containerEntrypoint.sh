@@ -35,17 +35,26 @@ else
     # $2 - Fixes image file, mandatory for offline mode
     # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
     bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "" "${SUIF_SUM_HOME}" 
-
-    cd "${SUIF_SUM_HOME}/bin"
-    # first ensure SUM is able to self update"
-    lCmd="./UpdateManagerCMD.sh -selfUpdate true"
-    lCmd="${lCmd} -empowerUser ${SUIF_EMPOWER_USER}"
-    lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
-
-    controlledExec "${lCmd}" "SUM-Self-Update"
-
-    unset lCmd
 fi
+
+logI "Attempting to update Update Manager itself..."
+cd "${SUIF_SUM_HOME}/bin"
+# first ensure SUM is able to self update"
+lCmd="./UpdateManagerCMD.sh -selfUpdate true"
+lCmd="${lCmd} -empowerUser ${SUIF_EMPOWER_USER}"
+lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
+
+controlledExec "${lCmd}" "SUM-Self-Update"
+
+result_SUM_SELF_UPDATE=$?
+
+if [ ${result_SUM_SELF_UPDATE} -ne 0 ]; then
+    logE "Update Manager Self Online Update failed, code ${result_SUM_SELF_UPDATE}"
+fi
+
+unset lCmd
+
+# TODO: initialize lTemplateFiles only if not already provided
 
 logI "Inspecting SUIF for setup templates"
 cd "${SUIF_HOME}/02.templates/01.setup"

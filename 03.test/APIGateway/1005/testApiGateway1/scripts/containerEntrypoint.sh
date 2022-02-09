@@ -64,6 +64,10 @@ checkPrerequisites(){
     fi
 } 
 
+beforeStartConfig(){
+    applyPostSetupTemplate Profiles/CVE-2021-44228-WA
+}
+
 afterStartConfig(){
     logI "Applying afterStartConfig"
     applyPostSetupTemplate ApiGateway/1005/ChangeAdministratorPassword
@@ -78,6 +82,9 @@ echo "Starting up API Gateway server"
 echo "Checking prerequisites ..."
 checkPrerequisites || exit 7
 pushd . >/dev/null
+
+beforeStartConfig
+
 echo "Starting Elasticsearch ..."
 cd "${SUIF_INSTALL_InstallDir}/InternalDataStore/bin"
 ./startup.sh
