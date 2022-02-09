@@ -48,6 +48,7 @@ generateFixesImageFromTemplate(){
         lCmd="${lCmd} -imagePlatform ${lPlatformString}"
         lCmd="${lCmd} -createImage "'"'"${lFixesImageFile}"'"' 
         lCmd="${lCmd} -empowerUser ${SUIF_EMPOWER_USER}"
+        echo "SUM command to execute: ${lCmd} -empowerPass ***"
         lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
 
         pushd . >/dev/null
@@ -140,6 +141,6 @@ generateProductsImageFromTemplate(){
         logI "Image ${lProductsImageFile} creation completed, result: $?"
         rm -f "${lVolatileScriptFile}"
 
-        echo "lProductsImageFile" >> /dev/shm/productsImagesList.txt
+        echo "${lProductsImageFile}" >> /dev/shm/productsImagesList.txt
     fi
 }
