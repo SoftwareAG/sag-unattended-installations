@@ -13,7 +13,9 @@ ${productsHash} = @{} #using a hash for unique values
 
 foreach ($productString in ${lProductsCsv}.split(',')){
     $productCode=$productString.split('/')[-1]
-    ${productsHash}["$productCode"] = "1"
+    $verArray=$productString.split('/')[2].split('_')[-1].split('.')
+    $productVersion=$verArray[0]+'.'+$verArray[1]+'.'+$verArray[2]
+    ${productsHash}["$productCode"] = $productVersion
 }
 
 if (${productsHash}.Count -gt 0){
@@ -22,7 +24,8 @@ if (${productsHash}.Count -gt 0){
         ${installedProducts} += (@{
             "productId" = ${productId}
             "displayName" = ${productId}
-            "version" = ${sumVersionString}
+            #"version" = ${sumVersionString}
+            "version" = ${productsHash}["${productId}"]
         })
     }
     $document=@{
