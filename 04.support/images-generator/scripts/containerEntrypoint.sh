@@ -56,22 +56,34 @@ unset lCmd
 
 # TODO: initialize lTemplateFiles only if not already provided
 
-logI "Inspecting SUIF for setup templates"
-cd "${SUIF_HOME}/02.templates/01.setup"
-lTemplateFiles=(`find . -type f -name template.wmscript`)
+SUIF_PROCESS_TEMPLATE=${SUIF_PROCESS_TEMPLATE:-all}
 
-for wmsfile in "${lTemplateFiles[@]}"
-do
-    templateId=${wmsfile%'/template.wmscript'}
-    templateId=${templateId#'./'}
-    logI "Found template ${templateId} (from file ${wmsfile})"
+if [ "${SUIF_PROCESS_TEMPLATE}" == "all" ];then
+    logI "Inspecting SUIF for setup templates"
+    cd "${SUIF_HOME}/02.templates/01.setup"
+    lTemplateFiles=(`find . -type f -name template.wmscript`)
 
-    # Parameters
-    # $1 -> setup template
-    # $2 -> platform string
-    generateProductsImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
-    generateFixesImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
-done
+    for wmsfile in "${lTemplateFiles[@]}"
+    do
+        templateId=${wmsfile%'/template.wmscript'}
+        templateId=${templateId#'./'}
+        logI "Found template ${templateId} (from file ${wmsfile})"
+
+        # Parameters
+        # $1 -> setup template
+        # $2 -> platform string
+        generateProductsImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
+        generateFixesImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
+    done
+else
+    if [ -d "${SUIF_HOME}/02.templates/01.setup/${SUIF_PROCESS_TEMPLATE}" ]; then
+        logI "Preparing images for specified template ${SUIF_PROCESS_TEMPLATE}"
+        generateProductsImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_PLATFORM_STRING}"
+        generateFixesImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_PLATFORM_STRING}"
+    else
+        logE "Template ${SUIF_PROCESS_TEMPLATE} not found!"
+    fi
+fi
 
 if [ "${SUIF_DEBUG_ON}" -eq 1 ]; then
     logD "Stopping execution for debug"

@@ -24,7 +24,7 @@ generateFixesImageFromTemplate(){
         else
             logI "Inventory file ${lPermanentInventoryFile} does not exists, creating now."
             pwsh "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
-                -file "${wmsfile}" -outfile "${lPermanentInventoryFile}" \
+                -file "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" -outfile "${lPermanentInventoryFile}" \
                 -sumPlatformString "${lPlatformString}"
         fi
 

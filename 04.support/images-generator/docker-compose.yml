@@ -51,4 +51,5 @@ services:
       - SUIF_SDC_SERVER_URL_1011
       - SUIF_SDC_1011_USER_NAME
       - SUIF_SDC_1011_USER_PASSWORD
+      - SUIF_PROCESS_TEMPLATE
     entrypoint: /mnt/scripts/containerEntrypoint.sh
