@@ -63,6 +63,11 @@ installProducts(){
 
     local installCmd="${1} -readScript /dev/shm/install.wmscript -console"
     local installCmd="${installCmd} -debugLvl ${debugLevel}"
+    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        local installCmd="${installCmd} -scriptErrorInteract yes"
+    else
+        local installCmd="${installCmd} -scriptErrorInteract no"
+    fi
     local installCmd="${installCmd} -debugFile "'"'"${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"'"'
     controlledExec "${installCmd}" "${d}.product-install"
     
@@ -361,15 +366,18 @@ setupProductsAndFixes(){
 # Parameters - applySetupTemplate
 # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
 applySetupTemplate(){
+    # TODO: render checkPrerequisites.sh optional
     logI "Applying Setup Template ${1}"
     huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript" || return 1
     huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
-    huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || return 4
+    huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" # || return 4
     logI "Sourcing variable values for template ${1} ..."
     . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
     logI "Checking installation prerequisites for template ${1} ..."
     chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" > /dev/null
-    "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
+    if [ -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" ]; then
+        "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
+    fi
     logI "Setting up products and fixes for template ${1} ..."
     setupProductsAndFixes \
         "${SUIF_INSTALL_INSTALLER_BIN}" \
