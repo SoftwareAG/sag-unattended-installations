@@ -1,0 +1,48 @@
+version: "3.5"
+
+volumes:
+  um-ta-1-install-home: {}
+  um-ta-1-sum-home: {}
+  um-ta-1-user-home: {}
+  um-ta-1-runs: {}
+  um-ta-1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  um-ta-1:
+    build: ./build
+    image: test-um-ta-1011-1
+    container_name: test-um-ta-1011-1-1
+    hostname: test-um-ta-1011-1-1
+    volumes:
+      - um-ta-1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - um-ta-1-install-home:/app/sag/1011/UMTA/
+      - um-ta-1-user-home:/home/sag/
+      - um-ta-1-sum-home:/app/sag/sumv11/
+      - um-ta-1-runs:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      # this test runs online
+      - SUIF_ONLINE_MODE=0
+      - SUIF_HOME=/mnt/SUIF_HOME
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      # Note: folders must match the ones in the Dockerfile
+      - SUIF_INSTALL_INSTALL_DIR=/app/sag/1011/UM-TA/
+      - SUIF_SUM_HOME=/app/sag/sumv11/
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      - SUIF_PATCH_AVAILABLE
+    entrypoint: /mnt/scripts/containerEntrypoint.sh

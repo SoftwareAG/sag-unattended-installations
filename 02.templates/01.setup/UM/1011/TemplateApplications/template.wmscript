@@ -1,0 +1,27 @@
+# UM Template Applications 10.11 Authored Template
+selectedFixes=
+#selectedFixes=wMFix.TPS.Loggers_10.11.0.0002-0018,wMFix.NUMClient.LNX64_10.11.0.0002-0656,wMFix.SCGCommon.IS_10.11.0.0001-0020,wMFix.LARSharedBundles_10.11.0.0002-0593,wMFix.SDRepository_10.11.0.0001-0651,wMFix.SDIntrospect_10.11.0.0001-0373,wMFix.CCShared_10.11.0.0001-1079,wMFix.ALL.SSL.LNXAMD64_10.11.0.0001-0082,wMFix.SJP.Java64.LNXAMD64_10.11.0.0138-0014,wMFix.NUMRepository.SharedBundles_10.11.0.0002-0656,wMFix.TPP.Misc_10.11.0.0001-0010,wMFix.TPP.Loggers_10.11.0.0002-0017,wMFix.ALL.SIN_10.11.0.0002-0611,wMFix.OSGI.Diagnostic_10.11.0.0002-0594,wMFix.Broker.SharedBundles_10.5.0.0004-0528,wMFix.SPM_10.11.0.0001-1079,wMFix.NUMTemplateApplications.LNX_10.11.0.0002-0656,wMFix.SUMApi_10.11.0.0001-0195,wMFix.NUMClient.JavaScript_10.11.0.0002-0656,wMFix.NUMClient_10.11.0.0002-0656 
+SPMTitleTextBlock=0
+SPMHttpPort=__VERSION1__,8092
+SPMHttpsPort=__VERSION1__,8093
+SPMConfigPanelPortsNotification=1
+SPMGeneralDescriptionTextBlock=0
+InstallLocProducts=
+NUM.Purpose.ID=__VERSION1__,2,0_,1,New+installation,Side-by-side+installation+for+upgrade
+NUM.Instance.Connection.ID=0
+ServerURL=https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi
+SPMUsingCC=__VERSION1__,1,0,Plan+to+use+Command+Central
+SPMAppOrService=__VERSION1__,1,0,Register+Windows+service%2FUNIX+daemon+for+automatic+startup+of+Platform+Manager
+NUM.EntMgr.TemplApps.ID=0
+com.wm.distman.utils_separator0=0
+changeAdminPasswordAtFirstLogin=true
+com.wm.distman.utils_panel0=0
+SPMAdditionalInfoDescriptionTextBlock=0
+NUM.Client.RNAME.ID=__VERSION1__,nsp%3A%2F%2Flocalhost%3A9000
+NUM.Client.Profile.ID=__VERSION1__,1,0_,umserver,umserver
+InstallProducts=e2ei/11/TPS_10.11.0.0.LATEST/SCG/jsw,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMTemplateApplications,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppModelling,e2ei/11/LIC_5.7.3.0.LATEST/LICSharedLibsJava/LICSharedLibsJava,e2ei/11/LIC_5.7.3.0.LATEST/LICRepository/LICRepository,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMClient,e2ei/11/WIS_10.11.0.0.LATEST/Infrastructure/WISSharedLibs,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppSEC,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppMisc,e2ei/11/BR_10.5.0.0.LATEST/Broker/PIFSharedBundles,e2ei/11/ACDL_10.11.0.0.LATEST/ACDL/ACDLDeployerSharedBundle,e2ei/11/WIS_10.11.0.0.LATEST/Infrastructure/WISSharedBundles,e2ei/11/TPS_10.11.0.0.LATEST/SCG/loggers,e2ei/11/LAR_10.11.0.0.LATEST/Platform/LARSharedBundles,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMRepository,e2ei/11/IS_10.11.0.0.LATEST/integrationServer/integrationServerMigrationFrameworkLib,e2ei/11/OSGI_10.11.0.0.LATEST/Platform/OSGI,e2ei/11/NUM_TOOLS_10.11.0.0.LATEST/UniversalMessaging/NUMspm,e2ei/11/SPM_10.11.0.0.LATEST/Platform/SPM,e2ei/11/WSC_10.11.0.0.LATEST/SCG/SCGCommon,e2ei/11/CMP_10.11.0.0.LATEST/CMP/CMP,e2ei/11/CMP_10.11.0.0.LATEST/CMP/CMP_API,e2ei/11/SSX_TLS_10.11.0.0.LATEST/API/SSX_TLS,e2ei/11/ZSL_10.11.0.0.LATEST/Platform/ZSLSharedBundles,e2ei/11/TPS_10.11.0.0.LATEST/Platform/TPS,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppGfJaxb,e2ei/11/IS_10.11.0.0.LATEST/integrationServer/ISSharedBundles,e2ei/11/LIC_5.7.3.0.LATEST/LICUtil/LICUtil,e2ei/11/TPL_10.11.0.0.LATEST/License/license,e2ei/11/SJP_11.0.12.0.LATEST/Infrastructure/sjp,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMInstanceManager 
+adminPassword=doesnotmatternoserverhere
+# Variables
+imageFile=${SUIF_INSTALL_IMAGE_FILE}
+InstallDir=${SUIF_INSTALL_INSTALL_DIR}
+HostName=${SUIF_INSTALL_DECLARED_HOSTNAME}
