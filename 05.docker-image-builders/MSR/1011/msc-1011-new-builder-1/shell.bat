@@ -1,0 +1,1 @@
+docker exec -ti msc1011-new-builder-type-1-1 bash

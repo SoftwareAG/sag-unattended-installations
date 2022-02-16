@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+  msc1011-new-builder-type-1:
+    build: 
+      context: ./build
+    image: msc1011-new-builder-type-1
+    container_name: msc1011-new-builder-type-1-1
+    hostname: msc1011-new-builder-type-1-1
+    volumes:
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      # we need access to docker because we are building...
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_EMPOWER_USER
+      - SUIF_EMPOWER_PASSWORD
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
