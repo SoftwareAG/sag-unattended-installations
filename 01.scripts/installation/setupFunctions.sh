@@ -95,7 +95,7 @@ bootstrapSum(){
     fi
 
     if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
-        if [ ! -f  ${2} ]; then
+        if [ ! -f  "${2}" ]; then
             logE "Fixes image file not found: ${2}"
             return 2
         fi
@@ -104,7 +104,8 @@ bootstrapSum(){
     local SUM_HOME=${3:-"/opt/sag/sum"}
 
     if [ -d "${SUM_HOME}/UpdateManager" ]; then
-        logI "Update manager already present, skipping bootstrap..."
+        logI "Update manager already present, skipping bootstrap, attempting to update from given image..."
+        patchSum "${2}" "${SUM_HOME}"
         return 0
     fi
 
@@ -127,6 +128,33 @@ bootstrapSum(){
         logE "SUM Boostrap failed, code ${RESULT_controlledExec}"
         return 3
     fi
+}
+
+# Parameters - patchSum()
+# $1 - Fixes Image (this will allways happen offline in this framework)
+# $2 - OTPIONAL SUM Home, default /opt/sag/sum
+patchSum(){
+    if [ ! -f "${1}" ]; then
+        logE "Fixes images file ${1} does not exist!"
+    fi
+    local SUM_HOME=${2:-"/opt/sag/sum"}
+    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+
+    if [ ! -d "${SUM_HOME}/UpdateManager" ]; then
+        logI "Update manager missing, nothing to patch..."
+        return 0
+    fi
+
+    logI "Updating SUM from image ${1} ..."
+    pushd . >/dev/null
+    cd "${SUM_HOME}/bin"
+    controlledExec "./UpdateManagerCMD.sh -selfUpdate true -installFromImage "'"'"${1}"'"' "${d}.PatchSum"
+    RESULT_controlledExec=$?
+    if [ "${RESULT_controlledExec}" -ne 0 ]; then
+        logE "Update Manager Self Update failed with code ${RESULT_controlledExec}"
+        return 1
+    fi
+    popd >/dev/null
 }
 
 # Parameters - removeDiagnoserPatch
@@ -225,6 +253,9 @@ patchInstallation(){
 
     logI "Taking a snapshot of existing fixes..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
+
+    logI "Explictly patch SUM itself, if required..."
+    patchSum "${1}" "${SUM_HOME}"
 
     logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
 

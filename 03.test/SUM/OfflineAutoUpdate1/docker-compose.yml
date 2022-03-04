@@ -1,0 +1,35 @@
+version: "3.5"
+
+volumes:
+  sum-home: {}
+  audit: {}
+  temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  test:
+    image: suif-test-sum-offline-autoupdate-1
+    build: ./build
+    container_name: um-server
+    hostname: um-server
+    volumes:
+      - temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - sum-home:/app/sag/sumv11/
+      - audit:/app/audit/
+      - ./scripts/:/mnt/scripts/local/
+      - ../../../:/mnt/scripts/SUIF/
+      - ${H_SUIF_OLDER_SUM_BOOTSTRAP_BIN}:/mnt/sum-bootstrap.bin
+      - ${H_SUIF_OLDER_SUM_FIX_IMAGE}:/mnt/fixesImage1.zip
+      - ${H_SUIF_NEWER_SUM_FIX_IMAGE}:/mnt/fixesImage2.zip
+    environment:
+      - SUIF_HOME=/mnt/scripts/SUIF
+      - SUIF_DEBUG_ON=1
+      - SUIF_ONLINE_MODE=0
+      - SUIF_AUDIT_BASE_DIR=/app/audit
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/mnt/sum-bootstrap.bin
+      - SUIF_OLDER_SUM_FIX_IMAGE=/mnt/fixesImage1.zip
+      - SUIF_NEWER_SUM_FIX_IMAGE=/mnt/fixesImage2.zip
+    network_mode: none
+    entrypoint: /mnt/scripts/local/entrypoint.sh

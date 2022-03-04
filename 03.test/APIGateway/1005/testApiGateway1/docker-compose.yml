@@ -55,6 +55,7 @@ services:
       - SUIF_SUM_HOME=/app/sag/sumv11/
       # setup template specifics - license provided by host
       - SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE=/tmp/API_Gateway_license.xml
+      - SUIF_PATCH_AVAILABLE=1
     ports:
       - "${H_SUIF_PORT_PREFIX}20:9240"
       - "${H_SUIF_PORT_PREFIX}73:9073"
