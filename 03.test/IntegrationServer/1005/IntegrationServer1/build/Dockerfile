@@ -18,7 +18,7 @@ RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_
     yum clean all &&\
     rm -rf /var/cache/yum &&\
     mkdir -p "${SUIF_SUM_HOME}" "${SUIF_AUDIT_BASE_DIR}" \
-      "${SUIF_LOCAL_SCRIPTS_HOME}" &&\
+      "${SUIF_LOCAL_SCRIPTS_HOME}" "${SUIF_INSTALL_InstallDir}" &&\
     touch "/tmp/products.zip" "/tmp/fixes.zip" &&\
     groupadd -g 1804 saggroup &&\
     useradd -u 1804 -m -g saggroup sag &&\
