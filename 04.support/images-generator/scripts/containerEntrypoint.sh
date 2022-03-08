@@ -27,7 +27,7 @@ fi
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh"
 
 
-if [ -d "${SUIF_SUM_HOME}/bin" ];then
+if [ -d "${SUIF_SUM_HOME}/bin/UpdateManager/conf " ];then
     logI "UpdateManager already present, skipping installation..."
 else
     # Parameters - bootstrapSum

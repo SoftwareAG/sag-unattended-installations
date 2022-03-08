@@ -130,8 +130,11 @@ generateProductsImageFromTemplate(){
         #explictly tell installer we are running unattended
         lCmd="${lCmd} -scriptErrorInteract no"
 
+        # use existing images as cache
+        find "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}" -type f -name products.zip >/dev/shm/productsImagesList.txt
+
         # avoid downloading what we already have
-        if [ -f /dev/shm/productsImagesList.txt ]; then
+        if [ -s /dev/shm/productsImagesList.txt ]; then
             lCmd="${lCmd} -existingImages /dev/shm/productsImagesList.txt"
         fi
 
@@ -141,6 +144,6 @@ generateProductsImageFromTemplate(){
         logI "Image ${lProductsImageFile} creation completed, result: $?"
         rm -f "${lVolatileScriptFile}"
 
-        echo "${lProductsImageFile}" >> /dev/shm/productsImagesList.txt
+        # echo "${lProductsImageFile}" >> /dev/shm/productsImagesList.txt
     fi
 }
