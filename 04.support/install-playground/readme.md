@@ -34,7 +34,7 @@ ${SUIF_INSTALL_INSTALLER_BIN} \
 - After all choices are made and immediately before the actual installation, installer writes the script file. Watch for the destination, when the file is created exit the installer. This moment may also be identified with the wizzard step where you can see 
 
 ```sh
-The products listed below are ready to be saved to script /mnt/scripts/trail1.wmscript and installed.
+The products listed below are ready to be saved to script /mnt/output/yourTemplateNameHere.wmscript and installed.
 ```
 
 - This procedure is supposed to be run online, but it can also be run against an existing image. If run online, as the first authoring step remove the Empower credentials from the output file and add the following lines at the bottom:
@@ -50,4 +50,13 @@ imageFile=${SUIF_INSTALL_IMAGE_FILE}
 #Template variables
 imageFile=${SUIF_INSTALL_IMAGE_FILE}
 InstallDir=${SUIF_INSTALL_INSTALL_DIR}
+```
+
+Installer also accepts a "LATEST" version of the components. To achieve this, run:
+
+```sh
+cd /mnt/scripts/
+./setLatestVerForProducts.sh # implicit file is /mnt/output/yourTemplateNameHere.wmscript
+# or
+./setLatestVerForProducts.sh /path/to/install.wmscript
 ```
