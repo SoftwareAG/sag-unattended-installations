@@ -1,0 +1,65 @@
+version: "3.5"
+
+volumes:
+  bpms1011-bre-p-test1-install-home: {}
+  bpms1011-bre-p-test1-runs: {}
+  bpms1011-bre-p-test1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  bpms1011-bre-p-test1:
+    build: 
+      context: ./build
+      args:
+        - SUIF_INSTALL_INSTALL_DIR=${SUIF_WMSCRIPT_InstallDir}
+        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
+        - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
+        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SUIF_SUM_HOME=${SUIF_SUM_HOME}
+    image: bpms1011-bre-p-test1
+    container_name: bpms1011-bre-p-test1-1
+    hostname: bpms1011-bre-p-test1-1
+    volumes:
+      - bpms1011-bre-p-test1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - bpms1011-bre-p-test1-install-home:${SUIF_WMSCRIPT_InstallDir}/
+      - bpms1011-bre-p-test1-runs:${SUIF_AUDIT_BASE_DIR}/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_IS_LICENSE_FILE}:${SUIF_WMSCRIPT_IS_LICENSE_FILE}
+      - ${H_BRE_LICENSE_FILE}:${SUIF_WMSCRIPT_BRMS_license_file}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ../../../../../:${SUIF_HOME}/
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+    environment:
+      - SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_INSTALL_INSTALL_DIR=${SUIF_WMSCRIPT_InstallDir}
+      - SUIF_WMSCRIPT_InstallDir
+      - SUIF_WMSCRIPT_IS_LICENSE_FILE
+      - SUIF_WMSCRIPT_BRMS_license_file
+      - SUIF_WMSCRIPT_adminPassword
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_DEBUG_ON
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      - SUIF_SUM_HOME=${SUIF_SUM_HOME}
+      # database
+      - SUIF_WMSCRIPT_TaskEngineRuntimeConnectionName
+      - SUIF_WMSCRIPT_TaskEngineDatabaseUrl
+      - SUIF_WMSCRIPT_TaskEngineRuntimeUserName
+      - SUIF_WMSCRIPT_TaskEngineRuntimePasswordName
+    ports:
+      - "${H_SUIF_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
+      - "${H_SUIF_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServerPort}"
+      - "${H_SUIF_PORT_PREFIX}99:${SUIF_WMSCRIPT_IntegrationServerdiagnosticPort}"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
