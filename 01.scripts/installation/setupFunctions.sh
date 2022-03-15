@@ -134,6 +134,11 @@ bootstrapSum(){
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 patchSum(){
+    if [ ${SUIF_ONLINE_MODE} -ne 0 ]; then
+        logI "patchSum() ignored in online mode"
+        return 0
+    fi
+
     if [ ! -f "${1}" ]; then
         logE "Fixes images file ${1} does not exist!"
     fi

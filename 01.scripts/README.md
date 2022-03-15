@@ -8,6 +8,20 @@ The scripts themselves have minimal comments to keep them light.
 
 All files that require parameters are managed with gnu envsusbst. This means that all properties will be sourceable shell files.
 
+### Template variables
+
+By convention, the wmscript templates will contain lines such as the following one when dealing with variables. Templates built before this convention are deprecated. Whnever a key contains a point (`.`) it is substituted with underscore (`_`)
+
+```sh
+key=${SUIF_WMSCRIPT_Key}
+```
+
+example
+
+```sh
+InstallDir=${SUIF_WMSCRIPT_InstallDir}
+```
+
 ## Important notes
 
 It is the caller responsibility to:

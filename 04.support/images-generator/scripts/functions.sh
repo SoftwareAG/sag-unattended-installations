@@ -85,8 +85,8 @@ generateProductsImageFromTemplate(){
             if [[ ${1} == *"/1005/"* ]]; then
                 lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
             else
-                if [[ ${1} == *"/1011/"* ]]; then
-                    logW "10.11 is not yet public..."
+                if [[ ${1} == *"/1013/"* ]]; then
+                    logW "10.13 is not yet public..."
                     # Exception for preview mode
 
                     SUIF_EMPOWER_USER=${SUIF_SDC_1011_USER_NAME:-${SUIF_EMPOWER_USER}}
