@@ -39,17 +39,17 @@ init
 installProducts(){
 
     if [ ! -f "${1}" ]; then
-        logE "Product installation failed: invalid installer file: ${1}"
+        logE "[setupFunctions.sh/installProducts()] - Product installation failed: invalid installer file: ${1}"
         return 1
     fi
 
     if [ ! -f "${2}" ]; then
-        logE "Product installation failed: invalid installer script file: ${2}"
+        logE "[setupFunctions.sh/installProducts()] - Product installation failed: invalid installer script file: ${2}"
         return 2
     fi
 
     if [ ! $(which envsubst) ]; then
-        logE "Product installation requires envsubst to be installed!"
+        logE "[setupFunctions.sh/installProducts()] - Product installation requires envsubst to be installed!"
         return 3
     fi
 
@@ -75,7 +75,7 @@ installProducts(){
     if [ ${RESULT_installProducts} -eq 0 ] ; then
         logI "Product installation successful"
     else
-        logE "Product installation failed, code ${RESULT_installProducts}"
+        logE "[setupFunctions.sh/installProducts()] - Product installation failed, code ${RESULT_installProducts}"
         logD "Dumping the install.wmscript file into the session audit folder..."
         if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
             cp /dev/shm/install.wmscript "${SUIF_AUDIT_SESSION_DIR}/"
@@ -90,13 +90,13 @@ installProducts(){
 # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
 bootstrapSum(){
     if [ ! -f  ${1} ]; then
-        logE "Software AG Update Manager boostrap file not found: ${1}"
+        logE "[setupFunctions.sh/bootstrapSum()] - Software AG Update Manager boostrap file not found: ${1}"
         return 1
     fi
 
     if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
         if [ ! -f  "${2}" ]; then
-            logE "Fixes image file not found: ${2}"
+            logE "[setupFunctions.sh/bootstrapSum()] - Fixes image file not found: ${2}"
             return 2
         fi
     fi
@@ -125,7 +125,7 @@ bootstrapSum(){
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "SUM Bootstrap successful"
     else
-        logE "SUM Boostrap failed, code ${RESULT_controlledExec}"
+        logE "[setupFunctions.sh/bootstrapSum()] - SUM Boostrap failed, code ${RESULT_controlledExec}"
         return 3
     fi
 }
@@ -140,7 +140,7 @@ patchSum(){
     fi
 
     if [ ! -f "${1}" ]; then
-        logE "Fixes images file ${1} does not exist!"
+        logE "[setupFunctions.sh/patchSum()] - Fixes images file ${1} does not exist!"
     fi
     local SUM_HOME=${2:-"/opt/sag/sum"}
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
@@ -156,7 +156,7 @@ patchSum(){
     controlledExec "./UpdateManagerCMD.sh -selfUpdate true -installFromImage "'"'"${1}"'"' "${d}.PatchSum"
     RESULT_controlledExec=$?
     if [ "${RESULT_controlledExec}" -ne 0 ]; then
-        logE "Update Manager Self Update failed with code ${RESULT_controlledExec}"
+        logE "[setupFunctions.sh/patchSum()] - Update Manager Self Update failed with code ${RESULT_controlledExec}"
         return 1
     fi
     popd >/dev/null
@@ -170,12 +170,12 @@ patchSum(){
 removeDiagnoserPatch(){
     local SUM_HOME=${3:-"/opt/sag/sum"}
     if [ ! -f "${SUM_HOME}/bin/UpdateManagerCMD.sh" ]; then
-        logE "Update manager not found at the inficated location ${SUM_HOME}"
+        logE "[setupFunctions.sh/removeDiagnoserPatch()] - Update manager not found at the inficated location ${SUM_HOME}"
         return 1
     fi
     local PRODUCTS_HOME=${4:-"/opt/sag/products"}
     if [ ! -d "${PRODUCTS_HOME}" ]; then
-        logE "Product installation folder is missing: ${PRODUCTS_HOME}"
+        logE "[setupFunctions.sh/removeDiagnoserPatch()] - Product installation folder is missing: ${PRODUCTS_HOME}"
         return 2
     fi
 
@@ -206,7 +206,7 @@ removeDiagnoserPatch(){
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "Support patch removal was successful"
     else
-        logE "Support patch removal failed, code ${RESULT_controlledExec}"
+        logE "[setupFunctions.sh/removeDiagnoserPatch()] - Support patch removal failed, code ${RESULT_controlledExec}"
         if [ ${SUIF_DEBUG_ON} ]; then
             logD "Recovering Update Manager logs for further investigations"
             mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
@@ -233,7 +233,7 @@ removeDiagnoserPatch(){
 # $5 - OTPIONAL Engineering patch diagnoser key (default "5437713_PIE-68082_5", however user must provide if $4=Y)
 patchInstallation(){
     if [ ! -f ${1} ]; then
-        logE "Fixes image file not found: ${1}"
+        logE "[setupFunctions.sh/patchInstallation()] - Fixes image file not found: ${1}"
         return 1
     fi
 
@@ -275,7 +275,7 @@ patchInstallation(){
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "Patch successful"
     else
-        logE "Patch failed, code ${RESULT_controlledExec}"
+        logE "[setupFunctions.sh/patchInstallation()] - Patch failed, code ${RESULT_controlledExec}"
         if [ ${SUIF_DEBUG_ON} ]; then
             logD "Recovering Update Manager logs for further investigations"
             mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
@@ -304,26 +304,26 @@ patchInstallation(){
 setupProductsAndFixes(){
 
     if [ ! -f "${1}" ]; then
-        logE "Installer binary file not found: ${1}"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Installer binary file not found: ${1}"
         return 1
     fi
     if [ ! -f ${2} ]; then
-        logE "Installer script file not found: ${2}"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Installer script file not found: ${2}"
         return 2
     fi
 
     if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ];  then 
         if [ ! -f ${3} ]; then
-                logE "Update Manager bootstrap binary file not found: ${3}"
+                logE "[setupFunctions.sh/setupProductsAndFixes()] - Update Manager bootstrap binary file not found: ${3}"
                 return 3
         fi
         if [ ! -f ${4} ]; then
-            logE "Fixes image file not found: ${3}"
+            logE "[setupFunctions.sh/setupProductsAndFixes()] - Fixes image file not found: ${4}"
             return 4
         fi
     fi
     if [ ! $(which envsubst) ]; then
-        logE "Product installation requires envsubst to be installed!"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product installation requires envsubst to be installed!"
         return 5
     fi
     # apply environment substitutions
@@ -334,7 +334,7 @@ setupProductsAndFixes(){
 
     # note no inline returns from now as we need to clean locally allocated resources
     if [ ! -f "${lProductImageFile}" ]; then
-        logE "Product image file not found: ${lProductImageFile}"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}"
         RESULT_setupProductsAndFixes=6
     else
         local lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
@@ -347,7 +347,7 @@ setupProductsAndFixes(){
             mkdir -p ${lInstallDir}
         fi
         if [ ! -d ${lInstallDir} ]; then
-            logE "Cannot create the installation directory!"
+            logE "[setupFunctions.sh/setupProductsAndFixes()] - Cannot create the installation directory!"
             RESULT_setupProductsAndFixes=7
         else
             local d=`date +%y-%m-%dT%H.%M.%S_%3N`
@@ -360,7 +360,7 @@ setupProductsAndFixes(){
             installProducts "${1}" "${2}" "${installerDebugLevel}"
             RESULT_installProducts=$?
             if [ ${RESULT_installProducts} -ne 0 ]; then
-                logE "installProducts failed, code ${RESULT_installProducts}!"
+                logE "[setupFunctions.sh/setupProductsAndFixes()] - installProducts failed, code ${RESULT_installProducts}!"
                 RESULT_setupProductsAndFixes=8
             else
 
@@ -373,7 +373,7 @@ setupProductsAndFixes(){
                     bootstrapSum "${3}" "${4}" "${lSumHome}"
                     local RESULT_bootstrapSum=$?
                     if [ ${RESULT_bootstrapSum} -ne 0 ]; then
-                        logE "Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
+                        logE "[setupFunctions.sh/setupProductsAndFixes()] - Update Manager bootstrap failed, code ${RESULT_bootstrapSum}!"
                         RESULT_setupProductsAndFixes=9
                     else
                         # Parameters - patchInstallation
@@ -383,7 +383,7 @@ setupProductsAndFixes(){
                         patchInstallation "${4}" "${lSumHome}" "${lInstallDir}"
                         RESULT_patchInstallation=$?
                         if [ ${RESULT_patchInstallation} -ne 0 ]; then
-                            logE "Patch Installation failed, code ${RESULT_patchInstallation}!"
+                            logE "[setupFunctions.sh/setupProductsAndFixes()] - Patch Installation failed, code ${RESULT_patchInstallation}!"
                             RESULT_setupProductsAndFixes=10
                         else
                             logI "Product and Fixes setup completed successfully"
@@ -406,7 +406,7 @@ applySetupTemplate(){
     logI "Applying Setup Template ${1}"
     huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript" || return 1
     huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
-    huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" # || return 4
+    huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || return 4
     logI "Sourcing variable values for template ${1} ..."
     . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
     logI "Checking installation prerequisites for template ${1} ..."
@@ -424,7 +424,7 @@ applySetupTemplate(){
         "verbose"
     local RESULT_setupProductsAndFixes=$?
     if [ ${RESULT_setupProductsAndFixes} -ne 0 ]; then
-        logE "Setup for template ${1} failed, code ${RESULT_setupProductsAndFixes}"
+        logE "[setupFunctions.sh/applySetupTemplate()] - Setup for template ${1} failed, code ${RESULT_setupProductsAndFixes}"
         return 3
     fi
 }
