@@ -17,7 +17,7 @@ while [[ ${ProductsLine} =~ $re ]]; do
 done
 
 d=`date +%y-%m-%dT%H.%M.%S_%3N`
-mv "${FILE}" "${FILE}.bak.${d}"
+mv "${FILE}" "${FILE}.${d}.bak"
 
 cat "${FILE}.bak.${d}" | grep -v 'InstallProducts=' > "${FILE}"
 
