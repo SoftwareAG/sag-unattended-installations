@@ -81,19 +81,23 @@ generateProductsImageFromTemplate(){
             # TODO: streamline
 
             # current default
-            local lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+            local lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
             if [[ ${1} == *"/1005/"* ]]; then
                 lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
             else
-                if [[ ${1} == *"/1013/"* ]]; then
-                    logW "10.13 is not yet public..."
-                    # Exception for preview mode
+                if [[ ${1} == *"/1007/"* ]]; then
+                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+                else
+                    if [[ ${1} == *"/1013/"* ]]; then
+                        logW "10.13 is not yet public..."
+                        # Exception for preview mode
 
-                    SUIF_EMPOWER_USER=${SUIF_SDC_1011_USER_NAME:-${SUIF_EMPOWER_USER}}
-                    SUIF_EMPOWER_PASSWORD=${SUIF_SDC_1011_USER_PASSWORD:-${SUIF_EMPOWER_PASSWORD}}
+                        SUIF_EMPOWER_USER=${SUIF_SDC_1011_USER_NAME:-${SUIF_EMPOWER_USER}}
+                        SUIF_EMPOWER_PASSWORD=${SUIF_SDC_1011_USER_PASSWORD:-${SUIF_EMPOWER_PASSWORD}}
 
-                    logI "Installer download user set to ${SUIF_EMPOWER_USER}"
-                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
+                        logI "Installer download user set to ${SUIF_EMPOWER_USER}"
+                        lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
+                    fi
                 fi
             fi
 
@@ -130,8 +134,8 @@ generateProductsImageFromTemplate(){
         #explictly tell installer we are running unattended
         lCmd="${lCmd} -scriptErrorInteract no"
 
-        # use existing images as cache
-        find "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}" -type f -name products.zip >/dev/shm/productsImagesList.txt
+        # use existing images as cache (this is very slow, use only if the internet connection is bery bad)
+        # find "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}" -type f -name products.zip >/dev/shm/productsImagesList.txt
 
         # avoid downloading what we already have
         if [ -s /dev/shm/productsImagesList.txt ]; then

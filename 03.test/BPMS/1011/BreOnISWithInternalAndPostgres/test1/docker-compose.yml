@@ -2,6 +2,7 @@ version: "3.5"
 
 volumes:
   bpms1011-bre-p-test1-install-home: {}
+  bpms1011-bre-p-test1-sum-home: {}
   bpms1011-bre-p-test1-runs: {}
   bpms1011-bre-p-test1-temp:
     driver_opts:
@@ -26,6 +27,7 @@ services:
       - bpms1011-bre-p-test1-temp:/tmp/
       # the following must match the Dokerfile folders, otherwise permissions on FS will not work
       - bpms1011-bre-p-test1-install-home:${SUIF_WMSCRIPT_InstallDir}/
+      - bpms1011-bre-p-test1-sum-home:${SUIF_SUM_HOME}/
       - bpms1011-bre-p-test1-runs:${SUIF_AUDIT_BASE_DIR}/
       - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
       # These must be provided, they are prerequisites
@@ -59,7 +61,7 @@ services:
       - SUIF_WMSCRIPT_TaskEngineRuntimeUserName
       - SUIF_WMSCRIPT_TaskEngineRuntimePasswordName
     ports:
-      - "${H_SUIF_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
-      - "${H_SUIF_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServerPort}"
+      - "${H_SUIF_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
+      - "${H_SUIF_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServerPort}"
       - "${H_SUIF_PORT_PREFIX}99:${SUIF_WMSCRIPT_IntegrationServerdiagnosticPort}"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
