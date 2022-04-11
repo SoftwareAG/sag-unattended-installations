@@ -19,6 +19,6 @@ done
 d=`date +%y-%m-%dT%H.%M.%S_%3N`
 mv "${FILE}" "${FILE}.${d}.bak"
 
-cat "${FILE}.bak.${d}" | grep -v 'InstallProducts=' > "${FILE}"
+cat "${FILE}.${d}.bak" | grep -v 'InstallProducts=' > "${FILE}"
 
 echo "${ProductsLine}" >> "${FILE}"
