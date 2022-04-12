@@ -30,6 +30,15 @@ if [ ! -f "${SUIF_INSTALL_INSTALL_DIR_DBC}/common/db/bin/dbConfigurator.sh" ]; t
     applySetupTemplate "AT/1011/DBC4AT" || echo "would exit 6"; tail -f /dev/null # exit 6
 fi
 
+createDbComponents(){
+    export SUIF_INSTALL_INSTALL_DIR="${SUIF_INSTALL_INSTALL_DIR_DBC}"
+    # template specific parameters
+    applyPostSetupTemplate DBC/1011/postgresql-create
+}
+
+createDbComponents
+
+
 if [ "${SUIF_DEBUG_ON}" -eq 1 ]; then
   logW "Stopping for debug"
   tail -f /dev/null

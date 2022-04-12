@@ -17,12 +17,12 @@ services:
     image: ${SUIF_TEST_POSTGRESQL_IMAGE}
     restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+      - POSTGRES_USER=${SUIF_DBSERVER_USER_NAME}
+      - POSTGRES_PASSWORD=${SUIF_DBSERVER_PASSWORD}
     networks:
       n1:
         aliases:
-          - postgresql-db-server
+          - ${SUIF_DBSERVER_HOSTNAME}
     # comment out ports, supposed to be used internally only
     #ports:
     #  - "${SUIF_TEST_PORT_PREFIX}32:5432"
@@ -107,6 +107,14 @@ services:
       - SUIF_PATCH_AVAILABLE
       - SUIF_ONLINE_MODE
       - SUIF_DEBUG_ON
+      # for database configurator
+      - SUIF_DBSERVER_HOSTNAME
+      - SUIF_DBSERVER_DATABASE_NAME
+      - SUIF_DBSERVER_USER_NAME
+      - SUIF_DBSERVER_PASSWORD
+      - SUIF_DBSERVER_PORT
+      - SUIF_DBC_COMPONENT_NAME
+      - SUIF_DBC_COMPONENT_VERSION
     networks:
       - n1
     depends_on:
