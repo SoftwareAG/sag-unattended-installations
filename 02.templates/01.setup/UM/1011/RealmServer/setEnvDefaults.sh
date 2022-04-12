@@ -18,7 +18,7 @@ export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/path/to/
 export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
 
 ## Template Specific
-export SUIF_WMSCRIPT_NUMLicenseFile=${SUIF_WMSCRIPT_NUMLicenseFile:'/path/to/NUMLicense.xml'}
+export SUIF_WMSCRIPT_NUMLicenseFile=${SUIF_WMSCRIPT_NUMLicenseFile:-'/path/to/NUMLicense.xml'}
 export SUIF_WMSCRIPT_NUMRealmServerLicenseFiletext=$(urlencode ${SUIF_WMSCRIPT_NUMLicenseFile})
 ############## Section 1 END - the caller MUST provide
 
