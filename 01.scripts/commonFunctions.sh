@@ -186,9 +186,9 @@ logEnv4Debug(){
 
     if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
         if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then
-            env | grep SUIF_ | grep -v PASS | sort;
+            env | grep SUIF_ | grep -v PASS | grep -vi password | grep -vi dbpass | sort;
         fi
-        echo env | grep SUIF_ | grep -v PASS | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+        echo env | grep SUIF_ | grep -v PASS | grep -vi password | grep -vi dbpass | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
 
