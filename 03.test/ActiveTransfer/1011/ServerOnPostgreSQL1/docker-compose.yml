@@ -1,0 +1,32 @@
+version: '3.8'
+volumes:
+  db-data: {}
+networks:
+    n1:
+      external: false
+services:
+  db:
+    image: ${SUIF_TEST_POSTGRESQL_IMAGE}
+    restart: always
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    networks:
+      n1:
+        aliases:
+          - postgresql-db-server
+    # comment out ports, supposed to be used internally only
+    #ports:
+    #  - "${SUIF_TEST_PORT_PREFIX}32:5432"
+    volumes: 
+      - db-data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    container_name: ats-on-postgres1-adminer
+    hostname: adminer
+    networks:
+      - n1
+    ports:
+      - "${SUIF_TEST_PORT_PREFIX}80:8080"
+    depends_on:
+      - db
