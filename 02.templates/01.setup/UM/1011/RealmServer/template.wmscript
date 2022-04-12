@@ -1,0 +1,35 @@
+# Template Universal Messaging Real Server 10.11
+adminPassword=manage01
+changeAdminPasswordAtFirstLogin=false
+com.wm.distman.utils_panel0=0
+com.wm.distman.utils_panel1=0
+com.wm.distman.utils_separator0=0
+InstallLocProducts=
+InstallProducts=e2ei/11/TPS_10.11.0.0.LATEST/SCG/jsw,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMTemplateApplications,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppModelling,e2ei/11/LIC_5.7.3.0.LATEST/LICSharedLibsJava/LICSharedLibsJava,e2ei/11/LIC_5.7.3.0.LATEST/LICRepository/LICRepository,e2ei/11/MTA_10.11.0.0.LATEST/Metering/MTAAgent,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMClient,e2ei/11/WIS_10.11.0.0.LATEST/Infrastructure/WISSharedLibs,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppSEC,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppMisc,e2ei/11/BR_10.5.0.0.LATEST/Broker/PIFSharedBundles,e2ei/11/ACDL_10.11.0.0.LATEST/ACDL/ACDLDeployerSharedBundle,e2ei/11/WIS_10.11.0.0.LATEST/Infrastructure/WISSharedBundles,e2ei/11/TPS_10.11.0.0.LATEST/SCG/loggers,e2ei/11/LAR_10.11.0.0.LATEST/Platform/LARSharedBundles,e2ei/11/IS_10.11.0.0.LATEST/integrationServer/integrationServerMigrationFrameworkLib,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMRepository,e2ei/11/OSGI_10.11.0.0.LATEST/Platform/OSGI,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMRealmServer,e2ei/11/NUM_TOOLS_10.11.0.0.LATEST/UniversalMessaging/NUMspm,e2ei/11/SPM_10.11.0.0.LATEST/Platform/SPM,e2ei/11/WSC_10.11.0.0.LATEST/SCG/SCGCommon,e2ei/11/CMP_10.11.0.0.LATEST/CMP/CMP,e2ei/11/CMP_10.11.0.0.LATEST/CMP/CMP_API,e2ei/11/SSX_TLS_10.11.0.0.LATEST/API/SSX_TLS,e2ei/11/ZSL_10.11.0.0.LATEST/Platform/ZSLSharedBundles,e2ei/11/TPS_10.11.0.0.LATEST/SCG/tppGfJaxb,e2ei/11/TPS_10.11.0.0.LATEST/Platform/TPS,e2ei/11/IS_10.11.0.0.LATEST/integrationServer/ISSharedBundles,e2ei/11/LIC_5.7.3.0.LATEST/LICUtil/LICUtil,e2ei/11/TPL_10.11.0.0.LATEST/License/license,e2ei/11/SJP_11.0.12.0.LATEST/Infrastructure/sjp,e2ei/11/NUM_10.11.0.0.LATEST/UniversalMessaging/NUMInstanceManager
+NUM.Instance.Create.ID=__VERSION1__,1,0_,Create+Server+Instance
+NUM.Interface.Binding.ID=__VERSION1__,3,0_,1,2,ALL,192.168.144.2,127.0.0.1,ALL
+NUM.License.file.text.ID=0
+NUM.Product.Name.ID=0
+NUM.Profile.Custom.file=__VERSION1__,
+NUM.Profile.ID=__VERSION1__,3,0_,1,2,webMethods+suite+use+cases+%28large+messages%2C+transactions%2C+persistence%29,Standalone+use+cases+%28small+messages%2C+non-transactional%2C+transient+data%29,Custom
+NUM.Purpose.ID=__VERSION1__,2,0_,1,New+installation,Side-by-side+installation+for+upgrade
+NUMRegCheckbox=__VERSION1__,1,0,Register+Windows+service%2FUNIX+daemon+for+automatic+startup
+selectedFixes=
+ServerURL=https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi
+SPMAdditionalInfoDescriptionTextBlock=0
+SPMAppOrService=__VERSION1__,1,0,Register+Windows+service%2FUNIX+daemon+for+automatic+startup+of+Platform+Manager
+SPMConfigPanelPortsNotification=1
+SPMGeneralDescriptionTextBlock=0
+SPMTitleTextBlock=0
+SPMUsingCC=__VERSION1__,1,0,Plan+to+use+Command+Central
+# Variables
+HostName=${SUIF_INSTALL_DECLARED_HOSTNAME}
+imageFile=${SUIF_INSTALL_IMAGE_FILE}
+InstallDir=${SUIF_INSTALL_INSTALL_DIR}
+NUM.Data.Dir.ID=__VERSION1__,${SUIF_WMSCRIPT_NUMDataDirID}
+NUM.Interface.Port.ID=__VERSION1__,${SUIF_WMSCRIPT_NUMInterfacePortID}
+NUM.Realm.Server.Name.ID=__VERSION1__,${SUIF_WMSCRIPT_NUMRealmServerNameID}
+NUMRealmServer.LicenseFile.text=__VERSION1__,${SUIF_WMSCRIPT_NUMRealmServerLicenseFiletext}
+SPMHttpPort=__VERSION1__,${SUIF_WMSCRIPT_SPMHttpPort}
+SPMHttpsPort=__VERSION1__,${SUIF_WMSCRIPT_SPMHttpsPort}
+
