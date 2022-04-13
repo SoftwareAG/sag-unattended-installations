@@ -122,4 +122,6 @@ services:
       - "${SUIF_TEST_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServerPort}"
       - "${SUIF_TEST_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
       - "${SUIF_TEST_PORT_PREFIX}50:${SUIF_WMSCRIPT_mftGWPortField}"
+      - "${SUIF_TEST_PORT_PREFIX}90:9100"
+      - "${SUIF_TEST_PORT_PREFIX}92:9102"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
