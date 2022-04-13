@@ -119,4 +119,8 @@ services:
       - n1
     depends_on:
       - db
+    ports:
+      - "${SUIF_TEST_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServerPort}"
+      - "${SUIF_TEST_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
+      - "${SUIF_TEST_PORT_PREFIX}50:${SUIF_WMSCRIPT_mftGWPortField}"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh

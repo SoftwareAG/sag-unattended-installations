@@ -19,7 +19,7 @@ fi
 
 # If the DBC installation is not present, do it now
 if [ ! -f "${SUIF_INSTALL_INSTALL_DIR_DBC}/common/db/bin/dbConfigurator.sh" ]; then
-    echo "Database configurator is not present, setting up ..."
+    logI "Database configurator is not present, setting up ..."
 
     export SUIF_INSTALL_IMAGE_FILE="${SUIF_INSTALL_IMAGE_FILE_DBC4AT}"
     export SUIF_PATCH_FIXES_IMAGE_FILE="${SUIF_PATCH_FIXES_IMAGE_FILE_DBC4AT}"
@@ -27,10 +27,21 @@ if [ ! -f "${SUIF_INSTALL_INSTALL_DIR_DBC}/common/db/bin/dbConfigurator.sh" ]; t
 
     # Parameters - applySetupTemplate
     # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-    applySetupTemplate "AT/1011/DBC4AT" || echo "would exit 6"; tail -f /dev/null # exit 6
+    applySetupTemplate "AT/1011/DBC4AT" || exit 6
 fi
 
 createDbComponents(){
+
+    logI "Eventually creating DB components..."
+    sleep 5 # this container is starting too quickly...
+    local p=`portIsReachable ${SUIF_DBSERVER_HOSTNAME} ${SUIF_DBSERVER_PORT}`
+    while [ $p -eq 0 ]; do
+        logI "Waiting for the database to come up, sleeping 5..."
+        sleep 5
+        p=`portIsReachable ${SUIF_DBSERVER_HOSTNAME} ${SUIF_DBSERVER_PORT}`
+        # TODO: add an maximum retry number
+    done
+
     export SUIF_INSTALL_INSTALL_DIR="${SUIF_INSTALL_INSTALL_DIR_DBC}"
     # template specific parameters
     applyPostSetupTemplate DBC/1011/postgresql-create
@@ -38,6 +49,39 @@ createDbComponents(){
 
 createDbComponents
 
+if [ ! -d "${SUIF_INSTALL_INSTALL_DIR_ATS}/IntegrationServer" ]; then
+    logI "Active Transfer Server not present, installing now..."
+    export SUIF_INSTALL_IMAGE_FILE="${SUIF_INSTALL_IMAGE_FILE_ATS}"
+    export SUIF_PATCH_FIXES_IMAGE_FILE="${SUIF_PATCH_FIXES_IMAGE_FILE_ATS}"
+    export SUIF_INSTALL_INSTALL_DIR="${SUIF_INSTALL_INSTALL_DIR_ATS}"
+
+    # Parameters - applySetupTemplate
+    # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
+    applySetupTemplate "AT/1011/server/minimal-on-postgresql" || exit 7
+fi
+
+onInterrupt(){
+	echo "Interrupted! Shutting Activetransfer Server..."
+    pushd . >/dev/null
+    cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/"
+    ./shutdown.sh
+    popd >/dev/null
+	exit 0 # managed expected exit
+}
+
+onKill(){
+	logW "Killed!"
+}
+
+trap "onInterrupt" SIGINT SIGTERM
+trap "onKill" SIGKILL
+
+logI "Starting Active Transfer Server..."
+pushd . > /dev/null
+cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/"
+./console.sh & wait
+
+popd > /dev/null
 
 if [ "${SUIF_DEBUG_ON}" -eq 1 ]; then
   logW "Stopping for debug"
