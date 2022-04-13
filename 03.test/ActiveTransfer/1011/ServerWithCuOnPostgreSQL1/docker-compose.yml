@@ -30,7 +30,6 @@ services:
       - db-data:/var/lib/postgresql/data
   adminer:
     image: adminer
-    container_name: ats-on-postgres1-adminer
     hostname: adminer
     networks:
       - n1
