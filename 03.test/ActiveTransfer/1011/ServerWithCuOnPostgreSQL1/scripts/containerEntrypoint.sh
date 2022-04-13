@@ -57,7 +57,7 @@ if [ ! -d "${SUIF_INSTALL_INSTALL_DIR_ATS}/IntegrationServer" ]; then
 
     # Parameters - applySetupTemplate
     # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-    applySetupTemplate "AT/1011/server/minimal-on-postgresql" || exit 7
+    applySetupTemplate "AT/1011/server/minimal-with-cu-on-postgresql" || exit 7
 fi
 
 onInterrupt(){
