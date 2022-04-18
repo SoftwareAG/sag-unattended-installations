@@ -70,7 +70,5 @@ services:
       - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE=2048m
     ports:
       - "${H_SUIF_PORT_PREFIX}10:9510"
-      #- "${H_SUIF_PORT_PREFIX}20:9887"
-      #- "${H_SUIF_PORT_PREFIX}30:9443"
-      #- "${H_SUIF_PORT_PREFIX}40:9889"
+      - "${H_SUIF_PORT_PREFIX}40:9540"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
