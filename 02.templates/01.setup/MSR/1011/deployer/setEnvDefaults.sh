@@ -36,7 +36,7 @@ export SUIF_SETUP_TEMPLATE_MSR_LICENSE_UrlEncoded=$(urlencode ${SUIF_SETUP_TEMPL
 
 # Section 4 - Constants
 
-export SUIF_CURRENT_SETUP_TEMPLATE_PATH="MSR/1011/lean"
+export SUIF_CURRENT_SETUP_TEMPLATE_PATH="MSR/1011/deployer"
 
 logI "Template environment sourced successfully"
 logEnv4Debug
