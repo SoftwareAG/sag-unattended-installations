@@ -11,7 +11,7 @@ This project is provided to help the user create new setup templates, specifical
 docker-compose up
 ```
 
-- Start a separate shell in the conatiner:
+- Start a separate shell in the container:
 
 ```sh
 docker exec -ti install-playground-1-1 bash
