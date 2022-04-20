@@ -4,7 +4,7 @@
 if [ ! "`type -t logI`X" == "functionX" ]; then
     echo "sourcing commonFunctions.sh ..."
     if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
-        echo "Panic, framework issue!"
+        echo "Panic, framework issue! File ${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh does not exist. SUIF_CACHE_HOME=${SUIF_CACHE_HOME}"
         exit 500
     fi
     . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
@@ -13,11 +13,11 @@ fi
 init(){
     # Section 1 - the caller MUST provide
     ## Framework - Install
-    export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/path/to/installer.bin"}
+    export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/tmp/installer.bin"}
     export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
     export SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE:-"0"}
     ## Framework - Patch
-    export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/path/to/sum-boostrap.bin"}
+    export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/tmp/sum-boostrap.bin"}
     export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
 
     # Section 2 - the caller MAY provide
@@ -401,6 +401,8 @@ setupProductsAndFixes(){
 
 # Parameters - applySetupTemplate
 # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
+# Environment must have valid values for vars SUIF_CACHE_HOME, SUIF_INSTALL_INSTALLER_BIN, SUIF_PATCH_SUM_BOOSTSTRAP_BIN, SUIF_SUM_HOME
+# Environment must also have valid values for the vars required by the referred template
 applySetupTemplate(){
     # TODO: render checkPrerequisites.sh optional
     logI "Applying Setup Template ${1}"
@@ -426,6 +428,52 @@ applySetupTemplate(){
     if [ ${RESULT_setupProductsAndFixes} -ne 0 ]; then
         logE "[setupFunctions.sh/applySetupTemplate()] - Setup for template ${1} failed, code ${RESULT_setupProductsAndFixes}"
         return 3
+    fi
+}
+
+# Parameters - assureDownloadableFile
+# $1 - Target File: a local path of the file to be assured
+# $2 - URL from where to get
+# $3 - SHA256 sum of the file (Use before reuse: for now we only need sha256sum)
+# $4 - Optional (future TODO - BA user for the URL)
+# $5 - Optional (future TODO - BA pass for the URL)
+assureDownloadableFile(){
+    if [ ! -f "${1}" ]; then
+        logI "File ${1} does not exist, attempting download from ${2}"
+        if ! which curl ; then
+            logE "[setupFunctions.sh/assureDownloadableFile()] - Cannot find curl"
+            return 1
+        fi
+        if ! curl "${2}" -o "${1}" ; then
+            logE "[setupFunctions.sh/assureDownloadableFile()] - Cannot download from ${2}"
+            return 2 
+        fi
+        if [ ! -f "${1}" ]; then
+            logE "[setupFunctions.sh/assureDownloadableFile()] - File ${1} waa not downloaded even if curl command succeded"
+            return 3
+        fi
+    fi
+    if ! echo "${3} ${1}" | sha256sum -c - ; then
+        logE "[setupFunctions.sh/assureDownloadableFile()] - sha256sum check for file ${1} failed"
+        return 4
+    fi
+}
+
+assureDefaultInstaller(){
+    local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20220221-Linux_x86_64.bin"
+    local installerSha256Sum="ef59cbead6086da9b844bc02eca34440ad14ed7af6c828721f883f37ec958a2f"
+    if ! assureDownloadableFile "${SUIF_INSTALL_INSTALLER_BIN}" "${installerUrl}" "${installerSha256Sum}" ; then
+        logE "[setupFunctions.sh/assureDefaultInstaller()] - Cannot assure default installer!"
+        return 1
+    fi
+}
+
+assureDefaultSumBoostrap(){
+    local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20210921-11-LinuxX86.bin"
+    local sumBoostrapSha256Sum="4cf2fcb232500674f6d8189588ad3dd6a8f1c1723dc41670fdd610c88c2c2020"
+    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${installerUrl}" "${installerSha256Sum}" ; then
+        logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
+        return 1
     fi
 }
 
