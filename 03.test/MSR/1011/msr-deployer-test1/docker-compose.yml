@@ -12,12 +12,16 @@ services:
     build: 
       context: ./build
       args:
-        - SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR}
-        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SRC_IMAGE 
+        - SUIF_INSTALL_INSTALL_DIR
+        - SUIF_SUM_HOME
+        - SUIF_USER_HOME
+        - SUIF_LOCAL_SCRIPTS_HOME
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_HOME	  
         - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
         - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
         - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
-        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
     image: deployer1011-test1
     container_name: deployer1011-test1-1
     hostname: deployer1011-test1-1
@@ -30,8 +34,8 @@ services:
       # These must be provided, they are prerequisites
       - ${H_MSR_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE}
       - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
-      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
-      - ../../../../:${SUIF_HOME}/
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN} 
+      - ../../../../:${SUIF_HOME}
     environment:
       - SUIF_HOME
       - SUIF_AUDIT_BASE_DIR
@@ -49,3 +53,4 @@ services:
       - "${H_SUIF_PORT_PREFIX}53:5553"
       - "${H_SUIF_PORT_PREFIX}99:9999"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
+    
