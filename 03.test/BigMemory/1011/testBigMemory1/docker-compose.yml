@@ -25,9 +25,9 @@ services:
         - SUIF_HOME
         - SUIF_WMSCRIPT_TCDataDirID
         - SUIF_WMSCRIPT_TCLogsDirID
-    image: test-big-memory-1
-    container_name: test-big-memory-1-1
-    hostname: test-big-memory-1-1
+    image: test-big-memory-1011
+    container_name: test-big-memory-1011-1
+    hostname: test-big-memory-1011-1
     volumes:
       - tsa1-temp:/tmp/
       # the following must match the Dokerfile folders, otherwise permissions on FS will not work
@@ -65,10 +65,10 @@ services:
       # The following are optional as the scripts have default values.
 
       # Ports (TMC's ports are not considered yet, we have the defaults)
-      - SUIF_POST_TC_SERVER_PORT=9510
-      - SUIF_POST_TC_SERVER_GROUP_PORT=9540
-      - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE=2048m
+      - SUIF_POST_TC_SERVER_PORT
+      - SUIF_POST_TC_SERVER_GROUP_PORT
+      - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE
     ports:
-      - "${H_SUIF_PORT_PREFIX}10:9510"
-      - "${H_SUIF_PORT_PREFIX}40:9540"
+      - "${H_SUIF_PORT_PREFIX}10:${SUIF_POST_TC_SERVER_PORT}"
+      - "${H_SUIF_PORT_PREFIX}40:${SUIF_POST_TC_SERVER_GROUP_PORT}"
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh

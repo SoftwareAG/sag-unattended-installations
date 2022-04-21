@@ -58,7 +58,7 @@ logI "Waiting for Terracotta Server to come up..."
 
 p=`portIsReachable localhost ${SUIF_POST_TC_SERVER_PORT}`
 while [ $p -eq 0 ]; do
-    logI "Waiting for UM Realm Server to come up, sleeping 5..."
+    logI "Waiting for Big Memory Server to come up, sleeping 5..."
     sleep 5
     p=`portIsReachable localhost ${SUIF_POST_TC_SERVER_PORT}`
 done
