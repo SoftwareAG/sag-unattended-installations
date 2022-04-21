@@ -1,4 +1,4 @@
-# MSR 10.11 Lean Test #1
+# MSR 10.11 Deployer and ABE Test #1
 
 Purpose of this test is to verify the minimum installation of template MSR/1011/deployer, without the application of any fix.
 

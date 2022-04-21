@@ -49,6 +49,11 @@ trap "onKill" SIGKILL
 
 logI "Temp - pause"
 
+rm ${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer/bin/.lock
+
 ${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer/bin/server.sh & wait
+
+
+#tail -f /dev/null
 
 logI "MSR was shut down"
