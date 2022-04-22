@@ -1,4 +1,4 @@
-# Deplotyer and ABE MSR 10.11 Authored Template
+# Deployer and ABE MSR 10.11 Authored Template
 IntegrationServerDBblock=0
 selectedFixes=
 IntegrationServerDBUser.Name=__VERSION1__,
