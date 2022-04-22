@@ -1,4 +1,4 @@
-# Lean Microservides Runtime
+# WebMethods Deployer On Lean Microservices Runtime
 
 This template installs a Microservices Runtime with deployer package.
 
