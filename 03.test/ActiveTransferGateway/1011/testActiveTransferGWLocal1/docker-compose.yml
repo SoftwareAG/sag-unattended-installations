@@ -1,0 +1,88 @@
+version: "3.8"
+
+volumes:
+  mftgw1-install-home: {}
+  mftgw1-sum-home: {}
+  mftgw1-runs: {}
+  mftgw1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+networks:
+  n1:
+    external: false
+services:
+  mftgw1:
+    build:
+      context: ./build
+      args:
+        - SUIF_INSTALL_IMAGE_FILE
+        - SUIF_INSTALL_INSTALLER_BIN
+        - SUIF_SETUP_TEMPLATE_MFT_GTW_LICENSE_FILE
+        - SUIF_INSTALL_INSTALL_DIR
+        - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+        - SUIF_PATCH_FIXES_IMAGE_FILE
+        - SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE        
+        - SUIF_SUM_HOME
+        - SUIF_USER_HOME
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SUIF_HOME
+    image: test-mft-gw-1
+    container_name: test-mft-gw-1-1
+    hostname: test-mft-gw-1-1
+    networks:
+      n1:
+        aliases:
+          - mftgw1
+    volumes:
+      - mftgw1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - mftgw1-install-home:${SUIF_INSTALL_INSTALL_DIR}
+      - mftgw1-sum-home:${SUIF_SUM_HOME}
+      - mftgw1-runs:${SUIF_AUDIT_BASE_DIR}
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}
+      # These must be provided, they are prerequisites
+      - ${H_MFTSERVER_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MFT_GTW_LICENSE_FILE}
+      - ${H_IS_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+ 
+      # SUIF provided - this exact branch
+      - ../../../../:${SUIF_HOME}
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON=1
+      - SUIF_PATCH_AVAILABLE=0
+      # this test runs offline
+      - SUIF_ONLINE_MODE=0
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_SETUP_TEMPLATE_MFT_GTW_LICENSE_FILE
+      - SUIF_INSTALL_INSTALL_DIR
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_SUM_HOME
+      - SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE       
+      - SUIF_LOCAL_SCRIPTS_HOME 
+      - SUIF_INSTALL_IS_DIAGS_HTTP_PORT
+      - SUIF_INSTALL_IS_MAIN_HTTP_PORT
+      - SUIF_INSTALL_IS_MAIN_HTTPS_PORT
+      - SUIF_INSTALL_MFTGW_PORT
+      - SUIF_INSTALL_SPM_HTTP_PORT
+      - SUIF_INSTALL_SPM_HTTPS_PORT
+      - SUIF_INSTALL_DECLARED_HOSTNAME
+      
+    ports:
+      - "${H_SUIF_PORT_PREFIX}99:${SUIF_INSTALL_IS_DIAGS_HTTP_PORT}"
+      - "${H_SUIF_PORT_PREFIX}55:${SUIF_INSTALL_IS_MAIN_HTTP_PORT}"
+      - "${H_SUIF_PORT_PREFIX}43:${SUIF_INSTALL_IS_MAIN_HTTPS_PORT}"
+      - "${H_SUIF_PORT_PREFIX}85:${SUIF_INSTALL_MFTGW_PORT}"
+      - "${H_SUIF_PORT_PREFIX}82:${SUIF_INSTALL_SPM_HTTP_PORT}"
+      - "${H_SUIF_PORT_PREFIX}83:${SUIF_INSTALL_SPM_HTTPS_PORT}"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
+
