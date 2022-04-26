@@ -416,6 +416,7 @@ applySetupTemplate(){
     if [ -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" ]; then
         "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
     fi
+    chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" > /dev/null
     logI "Setting up products and fixes for template ${1} ..."
     setupProductsAndFixes \
         "${SUIF_INSTALL_INSTALLER_BIN}" \
