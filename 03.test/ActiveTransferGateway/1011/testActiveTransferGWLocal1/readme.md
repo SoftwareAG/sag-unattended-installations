@@ -1,4 +1,4 @@
-# BigMemory test 1
+# Active Transfer Gateway Test #1
 
 The purpose of this test is to validate the local setup scripts for BigMemory used for IS clustering with version 1005
 
