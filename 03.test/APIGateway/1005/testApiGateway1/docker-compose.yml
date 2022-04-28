@@ -12,6 +12,10 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+
+networks:
+    n1:
+      external: false
 services:
   apigw1:
     build: ./build
@@ -61,4 +65,21 @@ services:
       - "${H_SUIF_PORT_PREFIX}73:9073"
       - "${H_SUIF_PORT_PREFIX}72:9072"
       - "${H_SUIF_PORT_PREFIX}55:5555"
+    networks:
+      n1:
+        aliases:
+          - apigw-server
     entrypoint: /mnt/scripts/containerEntrypoint.sh
+  elasticvue:
+    image: cars10/elasticvue
+    ports:
+      - "${H_SUIF_PORT_PREFIX}80:8080"
+    networks:
+      n1:
+        aliases:
+          - elasticvue
+    environment:
+      - http.cors.enabled=true
+      # eventually change host.docker.internal to your local name
+      - http.cors.allow-origin=http://host.docker.internal:${H_SUIF_PORT_PREFIX}80
+      - http.cors.allow-origin=http://localhost:${H_SUIF_PORT_PREFIX}80

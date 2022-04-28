@@ -29,6 +29,7 @@ All prerequisite files are in mentioned in the file .env_example.
    1. Note LB is iset according to docker-desktop conventions if you are using another system adapt as required the file scripts/config/lb.json
 7. You should observe Administrator password has been changed to manage1 and LB are set appropriately
 8. You should observe the fact extended settings were altered as per the provided json configuration.
+9. If you want to inspect elasticsearch contents, go to [elasicvue home](http://host.docker.internal:48180) and then point to the ES instance at http://host.docker.internal:48120
 
 ## Reusing the scripts for other environments
 
