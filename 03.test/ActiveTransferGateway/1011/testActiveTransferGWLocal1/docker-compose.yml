@@ -29,7 +29,7 @@ services:
         - SUIF_USER_HOME
         - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
         - SUIF_HOME
-    image: test-mft-gw-1
+    image: test-mft-gw-1011-1
     container_name: test-mft-gw-1-1
     hostname: test-mft-gw-1-1
     networks:
