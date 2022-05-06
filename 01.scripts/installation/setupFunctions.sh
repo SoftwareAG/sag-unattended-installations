@@ -32,6 +32,10 @@ init(){
 
 init
 
+# Online mode for SDC separated from Online mode for SUIF:
+export SUIF_ONLINE_MODE=${SUIF_ONLINE_MODE:-1} # default is online for SUIF
+export SUIF_SDC_ONLINE_MODE=${SUIF_SDC_ONLINE_MODE:-0} # default if offline for SDC
+
 # Parameters - installProducts
 # $1 - installer binary file
 # $2 - script file for installer
@@ -94,7 +98,7 @@ bootstrapSum(){
         return 1
     fi
 
-    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
         if [ ! -f  "${2}" ]; then
             logE "[setupFunctions.sh/bootstrapSum()] - Fixes image file not found: ${2}"
             return 2
@@ -112,7 +116,7 @@ bootstrapSum(){
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
-    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
         bootstrapCmd="${bootstrapCmd=} -i ${2}"
         # note: everything is always offline except this, as it is not requiring empower credentials
         logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
@@ -134,7 +138,7 @@ bootstrapSum(){
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 patchSum(){
-    if [ ${SUIF_ONLINE_MODE} -ne 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -ne 0 ]; then
         logI "patchSum() ignored in online mode"
         return 0
     fi
