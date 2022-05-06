@@ -1,4 +1,5 @@
 # Template to install BigMemory with 10.11
+LicenseAgree=Accept
 adminPassword=manage01
 changeAdminPasswordAtFirstLogin=false
 com.wm.distman.utils_panel0=0
