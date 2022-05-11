@@ -476,7 +476,7 @@ assureDefaultInstaller(){
 assureDefaultSumBoostrap(){
     local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20210921-11-LinuxX86.bin"
     local sumBoostrapSha256Sum="4cf2fcb232500674f6d8189588ad3dd6a8f1c1723dc41670fdd610c88c2c2020"
-    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${installerUrl}" "${installerSha256Sum}" ; then
+    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
         logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
         return 1
     fi
