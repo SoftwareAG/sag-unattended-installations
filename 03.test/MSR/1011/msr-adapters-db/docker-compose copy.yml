@@ -1,0 +1,185 @@
+version: "3.5"
+
+volumes:
+  db-data: {}
+  msr-adapters-test1-install-home: {}
+  msr-adapters-test1-runs: {}
+  msr-adapters-test1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  ats-audit: {}
+  ats-sum-home: {}
+  ats-wm-ats-home: {}
+  ats-wm-dbc-home: {}
+  ats-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+networks:
+    msr-n1:
+      external: false
+services:
+  msr-db:
+    image: ${SUIF_TEST_POSTGRESQL_IMAGE}
+    restart: always
+    environment:
+      - POSTGRES_USER=${SUIF_DBSERVER_USER_NAME}
+      - POSTGRES_PASSWORD=${SUIF_DBSERVER_PASSWORD}
+      - POSTGRES_DB=${SUIF_DBSERVER_DATABASE_NAME}
+    networks:
+      msr-n1:
+        aliases:
+          - ${SUIF_DBSERVER_HOSTNAME}
+    # comment out ports, supposed to be used internally only
+    #ports:
+    #  - "${H_SUIF_PORT_PREFIX}32:5432"
+    volumes: 
+      - db-data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    hostname: adminer
+    networks:
+      - msr-n1
+    ports:
+      - "${H_SUIF_PORT_PREFIX}80:8080"
+    depends_on:
+      - msr-db
+  ats:
+    build:
+      context: ./build-ats
+      args:
+        - SRC_IMAGE
+        - SUIF_INSTALL_INSTALL_DIR_ATS
+        - SUIF_SUM_HOME
+        - SUIF_USER_HOME
+        - SUIF_LOCAL_SCRIPTS_HOME
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_HOME
+    hostname: ${SUIF_INSTALL_DECLARED_HOSTNAME}
+    volumes:
+      - ats-temp:/tmp/
+      - ats-audit:${SUIF_AUDIT_BASE_DIR}
+      - ats-sum-home:${SUIF_SUM_HOME}
+      - ats-wm-ats-home:${SUIF_INSTALL_INSTALL_DIR_ATS}
+      - ats-wm-dbc-home:${SUIF_INSTALL_INSTALL_DIR_DBC}
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}
+      - ../../../../:${SUIF_HOME}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}  
+      - ${H_SUIF_INSTALL_IMAGE_FILE_ATS}:${SUIF_INSTALL_IMAGE_FILE_ATS}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE_ATS}:${SUIF_PATCH_FIXES_IMAGE_FILE_ATS}
+      - ${H_SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE}
+      - ${H_SUIF_SETUP_TEMPLATE_MFTSERVER_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MFTSERVER_LICENSE_FILE}
+    environment:
+      # build ARGS are already in the image by the means of the Dockerfile ENV command
+      # following variables are required by the templates AT/1011/DBC4AT and AT/1011/server/minimal-on-posgresql
+      # Common template application variables
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_INSTALL_DECLARED_HOSTNAME 
+      # ATS
+      - SUIF_INSTALL_IMAGE_FILE_ATS
+      - SUIF_PATCH_FIXES_IMAGE_FILE_ATS
+      - SUIF_WMSCRIPT_ActiveServerPasswordName
+      - SUIF_WMSCRIPT_ActiveServerPoolName
+      - SUIF_WMSCRIPT_ActiveServerUserName
+      - SUIF_WMSCRIPT_adminPassword
+      - SUIF_WMSCRIPT_IntegrationServerDBPassName
+      - SUIF_WMSCRIPT_IntegrationServerDBUserName
+      - SUIF_WMSCRIPT_IntegrationServerdiagnosticPort
+      - SUIF_WMSCRIPT_IntegrationServerPoolName
+      - SUIF_WMSCRIPT_IntegrationServerPort
+      - SUIF_WMSCRIPT_IntegrationServersecurePort
+      - SUIF_WMSCRIPT_mftGWPortField
+      - SUIF_WMSCRIPT_SPMHttpPort
+      - SUIF_WMSCRIPT_SPMHttpsPort
+      - SUIF_WMSCRIPT_CDSConnectionName
+      - SUIF_WMSCRIPT_CDSPasswordName
+      - SUIF_WMSCRIPT_CDSUserName
+      - SUIF_WMSCRIPT_integrationServerLicenseFiletext
+      - SUIF_WMSCRIPT_IS_JDBC_CONN_STRING
+      - SUIF_WMSCRIPT_CDS_JDBC_CONN_STRING
+      - SUIF_WMSCRIPT_ATS_JDBC_CONN_STRING
+      - SUIF_SETUP_TEMPLATE_IS_LICENSE_FILE
+      - SUIF_SETUP_TEMPLATE_MFTSERVER_LICENSE_FILE
+      # our test harness context
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_ONLINE_MODE
+      - SUIF_DEBUG_ON 
+    networks:
+      - msr-n1
+    depends_on:
+      - msr-db
+    ports:
+      - "${SUIF_TEST_PORT_PREFIX}55:${SUIF_WMSCRIPT_IntegrationServerPort}"
+      - "${SUIF_TEST_PORT_PREFIX}53:${SUIF_WMSCRIPT_IntegrationServersecurePort}"
+      - "${SUIF_TEST_PORT_PREFIX}50:${SUIF_WMSCRIPT_mftGWPortField}"
+      - "${SUIF_TEST_PORT_PREFIX}90:9100"
+      - "${SUIF_TEST_PORT_PREFIX}92:9102"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypointATS.sh
+  msr-adapters-test1:
+    build: 
+      context: ./build-msr
+      args:
+        - SUIF_INSTALL_INSTALL_DIR_MSR=${SUIF_INSTALL_INSTALL_DIR_MSR}
+        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
+        - SUIF_INSTALL_IMAGE_FILE_MSR=${SUIF_INSTALL_IMAGE_FILE_MSR}
+        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+        - SUIF_PATCH_FIXES_IMAGE_FILE_MSR
+    image: msr-adapters-test1
+    container_name: msr-adapters-test1-1
+    hostname: msr-adapters-test1-1
+    volumes:
+      - msr-adapters-test1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - msr-adapters-test1-install-home:${SUIF_INSTALL_INSTALL_DIR_MSR}/
+      - msr-adapters-test1-runs:${SUIF_AUDIT_BASE_DIR}/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_MSR_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE_MSR}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE_MSR}
+      - ../../../../:${SUIF_HOME}/
+      # DBC
+      - ${H_SUIF_INSTALL_IMAGE_FILE_DBC4AT}:${SUIF_INSTALL_IMAGE_FILE_DBC4AT}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE_DBC4AT}:${SUIF_PATCH_FIXES_IMAGE_FILE_DBC4AT}
+    environment:
+      - SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE_MSR
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_INSTALL_INSTALL_DIR_MSR
+      - SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_DEBUG_ON
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_FIXES_IMAGE_FILE_MSR
+        # DBC4AT files
+      - SUIF_INSTALL_IMAGE_FILE_DBC4AT
+      - SUIF_PATCH_FIXES_IMAGE_FILE_DBC4AT
+      # for database configurator
+      - SUIF_DBSERVER_HOSTNAME
+      - SUIF_DBSERVER_DATABASE_NAME
+      - SUIF_DBSERVER_USER_NAME
+      - SUIF_DBSERVER_PASSWORD
+      - SUIF_DBSERVER_PORT
+      - SUIF_DBC_COMPONENT_NAME
+      - SUIF_DBC_COMPONENT_VERSION
+    networks:
+      - msr-n1
+    depends_on:
+      - msr-db
+    ports:
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+      - "${H_SUIF_PORT_PREFIX}53:5553"
+      - "${H_SUIF_PORT_PREFIX}99:9999"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypointMSR.sh
