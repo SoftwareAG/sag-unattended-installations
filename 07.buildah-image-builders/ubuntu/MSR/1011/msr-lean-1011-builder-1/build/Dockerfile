@@ -19,7 +19,15 @@ ENV \
     SUIF_SAG_GROUP_NAME=${SUIF_SAG_USER_NAME}group
 
 RUN apt-get -y update ;\
-    apt-get install -y wget ca-certificates gnupg2 fuse-overlayfs ;\
+    apt-get install -y \
+        ca-certificates \
+        fuse-overlayfs \
+        gettext \
+        gnupg2 \
+        telnet \
+        wget \
+        which \
+        ;\
     echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /' | tee /etc/apt/sources.list.d/ devel:kubic:libcontainers:stable.list ;\
     wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key -O /tmp/Release.key ;\
     apt-key add - < /tmp/Release.key ;\
@@ -27,12 +35,15 @@ RUN apt-get -y update ;\
     apt-get -qq -y install buildah ;\
     apt-get install --only-upgrade bash ;\
     rm -rf /var/lib/apt/lists/* ;\
-    mkdir -p "${SUIF_AUDIT_BASE_DIR}" "${SUIF_LOCAL_SCRIPTS_HOME}" "${SUIF_INSTALL_INSTALL_DIR}" ;\
-    touch "${SUIF_INSTALL_IMAGE_FILE}" "${SUIF_INSTALL_INSTALLER_BIN}" ;\
+    mkdir -p \
+        "${SUIF_AUDIT_BASE_DIR}" \
+        "${SUIF_LOCAL_SCRIPTS_HOME}" \
+        "${SUIF_INSTALL_INSTALL_DIR}" ;\
+    touch \
+        "${SUIF_INSTALL_IMAGE_FILE}" \
+        "${SUIF_INSTALL_INSTALLER_BIN}" ;\
     groupadd -g 1804 ${SUIF_SAG_GROUP_NAME} ;\
     useradd -u 1804 -m -g ${SUIF_SAG_GROUP_NAME} ${SUIF_SAG_USER_NAME} ;\
-    usermod -aG docker ${SUIF_SAG_USER_NAME} ;\
-    usermod -aG wheel ${SUIF_SAG_USER_NAME} ;\
     chown ${SUIF_SAG_USER_NAME}:${SUIF_SAG_GROUP_NAME} "${SUIF_INSTALL_IMAGE_FILE}" "${SUIF_INSTALL_INSTALLER_BIN}" ;\
     chown -R ${SUIF_SAG_USER_NAME}:${SUIF_SAG_GROUP_NAME} "${SUIF_LOCAL_SCRIPTS_HOME}" ;\
     chown -R ${SUIF_SAG_USER_NAME}:${SUIF_SAG_GROUP_NAME} "${SUIF_AUDIT_BASE_DIR}" ;\
