@@ -2,6 +2,8 @@ version: "3.5"
 
 volumes:
   runs: {}
+  containers:
+    driver: vfs
   temp:
     driver_opts:
       type: tmpfs
@@ -11,12 +13,14 @@ services:
     build: 
       context: ./build
       args:
-        - SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR}
-        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
-        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
-        - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
-        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
-        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SRC_IMAGE
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_INSTALL_INSTALL_DIR
+        - SUIF_LOCAL_SCRIPTS_HOME
+        - SUIF_SAG_USER_NAME
+        - SUIF_SUM_HOME
+    security_opt:
+      - seccomp:unconfined
     image: buildah-msr1011-type-1
     container_name: buildah-msr1011-type-1-1
     hostname: buildah-msr1011-type-1-1
@@ -27,6 +31,7 @@ services:
       - runs:${SUIF_AUDIT_BASE_DIR}/
       - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
       - ../../../../../:${SUIF_HOME}/
+      - containers:/var/lib/containers
       # These must be provided, they are prerequisites
       - ${H_MSR_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE}
       - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}

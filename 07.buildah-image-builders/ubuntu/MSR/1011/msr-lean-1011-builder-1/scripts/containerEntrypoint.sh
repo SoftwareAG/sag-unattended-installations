@@ -7,33 +7,29 @@
 logFullEnv
 
 # If the installation is not present, do it now
-if [ ! -d "${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer" ]; then
-    logI "Starting up for the first time, setting up ..."
+logI "Starting up for the first time, setting up ..."
 
-    # Parameters - applySetupTemplate
-    # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-    applySetupTemplate "MSR/1011/lean" || exit 6
-fi
+# Parameters - applySetupTemplate
+# $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
+applySetupTemplate "MSR/1011/lean" || exit 6
 
-onInterrupt(){
+logI "Generating IS dockerfile"
+cd "${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer/docker"
+./is_container.sh createLeanDockerfile || exit 7
 
-    logI "Interrupted, shutting down MSR..."
+logI "IS dockerfile generated"
 
-    ${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer/bin/shutdown.sh
+cd "${SUIF_INSTALL_INSTALL_DIR}"
+logD "Dumping dockerfile"
+logD $(cat ./Dockerfile_IS)
 
-    #popd >/dev/null
-	exit 0 # managed expected exit
-}
+logI "Building container image in docker format..."
 
-onKill(){
-	logW "Killed!"
-}
+d=$(date +%y-%m-%dT%H.%M.%S_%3N)
 
-trap "onInterrupt" SIGINT SIGTERM
-trap "onKill" SIGKILL
+buildah \
+    bud -f ./Dockerfile_IS \
+        --format docker \
+        -t "sag-lean-msr-canonical_1011:${d}"
 
-logI "Temp - pause"
-
-${SUIF_INSTALL_INSTALL_DIR}/IntegrationServer/bin/server.sh & wait
-
-logI "MSR was shut down"
+logI "Image built"
