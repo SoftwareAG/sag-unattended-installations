@@ -1,6 +1,6 @@
-# MSR 10.11 Deployer and ABE Test #1
+# MSR 10.11 with Central Users and Adapters set #1
 
-Purpose of this test is to verify the minimum installation of template MSR/1011/deployer, without the application of any fix.
+Purpose of this test is to verify the minimum installation of template MSR/1011/msr-adapters.
 
 By minimum we intend that only the mandatory variables are provided, everything else will be initialized by default.
 
