@@ -49,11 +49,12 @@ RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_
     chown -R sag:saggroup "${SUIF_SUM_HOME}"
 
 USER sag
- 
-VOLUME \
+
+VOLUME  \
   "${SUIF_AUDIT_BASE_DIR}" \
   "${SUIF_HOME}" \
   "${SUIF_INSTALL_INSTALL_DIR_ATS}" \
   "${SUIF_INSTALL_INSTALL_DIR_DBC}" \
   "${SUIF_LOCAL_SCRIPTS_HOME}" \
   "${SUIF_SUM_HOME}" 
+  
