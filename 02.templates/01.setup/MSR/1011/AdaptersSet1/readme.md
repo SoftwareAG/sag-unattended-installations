@@ -2,12 +2,12 @@
 
 This template installs a Microservices Runtime with the follocomponentswing adapters:
 
-Central User Management
-JDBC Adapter
-SAP Adapter
-Kafka Adapter
-HBase Adapter
-CloudStreams Server
+- Central User Management
+- JDBC Adapter
+- SAP Adapter
+- Kafka Adapter
+- HBase Adapter
+- CloudStreams Server
 
 
 ## Variables
