@@ -1,0 +1,90 @@
+version: "3.5"
+
+volumes:
+  db-data: {}
+  install-home: {}
+  audit: {}
+  temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+networks:
+    n1:
+      external: false
+services:
+  db:
+    image: ${SUIF_TEST_POSTGRESQL_IMAGE}
+    restart: always
+    environment:
+      - POSTGRES_USER=${SUIF_DBSERVER_USER_NAME}
+      - POSTGRES_PASSWORD=${SUIF_DBSERVER_PASSWORD}
+    networks:
+      n1:
+        aliases:
+          - ${SUIF_DBSERVER_HOSTNAME}
+    # comment out ports, supposed to be used internally only
+    #ports:
+    #  - "${H_SUIF_PORT_PREFIX}32:5432"
+    volumes: 
+      - db-data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    hostname: adminer
+    networks:
+      - n1
+    ports:
+      - "${H_SUIF_PORT_PREFIX}80:8080"
+    depends_on:
+      - db
+  msr-pgsql-dev-lab-1:
+    depends_on:
+      - db
+    build: 
+      context: ./build
+      args:
+        - SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR}
+        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
+        - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
+        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+        - SUIF_PATCH_FIXES_IMAGE_FILE
+    image: msr-pgsql-dev-lab-1
+    container_name: msr-pgsql-dev-lab-1-1
+    hostname: msr-pgsql-dev-lab-1-1
+    networks:
+      - n1
+    volumes:
+      - temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:${SUIF_INSTALL_INSTALL_DIR}/
+      - audit:${SUIF_AUDIT_BASE_DIR}/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_MSR_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ../../../:${SUIF_HOME}/
+    environment:
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_DEBUG_ON
+      - SUIF_HOME
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_INSTALL_INSTALL_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LABS_PGSQL_DRIVER_URL
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE
+    ports:
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+      - "${H_SUIF_PORT_PREFIX}53:5553"
+      - "${H_SUIF_PORT_PREFIX}99:9999"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
