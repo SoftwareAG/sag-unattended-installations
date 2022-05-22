@@ -338,7 +338,7 @@ setupProductsAndFixes(){
 
     # note no inline returns from now as we need to clean locally allocated resources
     if [ ! -f "${lProductImageFile}" ]; then
-        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}. Does the wmscript have the imageFile=... line?"
         RESULT_setupProductsAndFixes=6
     else
         local lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
