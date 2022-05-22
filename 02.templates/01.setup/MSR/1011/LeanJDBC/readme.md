@@ -1,14 +1,6 @@
-# Lean Microservides Runtime
+# Lean Microservides Runtime With JDBC Adapter
 
-This template installs a Microservices Runtime with the follocomponentswing adapters:
-
-- Central User Management
-- JDBC Adapter
-- SAP Adapter
-- Kafka Adapter
-- HBase Adapter
-- CloudStreams Server
-
+This template installs a Microservices Runtime with the JDBC Adapter
 
 ## Variables
 

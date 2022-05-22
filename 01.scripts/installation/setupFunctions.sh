@@ -32,6 +32,10 @@ init(){
 
 init
 
+# Online mode for SDC separated from Online mode for SUIF:
+export SUIF_ONLINE_MODE=${SUIF_ONLINE_MODE:-1} # default is online for SUIF
+export SUIF_SDC_ONLINE_MODE=${SUIF_SDC_ONLINE_MODE:-0} # default if offline for SDC
+
 # Parameters - installProducts
 # $1 - installer binary file
 # $2 - script file for installer
@@ -94,7 +98,7 @@ bootstrapSum(){
         return 1
     fi
 
-    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
         if [ ! -f  "${2}" ]; then
             logE "[setupFunctions.sh/bootstrapSum()] - Fixes image file not found: ${2}"
             return 2
@@ -112,7 +116,7 @@ bootstrapSum(){
     local d=`date +%y-%m-%dT%H.%M.%S_%3N`
 
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
-    if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
         bootstrapCmd="${bootstrapCmd=} -i ${2}"
         # note: everything is always offline except this, as it is not requiring empower credentials
         logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
@@ -134,7 +138,7 @@ bootstrapSum(){
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 patchSum(){
-    if [ ${SUIF_ONLINE_MODE} -ne 0 ]; then
+    if [ ${SUIF_SDC_ONLINE_MODE} -ne 0 ]; then
         logI "patchSum() ignored in online mode"
         return 0
     fi
@@ -334,7 +338,7 @@ setupProductsAndFixes(){
 
     # note no inline returns from now as we need to clean locally allocated resources
     if [ ! -f "${lProductImageFile}" ]; then
-        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}"
+        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}. Does the wmscript have the imageFile=... line?"
         RESULT_setupProductsAndFixes=6
     else
         local lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
@@ -472,7 +476,7 @@ assureDefaultInstaller(){
 assureDefaultSumBoostrap(){
     local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20210921-11-LinuxX86.bin"
     local sumBoostrapSha256Sum="4cf2fcb232500674f6d8189588ad3dd6a8f1c1723dc41670fdd610c88c2c2020"
-    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${installerUrl}" "${installerSha256Sum}" ; then
+    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
         logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
         return 1
     fi

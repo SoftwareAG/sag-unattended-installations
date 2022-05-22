@@ -30,15 +30,16 @@ services:
       - ../../:/mnt/SUIF_HOME/
     environment:
       # commonFunctions
-      - SUIF_DEBUG_ON=1
+      - SUIF_DEBUG_ON=0
       # this test runs online, it must be able to download the fixes
       - SUIF_ONLINE_MODE=1
+      - SUIF_SDC_ONLINE_MODE=1 # we need to be online for this use case
       - SUIF_HOME=/mnt/SUIF_HOME
       - SUIF_AUDIT_BASE_DIR=/app/audit
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
       - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
-      - SUIF_SUM_HOME=/app/sag/sum/
+      - SUIF_SUM_HOME=/app/sag/sum
       - SUIF_FIXES_DATE_TAG=${H_SUIF_FIXES_DATE_TAG}
       - SUIF_PLATFORM_STRING=${H_SUIF_PLATFORM_STRING}
       - SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY=/mnt/products-out-dir

@@ -1,12 +1,12 @@
-# MSR 10.11 with Central Users and Adapters set #1
+# MSR 10.11 with JDBC Adapter
 
-Purpose of this test is to verify the minimum installation of template MSR/1011/msr-adapters.
+Purpose of this test is to provide a startup laboratory or development environment for exploring MSR service development with Postgres Database.
 
 By minimum we intend that only the mandatory variables are provided, everything else will be initialized by default.
 
 ## Quick Start
 
-- copy .env_example.md into .env
+- copy Example.env into .env
 - change the H_* variables according to your context
 - optionally change other variables
 - run `docker-compose up`

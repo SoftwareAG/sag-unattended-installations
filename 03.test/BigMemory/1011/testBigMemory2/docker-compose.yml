@@ -1,0 +1,75 @@
+version: "3.5"
+
+volumes:
+  tsa1-install-home: {}
+  tsa1-sum-home: {}
+  tsa1-user-home: {}
+  tsa1-suif-cache-home: {}
+  tsa1-runs: {}
+  tsa1-tcdata: {}
+  tsa1-tclogs: {}
+  tsa1-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  tsa1:
+    build:
+      context: ./build
+      args:
+        - SRC_IMAGE 
+        - SUIF_INSTALL_INSTALL_DIR
+        - SUIF_SUM_HOME
+        - SUIF_USER_HOME
+        - SUIF_LOCAL_SCRIPTS_HOME
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_CACHE_HOME
+        - SUIF_WMSCRIPT_TCDataDirID
+        - SUIF_WMSCRIPT_TCLogsDirID
+    image: test-big-memory-1011-2
+    container_name: test-big-memory-1011-1
+    hostname: test-big-memory-1011-1
+    volumes:
+      - tsa1-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - tsa1-install-home:${SUIF_INSTALL_INSTALL_DIR}
+      - tsa1-sum-home:${SUIF_SUM_HOME}      
+      - tsa1-user-home:${SUIF_USER_HOME}
+      - tsa1-runs:${SUIF_AUDIT_BASE_DIR}
+      - tsa1-tcdata:${SUIF_WMSCRIPT_TCDataDirID}
+      - tsa1-tclogs:${SUIF_WMSCRIPT_TCLogsDirID}
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}
+      - tsa1-suif-cache-home:${SUIF_CACHE_HOME}
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE} 
+      - ${H_SUIF_WMSCRIPT_TSALicenseFile}:${SUIF_WMSCRIPT_TSALicenseFile}
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON
+      - SUIF_PATCH_AVAILABLE
+      # this test runs online
+      - SUIF_ONLINE_MODE
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      # even when not using SPM, installer / update manager are spinning it up nonetheless
+      - SUIF_INSTALL_SPM_HTTPS_PORT
+      - SUIF_INSTALL_SPM_HTTP_PORT
+      # setup template specifics
+      - SUIF_WMSCRIPT_TSALicenseFile
+      # post setup template specifics
+      # The following are optional as the scripts have default values.
+
+      # Ports (TMC's ports are not considered yet, we have the defaults)
+      - SUIF_POST_TC_SERVER_PORT
+      - SUIF_POST_TC_SERVER_GROUP_PORT
+      - SUIF_POST_TC_SERVER_OFFHEAP_MEM_DATA_SIZE
+    ports:
+      - "${H_SUIF_PORT_PREFIX}10:${SUIF_POST_TC_SERVER_PORT}"
+      - "${H_SUIF_PORT_PREFIX}40:${SUIF_POST_TC_SERVER_GROUP_PORT}"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
