@@ -26,7 +26,7 @@ ENV \
 
 RUN if [ -f "$SUIF_TEST_GPG_KEYS_FILE_1" ] ; then rpmkeys --import "${SUIF_TEST_GPG_KEYS_FILE_1}" ; fi ;\ 
     yum -y update ;\ 
-    yum -y install which less gettext telnet nc ;\ 
+    yum -y install git which less gettext telnet nc ;\ 
     yum clean all ;\ 
     rm -rf /var/cache/yum ;\ 
 	  groupadd -g 1804 ${SUIF_SAG_GROUP_NAME} ;\
