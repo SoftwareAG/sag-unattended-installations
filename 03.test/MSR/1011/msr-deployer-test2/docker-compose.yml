@@ -1,0 +1,55 @@
+version: "3.5"
+
+volumes:
+  audit-home: {}
+  install-home: {}
+  sum-home: {}
+services:
+  deployer-1011-test-2:
+    build: 
+      context: ./build
+      args:
+        - SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR}
+        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
+        - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
+        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+        - SUIF_SUM_HOME=${SUIF_SUM_HOME}
+    image: deployer-1011-test-2
+    container_name: deployer-1011-test-2-1
+    hostname: deployer-1011-test-2-1
+    volumes:
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:${SUIF_INSTALL_INSTALL_DIR}/
+      - audit-home:${SUIF_AUDIT_BASE_DIR}/
+      - sum-home:${SUIF_SUM_HOME}
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_MSR_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ../../../../:${SUIF_HOME}/
+    environment:
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_DEBUG_ON
+      - SUIF_HOME
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_INSTALL_INSTALL_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_SDC_ONLINE_MODE
+      - SUIF_SETUP_TEMPLATE_MSR_LICENSE_FILE
+      - SUIF_SUM_HOME
+    ports:
+      - "${H_SUIF_PORT_PREFIX}53:5553"
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+      - "${H_SUIF_PORT_PREFIX}99:9999"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
