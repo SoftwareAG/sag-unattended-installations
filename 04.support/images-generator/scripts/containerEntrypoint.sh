@@ -5,7 +5,6 @@
 # This scripts sets up the local installation
 
 . "${SUIF_LOCAL_SCRIPTS_HOME}/set_env.sh" || exit 1
-. "${SUIF_LOCAL_SCRIPTS_HOME}/functions.sh" || exit 2
 
 onInterrupt(){
     echo "Interrupted!"
@@ -72,14 +71,14 @@ if [ "${SUIF_PROCESS_TEMPLATE}" == "all" ];then
         # Parameters
         # $1 -> setup template
         # $2 -> platform string
-        generateProductsImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
-        generateFixesImageFromTemplate "${templateId}" "${SUIF_PLATFORM_STRING}"
+        generateProductsImageFromTemplate "${templateId}" "${SUIF_INSTALL_INSTALLER_BIN}" "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}" "${SUIF_PLATFORM_STRING}"
+        generateFixesImageFromTemplate "${templateId}" "${SUIF_FIX_IMAGES_OUTPUT_DIRECTORY}" "${SUIF_FIXES_DATE_TAG}" "${SUIF_PLATFORM_STRING}" "${SUIF_SUM_HOME}"
     done
 else
     if [ -d "${SUIF_HOME}/02.templates/01.setup/${SUIF_PROCESS_TEMPLATE}" ]; then
         logI "Preparing images for specified template ${SUIF_PROCESS_TEMPLATE}"
-        generateProductsImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_PLATFORM_STRING}"
-        generateFixesImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_PLATFORM_STRING}"
+        generateProductsImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_INSTALL_INSTALLER_BIN}" "${SUIF_PRODUCT_IMAGES_OUTPUT_DIRECTORY}" "${SUIF_PLATFORM_STRING}"
+        generateFixesImageFromTemplate "${SUIF_PROCESS_TEMPLATE}" "${SUIF_FIX_IMAGES_OUTPUT_DIRECTORY}" "${SUIF_FIXES_DATE_TAG}" "${SUIF_PLATFORM_STRING}" "${SUIF_SUM_HOME}"
     else
         logE "Template ${SUIF_PROCESS_TEMPLATE} not found!"
     fi

@@ -464,22 +464,211 @@ assureDownloadableFile(){
     fi
 }
 
+# Parameters
+# $1 - OPTIONAL installer binary location, defaulted to ${SUIF_INSTALL_INSTALLER_BIN}, which is also defaulted to /tmp/installer.bin
 assureDefaultInstaller(){
     local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20220221-Linux_x86_64.bin"
     local installerSha256Sum="ef59cbead6086da9b844bc02eca34440ad14ed7af6c828721f883f37ec958a2f"
-    if ! assureDownloadableFile "${SUIF_INSTALL_INSTALLER_BIN}" "${installerUrl}" "${installerSha256Sum}" ; then
+    SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
+    local installerBin="${1:-$SUIF_INSTALL_INSTALLER_BIN}"
+    if ! assureDownloadableFile "${installerBin}" "${installerUrl}" "${installerSha256Sum}" ; then
         logE "[setupFunctions.sh/assureDefaultInstaller()] - Cannot assure default installer!"
         return 1
     fi
 }
 
+# Parameters
+# $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
 assureDefaultSumBoostrap(){
     local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20210921-11-LinuxX86.bin"
     local sumBoostrapSha256Sum="4cf2fcb232500674f6d8189588ad3dd6a8f1c1723dc41670fdd610c88c2c2020"
-    if ! assureDownloadableFile ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
+    SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
+    local lSumBootstrap="${1:-SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+    if ! assureDownloadableFile ${lSumBootstrap} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
         logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
         return 1
     fi
+}
+
+# TODO: generalize
+# Parameters
+# $1 -> setup template
+# $2 -> OPTIONAL - output folder, default /tmp/images/product
+# $3 -> OPTIONAL - fixes tag. Defaulted to current day
+# $4 -> OPTIONAL - platform string, default LNXAMD64
+# $5 -> OPTIONAL - sum home, default /tmp/sumv11
+# $6 -> OPTIONAL - sum-bootstrap binary location, default /tmp/sum-bootstrap.bin
+# NOTE: pass SDC credentials in env variables SUIF_EMPOWER_USER and SUIF_EMPOWER_PASSWORD
+generateFixesImageFromTemplate(){
+    local lCrtDate=$(date +%y-%m-%d)
+    local lFixesTag="${3:-$lCrtDate}"
+    logI "Addressing fixes image for setup template ${1} and tag ${lFixesTag}..."
+
+    local lOutputDir="${2:-/tmp/images/fixes}"
+    local lFixesDir="${lOutputDir}/${1}/${lFixesTag}"
+    mkdir -p "${lFixesDir}"
+    local lFixesImageFile="${lFixesDir}/fixes.zip"
+    local lPermanentInventoryFile="${lFixesDir}/inventory.json"
+    local lPermanentScriptFile="${lFixesDir}/createFixesImage.wmscript"
+    local lPlatformString="${4:-LNXAMD64}"
+
+    if [ -f "${lFixesImageFile}" ]; then
+        logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fixes image for template ${1} and tag ${lFixesTag} already exists, nothing to do."
+        return 0
+    fi
+
+    local lSumHome="${5:-/tmp/sumv11}"
+    if [ ! -d "${lSumHome}/bin" ]; then
+        logW "[setupFunctions.sh/generateFixesImageFromTemplate()] - SUM Home does not contain a SUM installation, trying to bootstrap now..."
+        local lSumBootstrapBin=${6:-/tmp/sum-bootstrap.bin}
+        if [ ! -f "${lSumBootstrapBin}" ]; then
+            logW "[setupFunctions.sh/generateFixesImageFromTemplate()] - SUM Bootstrap binary not found, trying to obtain the default one..."
+            assureDefaultSumBoostrap "${lSumBootstrapBin}" || return $?
+            # Parameters - bootstrapSum
+            # $1 - Update Manager Boostrap file
+            # $2 - Fixes image file, mandatory for offline mode
+            # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
+            # NOTE: SUIF_SDC_ONLINE_MODE must be 1 (non 0)
+            bootstrapSum "${lSumBootstrapBin}" '' "${lSumHome}" || return $?
+        fi
+    fi
+
+    if [ -f "${lPermanentInventoryFile}" ];then
+        logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Inventory file ${lPermanentInventoryFile} already exists, skipping creation."
+    else
+        logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Inventory file ${lPermanentInventoryFile} does not exists, creating now."
+        pwsh "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
+            -file "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" -outfile "${lPermanentInventoryFile}" \
+            -sumPlatformString "${lPlatformString}"
+    fi
+
+    if [ -f "${lPermanentScriptFile}" ];then
+        logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Permanent script file ${lPermanentScriptFile} already exists, skipping creation..."
+    else
+        logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Permanent script file ${lPermanentScriptFile} does not exist, creating now..."
+        echo "# Generated" > "${lPermanentScriptFile}"
+        echo "scriptConfirm=N" >> "${lPermanentScriptFile}"
+        # use before reuse -> diagnosers not covered for now
+        echo "installSP=N " >> "${lPermanentScriptFile}"
+        echo "action=Create or add fixes to fix image" >> "${lPermanentScriptFile}"
+        echo "selectedFixes=spro:all" >> "${lPermanentScriptFile}"
+        echo "installDir=${lPermanentInventoryFile}" >> "${lPermanentScriptFile}"
+        echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
+        echo "createEmpowerImage=C " >> "${lPermanentScriptFile}"
+    fi
+
+    local lCmd="./UpdateManagerCMD.sh -selfUpdate false -readScript "'"'"${lPermanentScriptFile}"'"'
+    lCmd="${lCmd} -installDir "'"'"${lPermanentInventoryFile}"'"'
+    lCmd="${lCmd} -imagePlatform ${lPlatformString}"
+    lCmd="${lCmd} -createImage "'"'"${lFixesImageFile}"'"' 
+    lCmd="${lCmd} -empowerUser ${SUIF_EMPOWER_USER}"
+    echo "SUM command to execute: ${lCmd} -empowerPass ***"
+    lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
+
+    pushd . >/dev/null
+    cd "${lSumHome}/bin"
+    controlledExec "${lCmd}" "Create-fixes-image-for-template-${1//\//-}-tag-${lFixesTag}"
+    local lResultFixCreation=$?
+    popd >/dev/null
+    logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished, result: ${lResultFixCreation}"
+}
+
+# Parameters
+# $1 -> setup template
+# $2 -> OPTIONAL - installer binary location, default /tmp/installer.bin
+# $3 -> OPTIONAL - output folder, default /tmp/images/product
+# $4 -> OPTIONAL - platform string, default LNXAMD64
+# NOTE: default URLs for download are fit for Europe. Use the ones without "-hq" for Americas
+# NOTE: pass SDC credentials in env variables SUIF_EMPOWER_USER and SUIF_EMPOWER_PASSWORD
+# NOTE: /dev/shm/productsImagesList.txt may be created upfront if image caches are available
+generateProductsImageFromTemplate(){
+
+    local lDebugOn=${SUIF_DEBUG_ON:-0}
+
+    logI "Addressing products image for setup template ${1}..."
+    local lInstallerBin="${2:-/tmp/installer.bin}"
+    if [ ! -f ${lInstallerBin} ]; then
+        logE "[setupFunctions.sh/generateProductsImageFromTemplate()] - Installer file ${lInstallerBin} not found, attempting to use the default one..."
+        assureDefaultInstaller "${lInstallerBin}" || return 1
+    fi
+    local lProductImageOutputDir="${3:-/tmp/images/product}"
+    local lProductsImageFile="${lProductImageOutputDir}/${1}/products.zip"
+
+    if [ -f "${lProductsImageFile}" ]; then
+        logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Products image for template ${1} already exists, nothing to do."
+        return 0
+    fi
+
+    local lDebugLogFile="${lProductImageOutputDir}/${1}/debug.log"
+
+    local lPermanentScriptFile="${lProductImageOutputDir}/${1}/createProductImage.wmscript"
+    if [ -f "${lPermanentScriptFile}" ]; then
+        logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file already present... Using the existing one."
+    else
+        logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file not present, creating now..."
+        local lPlatformString=${4:-LNXAMD64}
+
+        # current default
+        if [[ ${1} == *"/1011/"* ]]; then
+            local lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
+        else
+            if [[ ${1} == *"/1005/"* ]]; then
+                lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
+            else
+                if [[ ${1} == *"/1007/"* ]]; then
+                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
+                else
+                    logW "[setupFunctions.sh/generateProductsImageFromTemplate()] - Unsupported version in template ${1}. Continuing using the 10.11 SDC URL..."
+                fi
+            fi
+        fi
+
+        mkdir -p "${lProductImageOutputDir}/${1}"
+        echo "###Generated" > "${lPermanentScriptFile}"
+        echo "LicenseAgree=Accept" >> "${lPermanentScriptFile}"
+        echo "InstallLocProducts=" >> "${lPermanentScriptFile}"
+        cat "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" | \
+            grep "InstallProducts" >> "${lPermanentScriptFile}"
+        echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
+        echo "imageFile=${lProductsImageFile}" >> "${lPermanentScriptFile}"
+        echo "ServerURL=${lSdcServerUrl}" >> "${lPermanentScriptFile}"
+
+        logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file created"
+    fi
+
+    logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Creating the volatile script ..."
+    local lVolatileScriptFile="/dev/shm/SUIF/setup/templates/${1}/createProductImage.wmscript"
+    mkdir -p "/dev/shm/SUIF/setup/templates/${1}/"
+    cp "${lPermanentScriptFile}" "${lVolatileScriptFile}"
+    echo "Username=${SUIF_EMPOWER_USER}" >> "${lVolatileScriptFile}"
+    echo "Password=${SUIF_EMPOWER_PASSWORD}" >> "${lVolatileScriptFile}"
+    logI "Volatile script created."
+
+    ## TODO: check if error management enforcement is needed: what if the grep produced nothing?
+    ## TODO: dela with \ escaping in the password. For now avoid using '\' - backslash in the password string
+
+    ## TODO: not space safe, but it shouldn't matter for now
+    local lCmd="${lInstallerBin} -readScript ${lVolatileScriptFile}"
+    if [ "${lDebugOn}" -ne 0 ]; then
+        lCmd="${lCmd} -debugFile '${lDebugLogFile}' -debugLvl verbose"
+    fi
+    lCmd="${lCmd} -writeImage ${lProductsImageFile}"
+    # explictly tell installer we are running unattended
+    lCmd="${lCmd} -scriptErrorInteract no"
+
+    # avoid downloading what we already have
+    if [ -s /dev/shm/productsImagesList.txt ]; then
+        lCmd="${lCmd} -existingImages /dev/shm/productsImagesList.txt"
+    fi
+
+    logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Creating the product image ${lProductsImageFile}... This may take some time..."
+    logD "[setupFunctions.sh/generateProductsImageFromTemplate()] - Command is ${lCmd}"
+    controlledExec "${lCmd}" "Create-products-image-for-template-${1//\//-}"
+    local lCreateImgResult=$?
+    logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Image ${lProductsImageFile} creation completed, result: ${lCreateImgResult}"
+    rm -f "${lVolatileScriptFile}"
+
+    return ${lCreateImgResult}
 }
 
 logI "Setup Functions sourced"
