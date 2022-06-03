@@ -1,0 +1,43 @@
+version: "3.5"
+
+volumes:
+  um1011-no-instance-builder-type-2-runs: {}
+services:
+  um1011-no-instance-builder-type-2:
+    build: 
+      context: ./build
+      args:
+        - SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR}
+        - SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR}
+        - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}
+        - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}
+        - SUIF_SAG_USER_NAME=${SUIF_SAG_USER_NAME}
+        - SUIF_LOCAL_SCRIPTS_HOME=${SUIF_LOCAL_SCRIPTS_HOME}
+    image: um1011-no-instance-builder-type-2
+    container_name: um1011-no-instance-builder-type-2-1
+    hostname: um1011-no-instance-builder-type-2-1
+    volumes:
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      #- um1011-no-instance-builder-type-2-install-home:${SUIF_INSTALL_INSTALL_DIR}/
+      - um1011-no-instance-builder-type-2-runs:${SUIF_AUDIT_BASE_DIR}/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      - ${H_UM_LICENSE_FILE}:${SUIF_WMSCRIPT_NUMLicenseFile}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ../../../../:${SUIF_HOME}/
+      # we need access to docker because we are building...
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_INSTALL_INSTALL_DIR
+      - SUIF_WMSCRIPT_NUMLicenseFile
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_DEBUG_ON
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
