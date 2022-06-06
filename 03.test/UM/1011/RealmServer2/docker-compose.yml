@@ -1,0 +1,64 @@
+version: "3.5"
+
+volumes:
+  install-home: {}
+  sum-home: {}
+  runs: {}
+  umdata: {}
+  temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+services:
+  um-1011-test-2:
+    build:
+      context: ./build
+      args:
+        - SRC_IMAGE
+        #-SUIF_TEST_GPG_KEYS_FILE_1
+        - SUIF_INSTALL_INSTALL_DIR
+        - SUIF_SUM_HOME
+        - SUIF_USER_HOME
+        - SUIF_LOCAL_SCRIPTS_HOME
+        - SUIF_AUDIT_BASE_DIR
+        - SUIF_HOME
+    image: um-1011-test-2
+    container_name: um-1011-test-2
+    hostname: um-1011-test-2
+    volumes:
+      - temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:${SUIF_INSTALL_INSTALL_DIR}
+      - sum-home:${SUIF_SUM_HOME}
+      - runs:${SUIF_AUDIT_BASE_DIR}
+      # realm servers do not support symlinks, it has to be here...
+      - umdata:${SUIF_INSTALL_INSTALL_DIR}/UniversalMessaging/server/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}
+      - ../../../../:${SUIF_HOME}
+      # setup assets
+      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ${H_SUIF_WMSCRIPT_NUMLicenseFile}:${SUIF_WMSCRIPT_NUMLicenseFile}
+    environment:
+      # commonFunctions
+      - SUIF_DEBUG_ON
+      - SUIF_PATCH_AVAILABLE
+      # this test runs online
+      - SUIF_ONLINE_MODE
+      # setupFunctions
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      # even when not using SPM, installer / update manager are spinning it up nonetheless
+      - SUIF_WMSCRIPT_SPMHttpPort
+      - SUIF_WMSCRIPT_SPMHttpsPort
+      # setup template specifics
+      - SUIF_WMSCRIPT_NUMLicenseFile
+      - SUIF_WMSCRIPT_NUMInterfacePortID
+      - SUIF_WMSCRIPT_NUMRealmServerNameID
+    ports:
+      - "${H_SUIF_PORT_PREFIX}90:${SUIF_WMSCRIPT_NUMInterfacePortID}"
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
