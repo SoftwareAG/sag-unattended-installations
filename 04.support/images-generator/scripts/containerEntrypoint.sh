@@ -36,6 +36,9 @@ else
     bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "" "${SUIF_SUM_HOME}" 
 fi
 
+# Just in case the previous run was interrupted
+rm "${SUIF_SUM_HOME}/bin/.lock"
+
 logI "Attempting to update Update Manager itself..."
 cd "${SUIF_SUM_HOME}/bin"
 # first ensure SUM is able to self update"
