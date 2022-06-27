@@ -539,20 +539,20 @@ generateFixesImageFromTemplate(){
         logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Inventory file ${lPermanentInventoryFile} does not exists, creating now."
         huntForSuifFile "01.scripts/pwsh" "generateInventoryFileFromInstallScript.ps1"
 
-        if [ ! -f "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" ]; then
-            logE "Required file ${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1 not found, cannot continue"
+        if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" ]; then
+            logE "Required file ${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1 not found, cannot continue"
             return 1
         fi
 
         huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
 
-        if [ ! -f "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
-            logE "Required file ${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript not found, cannot continue"
+        if [ ! -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
+            logE "Required file ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript not found, cannot continue"
             return 2
         fi
 
-        pwsh "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
-            -file "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" -outfile "${lPermanentInventoryFile}" \
+        pwsh "${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
+            -file "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" -outfile "${lPermanentInventoryFile}" \
             -sumPlatformString "${lPlatformString}"
     fi
 
@@ -639,8 +639,8 @@ generateProductsImageFromTemplate(){
 
         huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
 
-        if [ ! -f "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
-            logE "Template script ${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript cannot be recovered, cannot continue"
+        if [ ! -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
+            logE "Template script ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript cannot be recovered, cannot continue"
             return 1
         fi
 
@@ -648,7 +648,7 @@ generateProductsImageFromTemplate(){
         echo "###Generated" > "${lPermanentScriptFile}"
         echo "LicenseAgree=Accept" >> "${lPermanentScriptFile}"
         echo "InstallLocProducts=" >> "${lPermanentScriptFile}"
-        cat "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" | \
+        cat "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" | \
             grep "InstallProducts" >> "${lPermanentScriptFile}"
         echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
         echo "imageFile=${lProductsImageFile}" >> "${lPermanentScriptFile}"
