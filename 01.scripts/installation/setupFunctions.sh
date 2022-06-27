@@ -537,6 +537,20 @@ generateFixesImageFromTemplate(){
         logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Inventory file ${lPermanentInventoryFile} already exists, skipping creation."
     else
         logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Inventory file ${lPermanentInventoryFile} does not exists, creating now."
+        huntForSuifFile "01.scripts/pwsh" "generateInventoryFileFromInstallScript.ps1"
+
+        if [ ! -f "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" ]; then
+            logE "Required file ${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1 not found, cannot continue"
+            return 1
+        fi
+
+        huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
+
+        if [ ! -f "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
+            logE "Required file ${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript not found, cannot continue"
+            return 2
+        fi
+
         pwsh "${SUIF_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" \
             -file "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" -outfile "${lPermanentInventoryFile}" \
             -sumPlatformString "${lPlatformString}"
@@ -621,6 +635,13 @@ generateProductsImageFromTemplate(){
                     logW "[setupFunctions.sh/generateProductsImageFromTemplate()] - Unsupported version in template ${1}. Continuing using the 10.11 SDC URL..."
                 fi
             fi
+        fi
+
+        huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
+
+        if [ ! -f "${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
+            logE "Template script ${SUIF_HOME}/02.templates/01.setup/${1}/template.wmscript cannot be recovered, cannot continue"
+            return 1
         fi
 
         mkdir -p "${lProductImageOutputDir}/${1}"
