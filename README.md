@@ -1,6 +1,6 @@
-# Software AG Unattented Installation Assets
+# Software AG Unattended Installation Assets
 
-- [Software AG Unattented Installation Assets](#software-ag-unattented-installation-assets)
+- [Software AG Unattended Installation Assets](#software-ag-unattended-installation-assets)
   - [Folders](#folders)
     - [01.scripts](#01scripts)
     - [02.templates](#02templates)
