@@ -2,9 +2,10 @@ ARG __from_img=centos:8
 # ARG __from_img used below on the final stage
 FROM centos:7 as installer
 
-ARG __i_bin=/tmp/installer.bin \
-    __s_bin=/tmp/sum-bootstrap.bin \
-    __sag_home=/opt/softwareag
+# Tamporary until buildah fix will be available: one argument for ARG
+ARG __i_bin=/tmp/installer.bin
+ARG __s_bin=/tmp/sum-bootstrap.bin
+ARG __sag_home=/opt/softwareag
 
 RUN yum -y update ;\ 
     yum -y install git curl gettext which
@@ -89,8 +90,8 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmXSLT/ ${SAG_HOME}
 RUN rm ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
 
 FROM "${__from_img}"
-ARG __sag_home=/opt/softwareag \
-    __user_group_id=1724
+ARG __sag_home=/opt/softwareag
+ARG __user_group_id=1724
 ENV SAG_HOME=${__sag_home} \
     JAVA_HOME=${__sag_hom}/jvm/jvm/ \
     JRE_HOME=${__sag_hom}/jvm/jvm/
