@@ -38,7 +38,9 @@ RUN cd /tmp/install; chmod u+x ./install.sh; ./install.sh
 RUN tar czf "${SUIF_INSTALL_INSTALL_DIR}/install.audit.tgz" "${SUIF_AUDIT_BASE_DIR}"
 
 FROM alpine as packer
+
 ARG __sag_home=/opt/softwareag
+
 ENV SAG_HOME ${__sag_home}
 
 # When mature enough might lose the audit
@@ -90,11 +92,13 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmXSLT/ ${SAG_HOME}
 RUN rm ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
 
 FROM "${__from_img}"
+
 ARG __sag_home=/opt/softwareag
 ARG __user_group_id=1724
+
 ENV SAG_HOME=${__sag_home} \
-    JAVA_HOME=${__sag_hom}/jvm/jvm/ \
-    JRE_HOME=${__sag_hom}/jvm/jvm/
+    JAVA_HOME=${__sag_home}/jvm/jvm/ \
+    JRE_HOME=${__sag_home}/jvm/jvm/
 
 RUN groupadd -g ${__user_group_id} sagadmin ;\
     useradd -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
