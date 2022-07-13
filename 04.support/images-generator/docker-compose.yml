@@ -4,10 +4,6 @@ volumes:
   sum-home: {}
   user-home: {}
   runs: {}
-  temp:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
 services:
   img-gen:
     build: ./build
@@ -15,7 +11,6 @@ services:
     container_name: suif-images-generator
     hostname: suif-images-generator
     volumes:
-      - temp:/tmp/
       # the following must match the Dokerfile folders, otherwise permissions on FS will not work
       - user-home:/home/sag/
       - sum-home:/app/sag/sum/
@@ -30,9 +25,9 @@ services:
       - ../../:/mnt/SUIF_HOME/
     environment:
       # commonFunctions
-      - SUIF_DEBUG_ON=0
+      - SUIF_DEBUG_ON
       # this test runs online, it must be able to download the fixes
-      - SUIF_ONLINE_MODE=1
+      - SUIF_ONLINE_MODE=0
       - SUIF_SDC_ONLINE_MODE=1 # we need to be online for this use case
       - SUIF_HOME=/mnt/SUIF_HOME
       - SUIF_AUDIT_BASE_DIR=/app/audit

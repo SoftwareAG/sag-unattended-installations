@@ -19,8 +19,8 @@ Assumption: the user is allowed to download all involved products. If this is no
 All prerequisite files are in mentioned in the file .env_example.
 
 1. Procure prerequisite Software AG files
-2. Copy .env_example into .env
-3. Modify .env to point to your local Software AG files
+2. Copy `EXAMPLE.env` into `.env`
+3. Modify `.env` to point to your local Software AG files and change the relevant options
 4. run the following command (also written in run.bat)
 
 ```sh

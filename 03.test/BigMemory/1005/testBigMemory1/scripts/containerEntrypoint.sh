@@ -18,7 +18,7 @@ if [ ! -d "${SUIF_INSTALL_InstallDir}/Terracotta" ]; then
     mkdir -p "${SUIF_CACHE_HOME}/01.scripts" || exit 2
 
     # source commonFunctions
-    export SUIF_HOME_URL=${SUIF_HOME_URL:-"https://raw.githubusercontent.com/Myhael76/sag-unattented-installations/main"}
+    export SUIF_HOME_URL=${SUIF_HOME_URL:-"https://raw.githubusercontent.com/SoftwareAG/sag-unattended-installations/main"}
     curl "${SUIF_HOME_URL}/01.scripts/commonFunctions.sh" -o "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" || exit 3
     chmod u+x "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
     export SUIF_ONLINE_MODE=1 #tell the framework we work online

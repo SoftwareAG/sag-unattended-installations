@@ -10,12 +10,7 @@ onInterrupt(){
     echo "Interrupted!"
 }
 
-onKill(){
-	echo "Killed!"
-}
-
 trap "onInterrupt" SIGINT SIGTERM
-trap "onKill" SIGKILL
 
 if [ ! -d "${SUIF_HOME}/02.templates/01.setup" ];then
     echo "SUIF not mounted, cannot continue"

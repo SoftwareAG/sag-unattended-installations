@@ -1,6 +1,6 @@
-# BigMemory test 1
+# API Gateway 10.5 test 1
 
-The purpose of this test is to validate the local setup scripts for API Gateway version 1005
+The purpose of this test is to validate the local setup scripts for API Gateway version 10.5
 
 The tested code is the one in the current branch, mounted locally.
 

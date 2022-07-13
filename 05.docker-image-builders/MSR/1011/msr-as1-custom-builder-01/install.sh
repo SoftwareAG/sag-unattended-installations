@@ -5,7 +5,7 @@ export SUIF_HOME=${SUIF_HOME:-"/tmp/SUIF_HOME"}
 export SUIF_TEMPLATE=${SUIF_TEMPLATE:-"MSR/1011/AdaptersSet1"}
 
 git clone -b "${SUIF_TAG}" --single-branch \
-  https://github.com/SoftwareAG/sag-unattented-installations.git \
+  https://github.com/SoftwareAG/sag-unattended-installations.git \
   "${SUIF_HOME}"
 
 . ${SUIF_HOME}/01.scripts/commonFunctions.sh

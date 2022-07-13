@@ -8,7 +8,7 @@ if [ ! -d "${SUIF_LOCAL_SCRIPTS_HOME}" ]; then
     exit 1
 fi
 
-export SUIF_HOME_URL="https://raw.githubusercontent.com/SoftwareAG/sag-unattented-installations/main"
+export SUIF_HOME_URL="https://raw.githubusercontent.com/SoftwareAG/sag-unattended-installations/main"
 mkdir -p "${SUIF_CACHE_HOME}/01.scripts"
 curl "${SUIF_HOME_URL}/01.scripts/commonFunctions.sh" -o "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
 
