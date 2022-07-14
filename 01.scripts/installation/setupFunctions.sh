@@ -13,21 +13,21 @@ fi
 init(){
     # Section 1 - the caller MUST provide
     ## Framework - Install
-    export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/tmp/installer.bin"}
-    export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
-    export SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE:-"0"}
+    export SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
+    export SUIF_INSTALL_IMAGE_FILE="${SUIF_INSTALL_IMAGE_FILE:-/path/to/install/product.image.zip}"
+    export SUIF_PATCH_AVAILABLE="${SUIF_PATCH_AVAILABLE:-0}"
     ## Framework - Patch
-    export SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-"/tmp/sum-boostrap.bin"}
-    export SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE:-"/path/to/install/fixes.image.zip"}
+    export SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-boostrap.bin}"
+    export SUIF_PATCH_FIXES_IMAGE_FILE="${SUIF_PATCH_FIXES_IMAGE_FILE:-/path/to/install/fixes.image.zip}"
 
     # Section 2 - the caller MAY provide
     ## Framework - Install
-    export SUIF_INSTALL_INSTALL_DIR=${SUIF_INSTALL_INSTALL_DIR:-"/opt/sag/products"}
-    export SUIF_INSTALL_SPM_HTTPS_PORT=${SUIF_INSTALL_SPM_HTTPS_PORT:-"9083"}
-    export SUIF_INSTALL_SPM_HTTP_PORT=${SUIF_INSTALL_SPM_HTTP_PORT:-"9082"}
-    export SUIF_INSTALL_DECLARED_HOSTNAME=${SUIF_INSTALL_DECLARED_HOSTNAME:-"localhost"}
+    export SUIF_INSTALL_INSTALL_DIR="${SUIF_INSTALL_INSTALL_DIR:-/opt/sag/products}"
+    export SUIF_INSTALL_SPM_HTTPS_PORT="${SUIF_INSTALL_SPM_HTTPS_PORT:-9083}"
+    export SUIF_INSTALL_SPM_HTTP_PORT="${SUIF_INSTALL_SPM_HTTP_PORT:-9082}"
+    export SUIF_INSTALL_DECLARED_HOSTNAME="${SUIF_INSTALL_DECLARED_HOSTNAME:-localhost}"
     ## Framework - Patch
-    export SUIF_SUM_HOME=${SUIF_SUM_HOME:-"/opt/sag/sum"}
+    export SUIF_SUM_HOME="${SUIF_SUM_HOME:-/opt/sag/sum}"
 }
 
 init

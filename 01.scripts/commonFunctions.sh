@@ -38,7 +38,7 @@ init(){
 
     # For internal dependency checks, 
     export SUIF_DEBUG_ON="${SUIF_DEBUG_ON:-0}"
-    export SUIF_LOG_TOKEN="${SUIF_LOG_TOKEN:-'SUIF'}"
+    export SUIF_LOG_TOKEN="${SUIF_LOG_TOKEN:-SUIF}"
     # by default, we assume we are working connected to internet, put this on 0 for offline installations
     export SUIF_ONLINE_MODE="${SUIF_ONLINE_MODE:-1}"
 

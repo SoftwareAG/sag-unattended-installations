@@ -1,4 +1,4 @@
-# API Gateway 10.5 test 1
+# API Gateway 10.11 test 1
 
 The purpose of this test is to validate the local setup scripts for API Gateway version 10.5
 
