@@ -1,0 +1,42 @@
+version: "3.5"
+
+volumes:
+  install-home: {}
+  audit: {}
+  sum-home: {}
+services:
+  css1011-test-01:
+    build: ../../../../common/baseCentos/build/
+    image: suif-test-base-centos
+    container_name: css1011-test-01
+    hostname: css1011-test-01
+    volumes:
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:/app/sag/products/
+      - audit:/app/audit/
+      - sum-home:/app/sag/sumv11
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_CSS_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_CSS_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ../../../../../:${SUIF_HOME}/
+    environment:
+      - SUIF_DEBUG_ON
+      - SUIF_HOME
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_ONLINE_MODE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_SDC_ONLINE_MODE
+      - SUIF_SETUP_TEMPLATE_CSS_LICENSE_FILE
+      - SUIF_WMSCRIPT_adminPassword
+    ports:
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+      - "${H_SUIF_PORT_PREFIX}53:5553"
+      - "${H_SUIF_PORT_PREFIX}99:9999"
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
