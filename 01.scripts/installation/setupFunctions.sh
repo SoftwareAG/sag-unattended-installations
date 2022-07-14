@@ -1,11 +1,11 @@
 #!/bin/sh
 
 # Dependency
-if [ ! "`type -t logI`X" == "functionX" ]; then
+if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then 
     echo "sourcing commonFunctions.sh ..."
     if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
         echo "Panic, framework issue! File ${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh does not exist. SUIF_CACHE_HOME=${SUIF_CACHE_HOME}"
-        exit 500
+        exit 155
     fi
     . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
 fi
@@ -146,8 +146,8 @@ patchSum(){
     if [ ! -f "${1}" ]; then
         logE "[setupFunctions.sh/patchSum()] - Fixes images file ${1} does not exist!"
     fi
-    local SUM_HOME=${2:-"/opt/sag/sum"}
-    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local SUM_HOME="${2:-'/opt/sag/sum'}"
+    local d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
 
     if [ ! -d "${SUM_HOME}/UpdateManager" ]; then
         logI "Update manager missing, nothing to patch..."
@@ -690,6 +690,57 @@ generateProductsImageFromTemplate(){
     rm -f "${lVolatileScriptFile}"
 
     return ${lCreateImgResult}
+}
+
+# No params. This function checks the basic prerequisites for any setup template
+checkSetupTemplateBasicPrerequisites(){
+    if [ -z "${SUIF_INSTALL_INSTALLER_BIN+x}" ]; then
+        logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
+        return 11
+    fi
+
+    if [ ! -f "${SUIF_INSTALL_INSTALLER_BIN}" ]; then
+        logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
+        return 12
+    fi
+
+    if [ -z "${SUIF_INSTALL_IMAGE_FILE+x}" ]; then
+        logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
+        return 13
+    fi
+
+    if [ ! -f "${SUIF_INSTALL_IMAGE_FILE}" ]; then
+        logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
+        return 14
+    fi
+
+    logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
+    logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}"
+    logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
+
+    if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ];  then
+        if [ -z "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN+x}" ]; then
+            logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
+            return 21
+        fi
+
+        if [ ! -f "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" ]; then
+            logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
+            return 22
+        fi
+
+        if [ -z "${SUIF_PATCH_FIXES_IMAGE_FILE+x}" ]; then
+            logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
+            return 23
+        fi
+
+        if [ ! -f "${SUIF_PATCH_FIXES_IMAGE_FILE}" ]; then
+            logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
+            return 24
+        fi
+        logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+        logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
+    fi
 }
 
 logI "Setup Functions sourced"

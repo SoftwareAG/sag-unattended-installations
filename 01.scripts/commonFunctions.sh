@@ -2,21 +2,39 @@
 
 # This file is a collection of functions used by all the other scripts
 
+# Almost everywhere /bin/sh is actually a symlink. This instruction gives us the actual shell
+SUIF_CURRENT_SHELL=$(readlink /proc/$$/exe)
+export SUIF_CURRENT_SHELL
+
 ## Framework variables
 # Convention: all variables from this framework are prefixed with SUIF_
 # Variables defaults are specified in the init function
 # client projects should source their variables with en .env file
 
+# deprecated
 newAuditSession(){
-    export SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR:-"/tmp"}
-    export SUIF_SESSION_TIMESTAMP=`date +%y-%m-%dT%H.%M.%S_%3N`
+    export SUIF_AUDIT_BASE_DIR="${SUIF_AUDIT_BASE_DIR:-'/tmp'}"
+    SUIF_SESSION_TIMESTAMP="$(date +%y-%m-%dT%H.%M.%S_%3N)"
+    export SUIF_SESSION_TIMESTAMP
+    export SUIF_AUDIT_SESSION_DIR="${SUIF_AUDIT_BASE_DIR}/${SUIF_SESSION_TIMESTAMP}"
+    mkdir -p "${SUIF_AUDIT_SESSION_DIR}"
+    return $?
+}
+
+date +%Y-%m-%dT%H.%M.%S_%3N
+
+initAuditSession(){
+    export SUIF_AUDIT_BASE_DIR="${SUIF_AUDIT_BASE_DIR:-'/tmp'}"
+    SUIF_SESSION_TIMESTAMP="${SUIF_SESSION_TIMESTAMP:-$(date +%Y-%m-%dT%H.%M.%S_%3N)}"
+    export SUIF_SESSION_TIMESTAMP
     export SUIF_AUDIT_SESSION_DIR="${SUIF_AUDIT_BASE_DIR}/${SUIF_SESSION_TIMESTAMP}"
     mkdir -p "${SUIF_AUDIT_SESSION_DIR}"
     return $?
 }
 
 init(){
-    newAuditSession || return $?
+    #newAuditSession || return $?
+    initAuditSession || return $?
 
     # For internal dependency checks, 
     export SUIF_DEBUG_ON="${SUIF_DEBUG_ON:-0}"
@@ -49,37 +67,37 @@ init || exit $?
 # $1 - Message to log
 
 logI(){
-    if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -INFO - ${1}"; fi
-    echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -INFO - ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+    if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -INFO - ${1}"; fi
+    echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -INFO - ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
 }
 
 logW(){
-    if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -WARN - ${1}"; fi
-    echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -WARN - ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+    if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -WARN - ${1}"; fi
+    echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -WARN - ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
 }
 
 logE(){
-    if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR- ${1}"; fi
-    echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -ERROR- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+    if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -ERROR- ${1}"; fi
+    echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -ERROR- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
 }
 
 logD(){
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
-        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -DEBUG- ${1}"; fi
-        echo `date +%y-%m-%dT%H.%M.%S_%3N`" ${SUIF_LOG_TOKEN} -DEBUG- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
+        if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -DEBUG- ${1}"; fi
+        echo "$(date +%y-%m-%dT%H.%M.%S_%3N) ${SUIF_LOG_TOKEN} -DEBUG- ${1}" >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
 
 logEnv(){
-    if [ ${SUIF_DEBUG_ON} -ne 0  ]; then
-        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then env | grep SUIF | sort; fi
+    if [ "${SUIF_DEBUG_ON}" -ne 0  ]; then
+        if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then env | grep SUIF | sort; fi
         env | grep SUIF | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
 
 logFullEnv(){
-    if [ ${SUIF_DEBUG_ON} -ne 0  ]; then
-        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then env | sort; fi
+    if [ "${SUIF_DEBUG_ON}" -ne 0  ]; then
+        if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then env | sort; fi
         env | grep SUIF | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
     fi
 }
@@ -91,7 +109,7 @@ logFullEnv(){
 controlledExec(){
     # Param $1 - command to execute in a controlled manner
     # Param $2 - tag for trace files
-    local lCrtEpoch=`date +%s`
+    local lCrtEpoch="$(date +%s)"
     eval "${1}" >"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.out" 2>"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.err"
     return $?
 }
@@ -104,6 +122,16 @@ portIsReachable(){
         temp=`(echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1`      # centos image
     fi
     if [ $? -eq 0 ] ; then echo 1; else echo 0; fi
+}
+
+portIsReachable2(){
+    # Params: $1 -> host $2 -> port
+    if [ -f /usr/bin/nc ]; then 
+        nc -z "${1}" "${2}"                                                 # alpine image
+    else
+        (echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1                         # centos image
+    fi
+    return $? 
 }
 
 # urlencode / decode taken from https://gist.github.com/cdown/1163649
@@ -184,8 +212,8 @@ applyPostSetupTemplate(){
 logEnv4Debug(){
     logD "Dumping environment variables for debugging purposes"
 
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
-        if [ ${SUIF_SUPPRESS_STDOUT} -eq 0 ]; then
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
+        if [ "${SUIF_SUPPRESS_STDOUT}" -eq 0 ]; then
             env | grep SUIF_ | grep -v PASS | grep -vi password | grep -vi dbpass | sort;
         fi
         echo env | grep SUIF_ | grep -v PASS | grep -vi password | grep -vi dbpass | sort >> "${SUIF_AUDIT_SESSION_DIR}/session.log"
@@ -193,7 +221,7 @@ logEnv4Debug(){
 }
 
 debugSuspend(){
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
         logD "Suspending for debug"
         tail -f /dev/null
     fi
@@ -217,4 +245,8 @@ readSecretFromUser(){
     done
 }
 
-logI "SLS common framework functions initialized"
+logI "SLS common framework functions initialized. Current shell is ${SUIF_CURRENT_SHELL}"
+
+if [ ! "${SUIF_CURRENT_SHELL}" = "/usr/bin/bash" ]; then
+    logW "This framework has not been tested with this shell. Scripts are not guaranteed to work as expected"
+fi
