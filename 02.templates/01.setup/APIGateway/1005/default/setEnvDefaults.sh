@@ -1,14 +1,15 @@
 #!/bin/sh
 
-if [ ! "`type -t urlencode`X" == "functionX" ]; then
-    if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
-        echo "Panic, common functions not sourced and not present locally! Cannot continue"
-        exit 500
-    fi
-    . "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+# Section 0 - Validations
+
+# Check if commons have been sourced, we need urlencode() for the license
+if ! command -V "urlencode" 2>/dev/null | grep function >/dev/null; then 
+    echo "FATAL: common functions not sourced and not present locally! Cannot continue"
+    exit 1
 fi
 
-# Section 1 - the caller MUST provide
+# Section 1 - check what the caller MUST provide
+
 ## Framework - Install
 export SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN:-"/path/to/installer.bin"}
 export SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE:-"/path/to/install/product.image.zip"}
