@@ -7,3 +7,5 @@ The test may be run immediately in Windows. Observe the commands in the `.bat` f
 ## Prerequisites
 
 The following local files must be present and declared in `setEnv.bat`. Rename `Example.setEnv.bat` to `setEnv.bat` and declare the file locations.
+
+The used template must have the same variables with the base MSR 10.11 lean template.

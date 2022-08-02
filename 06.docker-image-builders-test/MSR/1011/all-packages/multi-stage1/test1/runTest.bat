@@ -15,9 +15,7 @@ COPY "%MSR_LICENSE_XML%" build_context\msr-license.xml
 
 cd build_context
 
-pause
-
-docker build --arg __suif_template=CloudStreamsServer/1011/lean -t css-1011-lean-ms-test-1 .
+docker build --build-arg __suif_template=MSR/1011/lean -t msr-1011-lean-1 .
 
 cd ..
 
