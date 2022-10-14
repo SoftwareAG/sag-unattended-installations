@@ -1,0 +1,65 @@
+version: "3.5"
+
+volumes:
+  install-home: {}
+  sum-home: {}
+  audit: {}
+
+networks:
+    n1:
+      external: false
+services:
+  apigwids1:
+    build: ../../../common/baseCentos/build/
+    image: suif-test-base-centos
+    container_name: test-api-gw-ids-1011-1
+    hostname: test-api-gw-ids-1011-1
+    ulimits:
+      nproc: 4096
+      nofile: 65536
+    volumes:
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:/app/sag/products
+      - sum-home:/app/sag/sumv11
+      - audit:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # we declare SUIF_HOME because we mount it here
+      - SUIF_HOME=/mnt/SUIF_HOME
+      # setupFunctions prerequisites map, declared here because provided by host
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      # declare install dir and SUM dir because they are mounted here
+      # setup template specifics - license provided by host
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_ONLINE_MODE=0
+      - SUIF_SDC_ONLINE_MODE=0
+      - SUIF_DEBUG_ON=1
+    ports:
+      - "${H_SUIF_PORT_PREFIX}20:9240"
+    networks:
+      n1:
+        aliases:
+          - apigw-server
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
+  elasticvue:
+    image: cars10/elasticvue
+    ports:
+      - "${H_SUIF_PORT_PREFIX}80:8080"
+    networks:
+      n1:
+        aliases:
+          - elasticvue
+    environment:
+      - http.cors.enabled=true
+      # eventually change host.docker.internal to your local name
+      - http.cors.allow-origin=http://host.docker.internal:${H_SUIF_PORT_PREFIX}20
+      #- http.cors.allow-origin=http://localhost:${H_SUIF_PORT_PREFIX}80
