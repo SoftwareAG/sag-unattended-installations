@@ -1,0 +1,26 @@
+# Authored Template
+CELPanelTitleID=0
+CELRegCheckbox=__VERSION1__,1,0,Register+Windows+service%2FUNIX+daemon+for+automatic+startup 
+changeAdminPasswordAtFirstLogin=false
+com.wm.distman.utils_panel0=0
+com.wm.distman.utils_separator0=0
+InstallLocProducts=
+InstallProducts=e2ei/11/TPS_10.11.0.0.100/SCG/jsw,e2ei/11/LAR_10.11.0.0.570/Platform/LARSharedBundles,e2ei/11/IS_10.11.0.0.724/integrationServer/integrationServerMigrationFrameworkLib,e2ei/11/CEL_10.11.0.0.505/CEL/CELspm,e2ei/11/OSGI_10.11.0.0.684/Platform/OSGI,e2ei/11/LIC_5.7.3.0.1027/LICSharedLibsJava/LICSharedLibsJava,e2ei/11/LIC_5.7.3.0.1027/LICRepository/LICRepository,e2ei/11/SPM_10.11.0.0.1013/Platform/SPM,e2ei/11/WSC_10.11.0.0.531/SCG/SCGCommon,e2ei/11/WIS_10.11.0.0.603/Infrastructure/WISSharedLibs,e2ei/11/TPS_10.11.0.0.100/SCG/tppSEC,e2ei/11/ZSL_10.11.0.0.306/Platform/ZSLSharedBundles,e2ei/11/TPS_10.11.0.0.100/Platform/TPS,e2ei/11/CEL_10.11.0.0.505/CEL/CEL,e2ei/11/LIC_5.7.3.0.1027/LICUtil/LICUtil,e2ei/11/TPL_10.11.0.0.330/License/license,e2ei/11/SJP_11.0.12.0.64/Infrastructure/sjp,e2ei/11/ACDL_10.11.0.0.480/ACDL/ACDLDeployerSharedBundle,e2ei/11/WIS_10.11.0.0.603/Infrastructure/WISSharedBundles,e2ei/11/TPS_10.11.0.0.100/SCG/loggers
+selectedFixes=
+ServerURL=https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi
+SPMAdditionalInfoDescriptionTextBlock=0
+SPMAppOrService=__VERSION1__,1,0,Register+Windows+service%2FUNIX+daemon+for+automatic+startup+of+Platform+Manager
+SPMConfigPanelPortsNotification=1
+SPMGeneralDescriptionTextBlock=0
+SPMTitleTextBlock=0
+SPMUsingCC=__VERSION1__,1,0,Plan+to+use+Command+Central
+###################### - Template variables - common
+HostName=${SUIF_INSTALL_DECLARED_HOSTNAME}
+imageFile=${SUIF_INSTALL_IMAGE_FILE}
+InstallDir=${SUIF_INSTALL_INSTALL_DIR}
+SPMHttpPort=__VERSION1__,${SUIF_INSTALL_SPM_HTTP_PORT}
+SPMHttpsPort=__VERSION1__,${SUIF_INSTALL_SPM_HTTPS_PORT}
+###################### - Template variables - specific
+adminPassword=${SUIF_WMSCRIPT_adminPassword}
+CELHTTPPort=__VERSION1__,${SUIF_WMSCRIPT_CELHTTPPort}
+CELTCPPort=__VERSION1__,${SUIF_WMSCRIPT_CELTCPPort}
