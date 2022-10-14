@@ -1,6 +1,6 @@
 # API Gateway 10.11 test 1
 
-The purpose of this test is to validate the local setup scripts for API Gateway version 10.5
+The purpose of this test is to validate the local setup scripts for API Gateway version 10.11
 
 The tested code is the one in the current branch, mounted locally.
 
@@ -11,7 +11,7 @@ The tested code is the one in the current branch, mounted locally.
 - The following Software AG assets (cannot be downloaded publicly)
   - installer binary for linux 64 bit
   - update manager bootstrap for linux 64 bit
-  - product image containing BigMemory 4.3 (packaged with webmethods version 10.5)
+  - product image containing the products in the template
   - product fix image containing the latest relevant fixes
   - license for API Gateway
 
