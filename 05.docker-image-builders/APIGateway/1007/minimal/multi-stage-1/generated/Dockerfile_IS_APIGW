@@ -1,0 +1,34 @@
+FROM is:micro
+
+MAINTAINER SoftwareAG
+
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
+ENV EXTERN_ELASTICSEARCH true
+RUN echo intercopy echo 2
+COPY --chown=1724:1724 ./common/runtime/bundles/spm/eclipse/plugins /opt/softwareag/common/runtime/bundles/spm/eclipse/plugins/
+RUN echo intercopy echo 3
+COPY --chown=1724:1724 ./common/lib/ext/* /opt/softwareag/common/lib/ext/
+RUN echo intercopy echo 4
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration /opt/softwareag/profiles/IS_${INSTANCE_NAME}/configuration
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/apigateway  /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/workspace /opt/softwareag/profiles/IS_${INSTANCE_NAME}/workspace
+
+RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
+
+RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh && /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh; \
+    sed -i '/console.sh/i . /opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' /opt/softwareag/IntegrationServer/bin/startContainer.sh
+
+RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway
+RUN chmod 755 /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway.yml
+
+RUN sed -i '/apigw.console.log/c\apigw.console.log = true' /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
+
+HEALTHCHECK --interval=200s CMD curl -f http://localhost:5555/rest/apigateway/health
+
+USER 1724
+
+ENTRYPOINT ["/opt/softwareag/IntegrationServer/bin/startContainer.sh"]
+
+EXPOSE 9072

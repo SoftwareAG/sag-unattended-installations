@@ -48,7 +48,6 @@ export SUIF_INSTALL_SPM_HTTPS_PORT="${SUIF_INSTALL_SPM_HTTPS_PORT:-9083}"
 
 # ------------------------------ Section 4 - the caller MAY provide ( specific )
 
-export SUIF_WMSCRIPT_adminPassword="${SUIF_WMSCRIPT_adminPassword:-manage}"
 export SUIF_WMSCRIPT_CELHTTPPort="${SUIF_WMSCRIPT_CELHTTPPort:-9240}"
 export SUIF_WMSCRIPT_CELTCPPort="${SUIF_WMSCRIPT_CELTCPPort:-9340}"
 export SUIF_WMSCRIPT_IntegrationServerdiagnosticPort="${SUIF_WMSCRIPT_IntegrationServerdiagnosticPort:-9999}"
@@ -64,7 +63,7 @@ export SUIF_WMSCRIPT_integrationServerLicenseFiletext
 
 # ------------------------------ Section 6 - Constants
 
-export SUIF_CURRENT_SETUP_TEMPLATE_PATH="APIGateway/1011/default"
+export SUIF_CURRENT_SETUP_TEMPLATE_PATH="APIGateway/1007/default"
 
 logI "Template environment sourced successfully"
 logEnv4Debug

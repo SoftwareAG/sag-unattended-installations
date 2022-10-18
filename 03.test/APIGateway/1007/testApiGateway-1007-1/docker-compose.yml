@@ -1,0 +1,74 @@
+version: "3.5"
+
+volumes:
+  install-home: {}
+  sum-home: {}
+  audit: {}
+
+networks:
+    n1:
+      external: false
+services:
+  apigw-1007-1:
+    build: ../../../common/baseCentos/build/
+    image: suif-test-base-centos
+    container_name: test-api-gw-1007-1
+    hostname: test-api-gw-1007-1
+    ulimits:
+      nproc: 4096
+      nofile: 65536
+    volumes:
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - install-home:/app/sag/products
+      - sum-home:/app/sag/sumv11
+      - audit:/app/audit/
+      - ./scripts/:/mnt/scripts/
+      # These must be provided, they are prerequisites
+      - ${H_API_GW_LICENSE_FILE}:/tmp/API_Gateway_license.xml
+      - ${H_SUIF_FIXES_IMAGE_FILE}:/tmp/fixes.zip
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:/tmp/products.zip
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - ../../../../:/mnt/SUIF_HOME/
+    environment:
+      # we declare SUIF_HOME because we mount it here
+      - SUIF_HOME=/mnt/SUIF_HOME
+      # setupFunctions prerequisites map, declared here because provided by host
+      - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
+      - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
+      # declare install dir and SUM dir because they are mounted here
+      # setup template specifics - license provided by host
+      - SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE=/tmp/API_Gateway_license.xml
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_ONLINE_MODE=0
+      - SUIF_SDC_ONLINE_MODE=0
+      - SUIF_DEBUG_ON=1
+      - SUIF_APIGW_ADMINISTRATOR_PASSWORD=manage1
+      - SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD=manage
+      - SUIF_APIGW_NEW_ADMINISTRATOR_PASSWORD=manage1
+      - SUIF_APIGW_LB_JSON_FILE=/mnt/scripts/config/lb.json
+      - SUIF_APIGW_SETTINGS_JSON_FILE=/mnt/scripts/config/putSettings.json
+      - http.cors.allow-origin=/https?:\/\/(localhost|host.docker.internal)(:[0-9]+)?/
+    ports:
+      - "${H_SUIF_PORT_PREFIX}20:9240"
+      - "${H_SUIF_PORT_PREFIX}73:9073"
+      - "${H_SUIF_PORT_PREFIX}72:9072"
+      - "${H_SUIF_PORT_PREFIX}55:5555"
+    networks:
+      n1:
+        aliases:
+          - apigw-server
+    entrypoint: /mnt/scripts/containerEntrypoint.sh
+  elasticvue:
+    image: cars10/elasticvue
+    ports:
+      - "${H_SUIF_PORT_PREFIX}80:8080"
+    networks:
+      n1:
+        aliases:
+          - elasticvue
+    environment:
+      - http.cors.enabled=true
+      # eventually change host.docker.internal to your local name

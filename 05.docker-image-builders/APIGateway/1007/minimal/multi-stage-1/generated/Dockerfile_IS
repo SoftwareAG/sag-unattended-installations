@@ -1,0 +1,83 @@
+FROM centos:8
+
+MAINTAINER Software AG
+ENV SAG_HOME /opt/softwareag
+ENV INSTANCE_NAME default
+RUN groupadd -g 1724 sagadmin; useradd -u 1724 -m -g 1724 -d ${SAG_HOME} sagadmin
+USER 1724
+RUN mkdir -p ${SAG_HOME}/jvm ${SAG_HOME}/common ${SAG_HOME}/IntegrationServer ${SAG_HOME}/IntegrationServer/instances ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages ${SAG_HOME}/profiles ${SAG_HOME}/install
+
+ENV JAVA_HOME ${SAG_HOME}/jvm/jvm/
+ENV JRE_HOME ${SAG_HOME}/jvm/jvm/jre/
+
+COPY --chown=1724:1724 ./jvm/jvm/ ${SAG_HOME}/jvm/jvm/
+COPY --chown=1724:1724 ./install/jars/ ${SAG_HOME}/install/jars/
+COPY --chown=1724:1724 ./install/profile/ ${SAG_HOME}/install/profile/
+COPY --chown=1724:1724 ./install/products/ ${SAG_HOME}/install/products/
+
+
+COPY --chown=1724:1724 ./common/bin/ ${SAG_HOME}/common/bin/
+COPY --chown=1724:1724 ./common/conf/ ${SAG_HOME}/common/conf/
+COPY --chown=1724:1724 ./common/db/ ${SAG_HOME}/common/db/
+COPY --chown=1724:1724 ./common/DigitalEventServices/ ${SAG_HOME}/common/DigitalEventServices/
+COPY --chown=1724:1724 ./common/EventTypeStore/ ${SAG_HOME}/common/EventTypeStore/
+COPY --chown=1724:1724 ./common/metering/ ${SAG_HOME}/common/metering/
+COPY --chown=1724:1724 ./common/lib/ ${SAG_HOME}/common/lib/
+COPY --chown=1724:1724 ./common/runtime/ ${SAG_HOME}/common/runtime/
+
+COPY --chown=1724:1724 ./WS-Stack/ ${SAG_HOME}/WS-Stack/
+
+COPY --chown=1724:1724 ./IntegrationServer/bin/ ${SAG_HOME}/IntegrationServer/bin/
+COPY --chown=1724:1724 ./IntegrationServer/lib/ ${SAG_HOME}/IntegrationServer/lib/
+COPY --chown=1724:1724 ./IntegrationServer/updates/ ${SAG_HOME}/IntegrationServer/updates/
+COPY --chown=1724:1724 ./IntegrationServer/docker/ ${SAG_HOME}/IntegrationServer/docker/
+COPY --chown=1724:1724 ./IntegrationServer/features/ ${SAG_HOME}/IntegrationServer/features/
+
+COPY --chown=1724:1724 ./IntegrationServer/.tc.custom.log4j2.properties ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
+
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/web/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/updates/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/replicate/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/lib/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/bin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/db/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/config/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
+
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAssetPublisher/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAssetPublisher/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmARTExtDC/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmARTExtDC/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmISExtDC/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmISExtDC/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmXSLT/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmXSLT/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmMonitor/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmMonitor/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmFlatFile/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmFlatFile/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmParquet/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmParquet/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmJSONAPI/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmJSONAPI/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
+COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/
+
+COPY --chown=1724:1724 ./IntegrationServer/instances/is_instance.xml ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
+
+COPY --chown=1724:1724 ./IntegrationServer/instances/is_instance.sh ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
+RUN rm /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf; \
+    cd /opt/softwareag/IntegrationServer/docker; \
+    ./is_container.sh updateDockerConfigFiles \
+      -Dinstance.name=${INSTANCE_NAME} \
+      -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} \
+      -Ddocker.rootDir=${SAG_HOME}; \
+    cd /opt/softwareag/IntegrationServer/instances; \
+    ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/security/ ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json
+COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json
+
+EXPOSE 5555
+EXPOSE 9999
+
+ENTRYPOINT ["/opt/softwareag/IntegrationServer/bin/startContainer.sh"]
