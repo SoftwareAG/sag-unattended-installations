@@ -4,12 +4,17 @@ ARG __from_img=centos:8
 ############### Stage 1 - install the product and fixes from given zip image files
 FROM centos:7 as installer
 
+ARG __suif_tag=main
+
 LABEL MAINTAINER MIUN@SAG
 
 # Tamporary until buildah fix will be available: one argument for ARG
 ARG __i_bin=/tmp/installer.bin
 ARG __s_bin=/tmp/sum-bootstrap.bin
 ARG __sag_home=/opt/softwareag
+
+ENV SUIF_TAG=${__suif_tag}
+# ENV INSTANCE_NAME default
 
 RUN yum -y update ;\ 
     yum -y install git curl gettext which
@@ -41,6 +46,8 @@ RUN cd /tmp/install; chmod u+x ./install.sh; ./install.sh
 # When mature enough lose the audit
 RUN tar czf "${SUIF_INSTALL_INSTALL_DIR}/install.audit.tgz" "${SUIF_AUDIT_BASE_DIR}"
 
+# work around if the folder does not exist, which it should not
+# RUN mkdir -p ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db
 
 ############### Stage 2 - pick the necessary files and folders
 FROM centos:7 as packer
@@ -49,9 +56,6 @@ ARG __sag_home=/opt/softwareag
 
 ENV SAG_HOME ${__sag_home}
 ENV INSTANCE_NAME default
-
-# When mature enough might lose the audit
-COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tgz
 
 COPY --from=installer ${SAG_HOME}/jvm/jvm/ ${SAG_HOME}/jvm/jvm/
 COPY --from=installer ${SAG_HOME}/install/jars/ ${SAG_HOME}/install/jars/
@@ -95,7 +99,7 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/u
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
+#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
 
 #COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/
@@ -116,7 +120,7 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/p
 #COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/
 
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.xml ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
-COPY --from=installer ./profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
+COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
 
@@ -169,6 +173,9 @@ RUN rm ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
     rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+
+# When mature enough might lose the audit
+COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tgz
 
 ############### Stage 3 - final build of the API Gateway minimal image
 

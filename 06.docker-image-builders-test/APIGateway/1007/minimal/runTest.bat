@@ -17,7 +17,8 @@ COPY "%YAI_LICENSE_XML%" build_context\yai-license.xml
 
 cd build_context
 
-docker build -t sag-apigw-1107-custom-builder-01-test-01 .
+docker build -t sag-apigw-1107-custom-builder-01-test-01 ^
+  --build-arg __suif_tag=%SUIF_TAG% .
 
 cd ..
 

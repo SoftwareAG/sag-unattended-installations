@@ -15,10 +15,15 @@ COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration /opt/softwar
 COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/apigateway  /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway
 COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/workspace /opt/softwareag/profiles/IS_${INSTANCE_NAME}/workspace
 
-RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
+RUN rm -f \
+    /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat \
+    /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
 
-RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh && /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh; \
-    sed -i '/console.sh/i . /opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' /opt/softwareag/IntegrationServer/bin/startContainer.sh
+RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh && \
+    /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh; \
+    sed -i \
+        '/console.sh/i . \/opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' \
+        /opt/softwareag/IntegrationServer/bin/startContainer.sh
 
 RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway
 RUN chmod 755 /opt/softwareag/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway.yml
