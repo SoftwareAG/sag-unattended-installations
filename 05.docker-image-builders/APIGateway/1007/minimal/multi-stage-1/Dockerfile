@@ -101,29 +101,12 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/u
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
-
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAssetPublisher/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAssetPublisher/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmARTExtDC/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmARTExtDC/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmISExtDC/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmISExtDC/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmXSLT/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmXSLT/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmMonitor/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmMonitor/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmFlatFile/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmFlatFile/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmParquet/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmParquet/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmJSONAPI/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmJSONAPI/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
-#COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/
-
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.xml ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
-COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
-
 COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
 
 ##### Not necesary we always maintain the same folders
@@ -132,8 +115,16 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${S
 #         -Dinstance.name=${INSTANCE_NAME} \
 #         -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} \
 #         -Ddocker.rootDir=${SAG_HOME}; \
-#         cd ${SAG_HOME}/IntegrationServer/instances; \
-#         ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
+
+RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
+    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+
+RUN cd ${SAG_HOME}/IntegrationServer/instances; \
+    ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
+
+COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
+# Trial: copy the entire profile folder...
+COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/ ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/
 
 # the next 4 copies were inherited from IS, but they are useless as APIGW copies the father folder
 # COPY --from=installer \
@@ -157,29 +148,21 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${S
 # COPY --from=installer \
 #     ./profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
 #     /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin
 
 RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
-
-
-RUN rm ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
-    touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
-    rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
-    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
-    cd ${SAG_HOME}/IntegrationServer/instances; \
-    ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 
 # When mature enough might lose the audit
 COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tgz
@@ -206,7 +189,7 @@ HEALTHCHECK --interval=200s CMD curl -f http://localhost:5555/rest/apigateway/he
 
 USER sagadmin
 
-# Unknown yet - what is happening here?
+# Unknown yet - to verify
 #RUN cd ${SAG_HOME}/IntegrationServer/instances; ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 #RUN cd /opt/softwareag/IntegrationServer/docker; ./is_container.sh updateDockerConfigFiles -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer -Ddocker.rootDir=${SAG_HOME};
 EXPOSE 5555
