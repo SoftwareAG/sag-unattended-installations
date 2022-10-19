@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+
+  snapshotted-image:
+    image: ${IMAGE_TO_SNAPSHOT}
+    volumes:
+      - ./local/:/mnt/local/
+      - ./scripts/:/mnt/scripts/
+    environment:
+      - INSTALL_FOLDER
+    entrypoint: /mnt/scripts/snapshot.sh
