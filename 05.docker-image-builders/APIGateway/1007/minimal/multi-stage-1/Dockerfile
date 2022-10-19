@@ -119,10 +119,10 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${S
 RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
 
+COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 RUN cd ${SAG_HOME}/IntegrationServer/instances; \
     ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 
-COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 # Trial: copy the entire profile folder...
 COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/ ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/
 
