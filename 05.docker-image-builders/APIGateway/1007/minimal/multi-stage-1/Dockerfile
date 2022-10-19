@@ -54,8 +54,10 @@ FROM centos:7 as packer
 
 ARG __sag_home=/opt/softwareag
 
-ENV SAG_HOME ${__sag_home}
-ENV INSTANCE_NAME default
+ENV SAG_HOME=${__sag_home} \
+    JAVA_HOME=${__sag_home}/jvm/jvm/ \
+    JRE_HOME=${__sag_home}/jvm/jvm/jre/ \
+    INSTANCE_NAME=default
 
 COPY --from=installer ${SAG_HOME}/jvm/jvm/ ${SAG_HOME}/jvm/jvm/
 COPY --from=installer ${SAG_HOME}/install/jars/ ${SAG_HOME}/install/jars/
