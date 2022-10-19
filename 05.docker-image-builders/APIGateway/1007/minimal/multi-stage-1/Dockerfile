@@ -164,6 +164,9 @@ COPY --from=installer \
 COPY --from=installer \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin
 
 RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
