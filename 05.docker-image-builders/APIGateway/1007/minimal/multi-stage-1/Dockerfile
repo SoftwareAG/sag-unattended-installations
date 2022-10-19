@@ -41,7 +41,7 @@ ENV SUIF_SUM_HOME=/tmp/sumv11 \
     SUIF_SDC_ONLINE_MODE=0 \
     SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE="/tmp/yai-license.xml"
 
-RUN cd /tmp/install; chmod u+x ./install.sh; ./install.sh
+RUN cd /tmp/install; chmod u+x ./install.sh; ./install.sh;
 
 # When mature enough lose the audit
 RUN tar czf "${SUIF_INSTALL_INSTALL_DIR}/install.audit.tgz" "${SUIF_AUDIT_BASE_DIR}"
@@ -175,7 +175,9 @@ RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
 RUN rm ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
     rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
-    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
+    cd ${SAG_HOME}/IntegrationServer/instances; \
+    ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 
 # When mature enough might lose the audit
 COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tgz
