@@ -64,6 +64,11 @@ COPY --from=installer ${SAG_HOME}/install/jars/ ${SAG_HOME}/install/jars/
 COPY --from=installer ${SAG_HOME}/install/profile/ ${SAG_HOME}/install/profile/
 COPY --from=installer ${SAG_HOME}/install/products/ ${SAG_HOME}/install/products/
 
+# trial 10, successful
+COPY --from=installer ${SAG_HOME}/install/configurations/ ${SAG_HOME}/install/configurations/
+COPY --from=installer ${SAG_HOME}/install/etc/ ${SAG_HOME}/install/etc/
+COPY --from=installer ${SAG_HOME}/install/portparams/ ${SAG_HOME}/install/portparams/
+
 COPY --from=installer ${SAG_HOME}/common/bin/ ${SAG_HOME}/common/bin/
 COPY --from=installer ${SAG_HOME}/common/conf/ ${SAG_HOME}/common/conf/
 COPY --from=installer ${SAG_HOME}/common/db/ ${SAG_HOME}/common/db/
@@ -115,6 +120,9 @@ COPY --from=installer \
   ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
 # All packages are inserted by default, but they are not really needed
 COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/
+COPY --from=installer \
   ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/ \
   ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/
 COPY --from=installer \
@@ -139,78 +147,23 @@ COPY --from=installer \
   ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf \
   ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 
-RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf
-RUN cd /opt/softwareag/IntegrationServer/docker; \
-    ./is_container.sh updateDockerConfigFiles \
-      -Dinstance.name=${INSTANCE_NAME} \
-      -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} \
-      -Ddocker.rootDir=${SAG_HOME}
-RUN cd /opt/softwareag/IntegrationServer/instances; \
-    ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/ \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/
 
-# 2022-10-20 : commenting this out, the file does not exist
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
-# the next 3 copies were inherited from IS, but they seem useless as APIGW copies the father folder
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/ \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json
 
-####### API Gatewy generted dockerfile section
-
-### Copies the package again, TODO: check if something changes wrt to the above copy
-COPY --from=installer \
-    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ \
-    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
-
-COPY --from=installer \
-    ${SAG_HOME}/common/runtime/bundles/spm/eclipse/plugins \
-    ${SAG_HOME}/common/runtime/bundles/spm/eclipse/plugins/
-COPY --from=installer \
-    ${SAG_HOME}/common/lib/ext/* \
-    ${SAG_HOME}/common/lib/ext/
-
-# 2022-10-20 trial #3 failed because apigw_*.sh files do not exist
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
+####### API Gatewy generated dockerfile section
 
 RUN rm -f \
     ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat \
     ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
-# RUN sed -i \
-#     '/console.sh/i . \/opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' \
-#     ${SAG_HOME}/IntegrationServer/bin/startContainer.sh
 
 RUN chmod a+x \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway
 RUN chmod 755 \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway.yml
 
-RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; 
-
-# 2022-10-20 trial #3 failed because apigw_*.sh files do not exist
-# RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; \
-#     /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh
+RUN chmod a+x ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/*.sh; 
 
 RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
@@ -224,6 +177,9 @@ RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
 
 RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+
+# Trial 8: For some reason WmAPIGateway package does not load completely because this file is missing (?)
+RUN touch ${SAG_HOME}/profiles/IS_default/apigateway/dashboard/config/kibana.yml
 
 # eventually, but it doesn't seem the case here
 # RUN mkdir-p ${SAG_HOME}/IntegrationServer/config; \
@@ -255,7 +211,7 @@ USER sagadmin
 
 # Unknown yet - to verify
 #RUN cd ${SAG_HOME}/IntegrationServer/instances; ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
-#RUN cd /opt/softwareag/IntegrationServer/docker; ./is_container.sh updateDockerConfigFiles -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer -Ddocker.rootDir=${SAG_HOME};
+#RUN cd ${SAG_HOME}/IntegrationServer/docker; ./is_container.sh updateDockerConfigFiles -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer -Ddocker.rootDir=${SAG_HOME};
 EXPOSE 5555
 EXPOSE 9999
 EXPOSE 5553
