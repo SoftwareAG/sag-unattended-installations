@@ -84,88 +84,142 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/docker/ ${SAG_HOME}/Integrat
 #COPY --from=installer ${SAG_HOME}/IntegrationServer/replicate/ ${SAG_HOME}/IntegrationServer/replicate/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/features/ ${SAG_HOME}/IntegrationServer/features/
 
-COPY --from=installer ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
+COPY --from=installer ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties \
+  ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
 #COPY --from=installer ${SAG_HOME}/IntegrationServer/config/ ${SAG_HOME}/IntegrationServer/config/
 #COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/ ${SAG_HOME}/IntegrationServer/packages/
 
 ########## IS instance section
 
-# the config backup folder, if exists, does not make sense in containers
-RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
+# db folder present in the original dockerfile, but it actually does not exist before a first startup
+# COPY --from=installer \
+#   ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/ \
+#   ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
+# All packages are inserted by default, but they are not really needed
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/\
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmCloud/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.xml \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
+COPY --from=installer \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.sh \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
+COPY --from=installer \
+  ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf \
+  ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 
-# the cluster will be formed after start time, not at build time
-RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat
-
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAdmin/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmRoot/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmPublic/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.xml ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
-COPY --from=installer ${SAG_HOME}/IntegrationServer/instances/is_instance.sh ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
-
-##### Not necesary we always maintain the same folders
-# RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf; \
-#     cd ${SAG_HOME}/IntegrationServer/docker; ./is_container.sh updateDockerConfigFiles \
-#         -Dinstance.name=${INSTANCE_NAME} \
-#         -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} \
-#         -Ddocker.rootDir=${SAG_HOME}; \
-
-RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
-    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
-
-COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
-RUN cd ${SAG_HOME}/IntegrationServer/instances; \
+RUN rm /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf
+RUN cd /opt/softwareag/IntegrationServer/docker; \
+    ./is_container.sh updateDockerConfigFiles \
+      -Dinstance.name=${INSTANCE_NAME} \
+      -Ddocker.isHomeDir=${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME} \
+      -Ddocker.rootDir=${SAG_HOME}
+RUN cd /opt/softwareag/IntegrationServer/instances; \
     ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 
-# Trial: copy the entire profile folder...
-COPY --from=installer ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/ ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
+# the next 3 copies were inherited from IS, but they seem useless as APIGW copies the father folder
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/ \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json
 
-# the next 4 copies were inherited from IS, but they are useless as APIGW copies the father folder
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/ \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/event/routing/services/UniversalMessaging/service-UniversalMessaging.json
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/DigitalEventServices/services/UniversalMessaging/service-UniversalMessaging.json
+####### API Gatewy generted dockerfile section
 
-# Not necessary, we are maintaining the same paths all over the build
-# COPY --from=installer \
-#     ./profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh \
-#     /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/
-# manipulating filebeat config, shouldn't be done here, but at startup
-# COPY --from=installer \
-#     ./profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
-#     /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
-# COPY --from=installer \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin \
-#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin
+### Copies the package again, TODO: check if something changes wrt to the above copy
+COPY --from=installer \
+    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ \
+    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
+
+COPY --from=installer \
+    ${SAG_HOME}/common/runtime/bundles/spm/eclipse/plugins \
+    ${SAG_HOME}/common/runtime/bundles/spm/eclipse/plugins/
+COPY --from=installer \
+    ${SAG_HOME}/common/lib/ext/* \
+    ${SAG_HOME}/common/lib/ext/
+
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway
+COPY --from=installer \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/workspace
+
+RUN rm -f \
+    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat \
+    ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
+RUN sed -i \
+    '/console.sh/i . \/opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' \
+    ${SAG_HOME}/IntegrationServer/bin/startContainer.sh
+
+RUN chmod a+x \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway
+RUN chmod 755 \
+    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway.yml
+
+RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; \
+    /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh
 
 RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
 
 # When mature enough might lose the audit
 COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tgz
+
+### Final cleanup and optimizations
+# the config backup folder, if exists, does not make sense in containers
+RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
+
+RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
+    touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+
 
 ############### Stage 3 - final build of the API Gateway minimal image
 
