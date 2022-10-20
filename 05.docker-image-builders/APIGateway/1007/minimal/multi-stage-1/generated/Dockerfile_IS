@@ -33,15 +33,30 @@ COPY --chown=1724:1724 ./IntegrationServer/updates/ ${SAG_HOME}/IntegrationServe
 COPY --chown=1724:1724 ./IntegrationServer/docker/ ${SAG_HOME}/IntegrationServer/docker/
 COPY --chown=1724:1724 ./IntegrationServer/features/ ${SAG_HOME}/IntegrationServer/features/
 
-COPY --chown=1724:1724 ./IntegrationServer/.tc.custom.log4j2.properties ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
+COPY --chown=1724:1724 ./IntegrationServer/.tc.custom.log4j2.properties \
+  ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
 
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/web/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/updates/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/replicate/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/lib/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/bin/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/db/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
-COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/config/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/web/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/web/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/updates/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/updates/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/replicate/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/replicate/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/lib/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/lib/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/bin/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/bin/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/db/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/db/
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/${INSTANCE_NAME}/config/ \
+  ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/
 
 COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/Default/
 COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAS400/
@@ -60,10 +75,16 @@ COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/W
 COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmAPIGateway/
 COPY --chown=1724:1724 ./IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/ ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/packages/WmART/
 
-COPY --chown=1724:1724 ./IntegrationServer/instances/is_instance.xml ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
-COPY --chown=1724:1724 ./profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
+COPY --chown=1724:1724 \
+  /IntegrationServer/instances/is_instance.xml \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.xml
+COPY --chown=1724:1724 \
+  ./profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf \
+  ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
+COPY --chown=1724:1724 \
+  ./IntegrationServer/instances/is_instance.sh \
+  ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
 
-COPY --chown=1724:1724 ./IntegrationServer/instances/is_instance.sh ${SAG_HOME}/IntegrationServer/instances/is_instance.sh
 RUN rm /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf; \
     cd /opt/softwareag/IntegrationServer/docker; \
     ./is_container.sh updateDockerConfigFiles \

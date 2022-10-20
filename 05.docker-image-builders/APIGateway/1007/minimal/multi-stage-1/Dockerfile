@@ -148,9 +148,10 @@ RUN cd /opt/softwareag/IntegrationServer/docker; \
 RUN cd /opt/softwareag/IntegrationServer/instances; \
     ./is_instance.sh create-osgi-profile -Dinstance.name=${INSTANCE_NAME}
 
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
+# 2022-10-20 : commenting this out, the file does not exist
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info.fixes \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info
 # the next 3 copies were inherited from IS, but they seem useless as APIGW copies the father folder
 COPY --from=installer \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/security/ \
