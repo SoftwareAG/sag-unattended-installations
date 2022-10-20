@@ -224,7 +224,8 @@ RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
 
 RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
-RUN rm -f ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
+RUN mkdir-p ${SAG_HOME}/IntegrationServer/config \
+    rm -f ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
 
 
