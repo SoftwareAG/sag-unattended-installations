@@ -56,6 +56,8 @@ services:
     image: ${APIGW_DOCKER_IMAGE_NAME}
     # Container name
     container_name: api-gateway-01
+    volumes:
+      - ${API_GW_LICENSE_FILE}:${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
     environment:
       # Name and port of the REST interface of the Elasticsearch container.
       - apigw_elasticsearch_hosts=elasticsearch:9200
@@ -84,7 +86,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 2
-      start_period: 1m30s
+      start_period: 120s
 
   # Kibana may be run externally and not in API Gw container
   kibana:
@@ -97,8 +99,12 @@ services:
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - KIBANA_EXTERNAL_HOSTNAME=http://host.docker.internal:${H_SUIF_PORT_PREFIX}56
       - ELASTICSEARCH_USERNAME=elastic
       - ELASTICSEARCH_PASSWORD=${PROVIDED_ELASTIC_PASSWORD}
+      - SERVER_BASEPATH=/apigatewayui/dashboardproxy
+      - CONSOLE_ENABLED=false
+      - KIBANA_INDEX=gateway_default_dashboard
     ports:
     - ${H_SUIF_PORT_PREFIX}56:5601
     networks:
