@@ -139,7 +139,7 @@ COPY --from=installer \
   ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration/custom_wrapper.conf \
   ${SAG_HOME}/IntegrationServer/instances/custom_wrapper.conf.template
 
-RUN rm /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf
+RUN rm -f /opt/softwareag/IntegrationServer/instances/${INSTANCE_NAME}/config/repository4.cnf
 RUN cd /opt/softwareag/IntegrationServer/docker; \
     ./is_container.sh updateDockerConfigFiles \
       -Dinstance.name=${INSTANCE_NAME} \
@@ -217,8 +217,10 @@ COPY --from=installer ${SAG_HOME}/install.audit.tgz ${SAG_HOME}/install.audit.tg
 # the config backup folder, if exists, does not make sense in containers
 RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
 
-RUN rm ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
+RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
+RUN rm -f ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
+    touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
 
 
 ############### Stage 3 - final build of the API Gateway minimal image
