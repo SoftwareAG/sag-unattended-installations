@@ -224,9 +224,11 @@ RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup
 
 RUN rm -f ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml; \
     touch ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/licenseKey.xml
-RUN mkdir-p ${SAG_HOME}/IntegrationServer/config \
-    rm -f ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
-    touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
+
+# eventually, but it doesn't seem the case here
+# RUN mkdir-p ${SAG_HOME}/IntegrationServer/config; \
+#     rm -f ${SAG_HOME}/IntegrationServer/config/licenseKey.xml; \
+#     touch ${SAG_HOME}/IntegrationServer/config/licenseKey.xml
 
 
 ############### Stage 3 - final build of the API Gateway minimal image
