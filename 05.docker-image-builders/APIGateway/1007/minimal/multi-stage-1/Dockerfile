@@ -177,12 +177,13 @@ COPY --from=installer \
     ${SAG_HOME}/common/lib/ext/* \
     ${SAG_HOME}/common/lib/ext/
 
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
-COPY --from=installer \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
-    ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
+# 2022-10-20 trial #3 failed because apigw_*.sh files do not exist
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
+# COPY --from=installer \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/apigw_updateNode.sh \
+#     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/bin/
 COPY --from=installer \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/configuration
@@ -196,17 +197,20 @@ COPY --from=installer \
 RUN rm -f \
     ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/clusteruuid.dat \
     ${SAG_HOME}/IntegrationServer/instances/${INSTANCE_NAME}/config/backup/clusteruuid.dat
-RUN sed -i \
-    '/console.sh/i . \/opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' \
-    ${SAG_HOME}/IntegrationServer/bin/startContainer.sh
+# RUN sed -i \
+#     '/console.sh/i . \/opt/softwareag/profiles/IS_$INSTANCE_NAME/bin/apigw_updateNode.sh' \
+#     ${SAG_HOME}/IntegrationServer/bin/startContainer.sh
 
 RUN chmod a+x \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway
 RUN chmod 755 \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/filebeat/filebeat_apigateway.yml
 
-RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; \
-    /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh
+RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; 
+
+# 2022-10-20 trial #3 failed because apigw_*.sh files do not exist
+# RUN chmod a+x /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/*.sh; \
+#     /opt/softwareag/profiles/IS_${INSTANCE_NAME}/bin/apigw_updatePath.sh
 
 RUN sed -i '/apigw.console.log/c\apigw.console.log = true' \
     ${SAG_HOME}/profiles/IS_${INSTANCE_NAME}/apigateway/config/uiconfiguration.properties
