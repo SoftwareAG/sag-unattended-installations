@@ -4,7 +4,7 @@ call .\setEnv.bat
 
 md build_context
 
-SET RELATIVE_BUILDER_PATH=..\..\..\..\05.docker-image-builders\APIGateway\1007\minimal\multi-stage-1
+SET RELATIVE_BUILDER_PATH=..\..\..\..\..\05.docker-image-builders\APIGateway\1007\minimal\multi-stage-1
 
 copy %RELATIVE_BUILDER_PATH%\Dockerfile build_context\
 copy %RELATIVE_BUILDER_PATH%\*.sh build_context\
