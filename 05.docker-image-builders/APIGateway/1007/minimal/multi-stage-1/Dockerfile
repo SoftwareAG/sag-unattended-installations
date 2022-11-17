@@ -216,4 +216,4 @@ EXPOSE 5555
 EXPOSE 9999
 EXPOSE 5553
 
-ENTRYPOINT "/bin/bash" "-c" "${SAG_HOME}/IntegrationServer/bin/startContainer.sh"
+ENTRYPOINT "${SAG_HOME}/IntegrationServer/bin/startContainer.sh"
