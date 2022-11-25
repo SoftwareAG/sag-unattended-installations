@@ -1,0 +1,30 @@
+# Lean MSR 10.11 Authored Template
+changeAdminPasswordAtFirstLogin=false
+com.wm.distman.utils_panel0=0
+com.wm.distman.utils_panel1=0
+IntegrationServer.RDBMS.Type=__VERSION1__,6,0_,1,2,3,4,5,Oracle,SQL+Server,DB2+for+Linux%2C+UNIX%2C+Windows,MySQL+Community+Edition,MySQL+Enterprise+Edition,PostgreSQL
+IntegrationServerDBblock=0
+IntegrationServerDBMsgblock=1
+IntegrationServerDBPass.Name=__VERSION1__,
+IntegrationServerDBURL.Name=__VERSION1__,
+IntegrationServerDBUser.Name=__VERSION1__,
+IntegrationServerNetworkInterface=__VERSION1__,
+IntegrationServerNetworkInterfaceBlock=0
+IntegrationServerNetworkInterfaceBodyBlock=0
+IntegrationServerPool.Name=__VERSION1__,
+IntegrationServerSampleURLBlock=1
+IntegrationServerTitleBlock=0
+InstallLocProducts=
+ISExtOrInt=__VERSION1__,2,0,1_,External+RDBMS,Embedded+database
+selectedFixes=
+# Authored changes below this line
+InstallProducts=e2ei/11/IS_10.11.0.0.724/CDC/PIEEmbeddedCdc,e2ei/11/BR_10.5.0.0.1105/Broker/BrokerJMSShared,e2ei/11/TPS_10.11.0.0.100/SCG/tppModelling,e2ei/11/LIC_5.7.3.0.1027/LICSharedLibsJava/LICSharedLibsJava,e2ei/11/TES_4.3.10.0.68/TES/TESCommon,e2ei/11/TPS_10.11.0.0.100/SCG/tppGf,e2ei/11/TPS_10.11.0.0.100/SCG/tppDB,e2ei/11/MTA_10.11.0.0.607/Metering/MTAAgent,e2ei/11/WIS_10.11.0.0.603/Infrastructure/WISSharedLibs,e2ei/11/TPS_10.11.0.0.100/SCG/tppAnt,e2ei/11/IS_10.11.0.0.724/integrationServer/PIECore,e2ei/11/TPS_10.11.0.0.100/SCG/tppSEC,e2ei/11/TPS_10.11.0.0.100/SCG/tppMisc,e2ei/11/BR_10.5.0.0.1105/Broker/PIFSharedBundles,e2ei/11/TPS_10.11.0.0.100/SCG/tppSwagger,e2ei/11/IS_10.11.0.0.724/integrationServer/MSC,e2ei/11/ACDL_10.11.0.0.480/ACDL/ACDLDeployerSharedBundle,e2ei/11/TPS_10.11.0.0.100/SCG/loggers,e2ei/11/TPS_10.11.0.0.100/SCG/tppServlet,e2ei/11/DCC_10.11.0.0.307/CDC/DatabaseComponentConfiguratorCore,e2ei/11/IS_10.11.0.0.724/integrationServer/integrationServerMigrationFrameworkLib,e2ei/11/TPS_10.11.0.0.100/SCG/tppCommons,e2ei/11/WFF_10.7.0.0.28/IntegrationServer/WFF,e2ei/11/TPS_10.11.0.0.100/SCG/tppWS,e2ei/11/WSC_10.11.0.0.531/SCG/SCGCommon,e2ei/11/WAR_10.11.0.0.383/IntegrationServer/WAR,e2ei/11/NUM_10.11.0.0.468/UniversalMessaging/NUMSharedLibs,e2ei/11/TPS_10.11.0.0.100/SCG/tppGfJaxb,e2ei/11/WSS_10.11.0.0.679/SCG/WSSCore,e2ei/11/TPL_10.11.0.0.330/License/license,e2ei/11/SJP_11.0.12.0.64/Infrastructure/sjp,e2ei/11/TPS_10.11.0.0.100/SCG/tppSpring,e2ei/11/WmSAP_10.1.0.0.1011/Adapters/WmSAP,e2ei/11/TPS_10.11.0.0.100/SCG/tppParsers
+# Parameters
+imageFile=${SUIF_INSTALL_IMAGE_FILE}
+InstallDir=${SUIF_INSTALL_INSTALL_DIR}
+HostName=${SUIF_INSTALL_DECLARED_HOSTNAME}
+adminPassword=${SUIF_INSTALL_TIME_ADMIN_PASSWORD}
+IntegrationServerPort=__VERSION1__,${SUIF_INSTALL_MSR_MAIN_HTTP_PORT}
+IntegrationServersecurePort=__VERSION1__,${SUIF_INSTALL_MSR_MAIN_HTTPS_PORT}
+IntegrationServerdiagnosticPort=__VERSION1__,${SUIF_INSTALL_MSR_DIAGS_HTTP_PORT}
+integrationServer.LicenseFile.text=__VERSION1__,${SUIF_SETUP_TEMPLATE_MSR_LICENSE_UrlEncoded}

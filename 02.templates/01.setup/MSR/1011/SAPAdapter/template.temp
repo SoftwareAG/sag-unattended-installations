@@ -1,0 +1,22 @@
+#Fri Nov 25 10:37:52 UTC 2022
+
+
+
+IntegrationServer.RDBMS.Type=__VERSION1__,6,0_,1,2,3,4,5,Oracle,SQL+Server,DB2+for+Linux%2C+UNIX%2C+Windows,MySQL+Community+Edition,MySQL+Enterprise+Edition,PostgreSQL
+IntegrationServerDBblock=0
+IntegrationServerDBMsgblock=1
+IntegrationServerDBPass.Name=__VERSION1__,
+IntegrationServerDBURL.Name=__VERSION1__,
+IntegrationServerDBUser.Name=__VERSION1__,
+IntegrationServerdiagnosticPort=__VERSION1__,9999
+IntegrationServerNetworkInterface=__VERSION1__,
+IntegrationServerNetworkInterfaceBlock=0
+IntegrationServerNetworkInterfaceBodyBlock=0
+IntegrationServerPool.Name=__VERSION1__,
+IntegrationServerPort=__VERSION1__,5555
+IntegrationServerSampleURLBlock=1
+IntegrationServersecurePort=__VERSION1__,5543
+IntegrationServerTitleBlock=0
+ISExtOrInt=__VERSION1__,2,0,1_,External+RDBMS,Embedded+database
+selectedFixes=
+ServerURL=https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi
