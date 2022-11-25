@@ -480,8 +480,8 @@ assureDefaultInstaller(){
 # Parameters
 # $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
 assureDefaultSumBoostrap(){
-    local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20220825-11-LinuxX86.bin"
-    local sumBoostrapSha256Sum="8d8156cc40f9f866ab6aa897086bea629fa64ec45d1424b94d310c3acc4f9551"
+    local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20221101-11-LinuxX86.bin"
+    local sumBoostrapSha256Sum="d29f20ebeb77a9fbe58815fc621a80c970bdd98bbe95563748ef694acf652b4b"
     SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
     local lSumBootstrap="${1:-SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
     if ! assureDownloadableFile ${lSumBootstrap} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
@@ -593,11 +593,13 @@ generateFixesImageFromTemplate(){
         logD "Listing all log files produced by Update Manager"
         find . -type f -name *.log
         find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/sum_logs.tgz"
-        logI "Dump complete"    
+        logI "Dump complete"
+        popd >/dev/null
+        return 3
     fi
 
     popd >/dev/null
-    logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished, result: ${lResultFixCreation}"
+    logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished successfully"
 }
 
 # Parameters
