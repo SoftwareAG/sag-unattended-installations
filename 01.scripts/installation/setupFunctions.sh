@@ -588,10 +588,12 @@ generateFixesImageFromTemplate(){
         logW "Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
         logI "Archiving destination folder results, which are partial at best..."
         cd "${lFixesDir}"
-        tar czf "dump_$(date +%y-%m-%dT%H.%M.%S_%3N).tgz" . --remove-files
+        tar czf "dump_$(date +%y-%m-%dT%H.%M.%S_%3N).tgz" ./* --remove-files
         cd "${lSumHome}"
+        logD "Listing all log files produced by Update Manager"
+        find . -type f -name *.log
         find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/sum_logs.tgz"
-        logI "Dump complete"
+        logI "Dump complete"    
     fi
 
     popd >/dev/null
