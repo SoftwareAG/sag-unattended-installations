@@ -583,6 +583,17 @@ generateFixesImageFromTemplate(){
     cd "${lSumHome}/bin"
     controlledExec "${lCmd}" "Create-fixes-image-for-template-${1//\//-}-tag-${lFixesTag}"
     local lResultFixCreation=$?
+
+    if [ ${lResultFixCreation} -ne 0 ]; then
+        logW "Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
+        logI "Archiving destination folder results, which are partial at best..."
+        cd "${lFixesDir}"
+        tar czf "dump_$(date +%y-%m-%dT%H.%M.%S_%3N).tgz" . --remove-files
+        cd "${lSumHome}"
+        find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/sum_logs.tgz"
+        logI "Dump complete"
+    fi
+
     popd >/dev/null
     logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished, result: ${lResultFixCreation}"
 }
