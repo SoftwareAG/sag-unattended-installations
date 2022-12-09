@@ -1,0 +1,13 @@
+version: "3.5"
+
+services:
+  dind1:
+    #image: docker
+    image: rancher/dind
+    container_name: dind1
+    privileged: true
+    volumes:
+      - ./scripts/:/root/scripts/
+      - ${H_SUIF_INSTALLER_BIN}:/tmp/installer.bin
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: /root/scripts/containerEntrypoint.sh
