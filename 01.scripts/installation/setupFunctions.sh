@@ -636,10 +636,11 @@ generateProductsImageFromTemplate(){
     else
         logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file not present, creating now..."
         local lPlatformString=${4:-LNXAMD64}
+        local lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi"}
 
         # current default
         if [[ ${1} == *"/1011/"* ]]; then
-            local lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
+            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
         else
             if [[ ${1} == *"/1005/"* ]]; then
                 lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
@@ -647,7 +648,8 @@ generateProductsImageFromTemplate(){
                 if [[ ${1} == *"/1007/"* ]]; then
                     lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
                 else
-                    logW "[setupFunctions.sh/generateProductsImageFromTemplate()] - Unsupported version in template ${1}. Continuing using the 10.11 SDC URL..."
+                    logW "[setupFunctions.sh/generateProductsImageFromTemplate()] - Unsupported version in template ${1}. Continuing using the 10.15 SDC URL..."
+                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1015:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi"}
                 fi
             fi
         fi
