@@ -1,0 +1,1 @@
+docker exec -ti install-playground-1-1 bash
