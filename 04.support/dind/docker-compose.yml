@@ -3,7 +3,9 @@ version: "3.5"
 services:
   dind1:
     #image: docker
-    image: rancher/dind
+    #image: rancher/dind
+    #image: docker:stable-dind
+    image: jpetazzo/dind
     container_name: dind1
     privileged: true
     volumes:
