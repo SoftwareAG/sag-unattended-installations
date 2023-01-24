@@ -2,12 +2,7 @@
 
 # WARNING: This is not a strict POSIX script. The following exceptions apply
 # - local variables for functions
-# - pushd / popd
-# - string replacement like ${1//\//-}
-
 # shellcheck disable=SC3043
-# shellcheck disable=SC3044
-# shellcheck disable=SC3060
 
 # This file is a collection of functions used by all the other scripts
 
@@ -30,10 +25,8 @@ newAuditSession() {
   return $?
 }
 
-date +%Y-%m-%dT%H.%M.%S_%3N
-
 initAuditSession() {
-  export SUIF_AUDIT_BASE_DIR="${SUIF_AUDIT_BASE_DIR:-'/tmp'}"
+  export SUIF_AUDIT_BASE_DIR="${SUIF_AUDIT_BASE_DIR:-/tmp}"
   SUIF_SESSION_TIMESTAMP="${SUIF_SESSION_TIMESTAMP:-$(date +%Y-%m-%dT%H.%M.%S_%3N)}"
   export SUIF_SESSION_TIMESTAMP
   export SUIF_AUDIT_SESSION_DIR="${SUIF_AUDIT_BASE_DIR}/${SUIF_SESSION_TIMESTAMP}"
@@ -148,38 +141,31 @@ portIsReachable2() {
   return $?
 }
 
-# urlencode / decode taken from https://gist.github.com/cdown/1163649
-# POSIX exceptions only for this function:
-# https://www.shellcheck.net/wiki/SC3005
-# https://www.shellcheck.net/wiki/SC3018
-# https://www.shellcheck.net/wiki/SC3057
-
-urlencode() {
-  # urlencode <string>
-  # usage A_ENC=$(urlencode ${A})
-
-  local old_lc_collate="$LC_COLLATE"
-  LC_COLLATE=C
-
-  local length="${#1}"
-  # shellcheck disable=SC3005,SC3018
-  for ((i = 0; i < length; i++)); do
-    # shellcheck disable=SC3057
-    local c="${1:$i:1}"
-    case $c in
-    [a-zA-Z0-9.~_-]) printf '%s' "$c" ;;
-    *) printf '%%%02X' "'$c" ;;
-    esac
-  done
-
-  LC_COLLATE=$old_lc_collate
+# New urlencode approach, to render the script more portable
+# Code taken from https://stackoverflow.com/questions/38015239/url-encoding-a-string-in-shell-script-in-a-portable-way
+urlencodepipe() {
+  local LANG=C; local c; while IFS= read -r c; do
+    # shellcheck disable=SC2059
+    case $c in [a-zA-Z0-9.~_-]) printf "$c"; continue ;; esac
+    # shellcheck disable=SC2059
+    printf "$c" | od -An -tx1 | tr ' ' % | tr -d '\n'
+  done <<EOF
+$(fold -w1)
+EOF
+  echo
 }
 
+# shellcheck disable=SC2059
+urlencode() { printf "$*" | urlencodepipe ;}
+
+# deprecated, not POSIX portable
 urldecode() {
   # urldecode <string>
   # usage A=$(urldecode ${A_ENC})
 
+  # shellcheck disable=SC3060
   local url_encoded="${1//+/ }"
+  # shellcheck disable=SC3060
   printf '%b' "${url_encoded//%/\\x}"
 }
 
@@ -248,19 +234,19 @@ debugSuspend() {
   fi
 }
 
-# POSIX exception for this function only:
-# https://www.shellcheck.net/wiki/SC3045
-readSecretFromUser() {
-  # params
-  # $1 - message -> what to input
+# Rewritten for portability
+# code inspired from https://stackoverflow.com/questions/3980668/how-to-get-a-password-from-a-shell-script-without-echoing
+readSecretFromUser(){
+  stty -echo
   secret="0"
+  local s1 s2
   while [ "${secret}" = "0" ]; do
-    # shellcheck disable=SC3045
-    read -rsp "Please input ${1}: " s1
-    echo ""
-    # shellcheck disable=SC3045
-    read -rsp "Please input ${1} again: " s2
-    echo ""
+    printf "Please input %s: " "${1}"
+    read -r s1
+    printf "\n"
+    printf "Please input %s again: " "${1}"
+    read -r s2
+    printf "\n"
     if [ "${s1}" = "${s2}" ]; then
       secret=${s1}
     else
@@ -268,6 +254,19 @@ readSecretFromUser() {
     fi
     unset s1 s2
   done
+  stty echo
+}
+
+# POSIX string substitution
+# Parameters 
+# $1 - original string
+# $2 - charset what to substitute
+# $3 - replacement charset
+# ATTN: works char by char, not with substrings
+strSubstPOSIX()
+{
+  # shellcheck disable=SC2086
+  printf '%s' "$1" | tr $2 $3
 }
 
 logI "SLS common framework functions initialized. Current shell is ${SUIF_CURRENT_SHELL}"

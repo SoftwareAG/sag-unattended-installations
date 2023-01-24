@@ -2,12 +2,7 @@
 
 # WARNING: This is not a strict POSIX script. The following exceptions apply
 # - local variables for functions
-# - pushd / popd
-# - string replacement like ${1//\//-}
-
 # shellcheck disable=SC3043
-# shellcheck disable=SC3044
-# shellcheck disable=SC3060
 
 # Dependency
 if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
@@ -168,7 +163,8 @@ patchSum() {
   fi
 
   logI "Updating SUM from image ${1} ..."
-  pushd . >/dev/null
+  local crtDir
+  crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 2
   controlledExec "./UpdateManagerCMD.sh -selfUpdate true -installFromImage "'"'"${1}"'"' "${d}.PatchSum"
   RESULT_controlledExec=$?
@@ -176,7 +172,7 @@ patchSum() {
     logE "[setupFunctions.sh/patchSum()] - Update Manager Self Update failed with code ${RESULT_controlledExec}"
     return 1
   fi
-  popd >/dev/null || return 3
+  cd "${crtDir}" || return 3
 }
 
 # Parameters - removeDiagnoserPatch
@@ -208,7 +204,8 @@ removeDiagnoserPatch() {
     echo "action=Uninstall fixes"
   } >"${tmpScriptFile}"
 
-  pushd . >/dev/null
+  local crtDir
+  crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 4
 
   logI "Taking a snapshot of existing fixes..."
@@ -221,7 +218,7 @@ removeDiagnoserPatch() {
   logI "Taking a snapshot of fixes after the execution of SP removal..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterSPRemoval"
 
-  popd >/dev/null || return 5
+  cd "${crtDir}" || return 5
 
   if [ ${RESULT_controlledExec} -eq 0 ]; then
     logI "Support patch removal was successful"
@@ -275,7 +272,8 @@ patchInstallation() {
     fi
   } >/dev/shm/fixes.wmscript.txt
 
-  pushd . >/dev/null
+  local crtDir
+  crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 3
 
   logI "Taking a snapshot of existing fixes..."
@@ -292,7 +290,7 @@ patchInstallation() {
   logI "Taking a snapshot of fixes after the patching..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterPatching"
 
-  popd >/dev/null || return 4
+  cd "${crtDir}" || return 4
 
   if [ ${RESULT_controlledExec} -eq 0 ]; then
     logI "Patch successful"
@@ -468,7 +466,7 @@ applySetupTemplate() {
 assureDownloadableFile() {
   if [ ! -f "${1}" ]; then
     logI "File ${1} does not exist, attempting download from ${2}"
-    if ! which curl; then
+    if ! which curl > /dev/null; then
       logE "[setupFunctions.sh/assureDownloadableFile()] - Cannot find curl"
       return 1
     fi
@@ -506,7 +504,7 @@ assureDefaultSumBoostrap() {
   local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20221101-11-LinuxX86.bin"
   local sumBoostrapSha256Sum="d29f20ebeb77a9fbe58815fc621a80c970bdd98bbe95563748ef694acf652b4b"
   SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
-  local lSumBootstrap="${1:-SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+  local lSumBootstrap="${1:-$SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
   if ! assureDownloadableFile "${lSumBootstrap}" "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}"; then
     logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
     return 1
@@ -590,12 +588,12 @@ generateFixesImageFromTemplate() {
       echo "# Generated"
       echo "scriptConfirm=N"
       # use before reuse -> diagnosers not covered for now
-      echo "installSP=N "
+      echo "installSP=N"
       echo "action=Create or add fixes to fix image"
       echo "selectedFixes=spro:all"
       echo "installDir=${lPermanentInventoryFile}"
       echo "imagePlatform=${lPlatformString}"
-      echo "createEmpowerImage=C "
+      echo "createEmpowerImage=C"
     } >"${lPermanentScriptFile}"
   fi
 
@@ -607,10 +605,12 @@ generateFixesImageFromTemplate() {
   echo "SUM command to execute: ${lCmd} -empowerPass ***"
   lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
 
-  pushd . >/dev/null
+  local crtDir
+  crtDir=$(pwd)
 
   cd "${lSumHome}/bin" || return 3
-  controlledExec "${lCmd}" "Create-fixes-image-for-template-${1//\//-}-tag-${lFixesTag}"
+  
+  controlledExec "${lCmd}" "Create-fixes-image-for-template-$(strSubstPOSIX "$1" "/" "-")-tag-${lFixesTag}"
   local lResultFixCreation=$?
 
   if [ ${lResultFixCreation} -ne 0 ]; then
@@ -625,11 +625,11 @@ generateFixesImageFromTemplate() {
     find . -type f -name "*.log"
     find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/$d/sum_logs.tgz"
     logI "Dump complete"
-    popd >/dev/null || return 4
+    cd "${crtDir}" || return 4
     return 3
   fi
 
-  popd >/dev/null || return 5
+  cd "${crtDir}" || return 5
   logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished successfully"
 }
 
@@ -734,7 +734,7 @@ generateProductsImageFromTemplate() {
 
   logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Creating the product image ${lProductsImageFile}... This may take some time..."
   logD "[setupFunctions.sh/generateProductsImageFromTemplate()] - Command is ${lCmd}"
-  controlledExec "${lCmd}" "Create-products-image-for-template-${1//\//-}"
+  controlledExec "${lCmd}" "Create-products-image-for-template-$(strSubstPOSIX "$1" "/" "-")"
   local lCreateImgResult=$?
   logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Image ${lProductsImageFile} creation completed, result: ${lCreateImgResult}"
   rm -f "${lVolatileScriptFile}"
@@ -745,52 +745,81 @@ generateProductsImageFromTemplate() {
 # No params. This function checks the basic prerequisites for any setup template
 checkSetupTemplateBasicPrerequisites() {
   if [ -z "${SUIF_INSTALL_INSTALLER_BIN+x}" ]; then
-    logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
     return 11
   fi
 
   if [ ! -f "${SUIF_INSTALL_INSTALLER_BIN}" ]; then
-    logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
     return 12
   fi
 
   if [ -z "${SUIF_INSTALL_IMAGE_FILE+x}" ]; then
-    logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
     return 13
   fi
 
   if [ ! -f "${SUIF_INSTALL_IMAGE_FILE}" ]; then
-    logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
     return 14
   fi
 
-  logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
-  logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}"
-  logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
 
   if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ]; then
     if [ -z "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN+x}" ]; then
-      logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
       return 21
     fi
 
     if [ ! -f "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" ]; then
-      logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
       return 22
     fi
 
     if [ -z "${SUIF_PATCH_FIXES_IMAGE_FILE+x}" ]; then
-      logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
       return 23
     fi
 
     if [ ! -f "${SUIF_PATCH_FIXES_IMAGE_FILE}" ]; then
-      logE "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
       return 24
     fi
-    logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
-    logI "setupFunctions.sh:checkSetupTemplateBasicPrerequisites - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
+    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
   fi
+}
+
+checkEmpowerCredentials(){
+  # Check if credentials are valid
+  logI "Checking if provided Empower credentials are valid..."
+
+  if ! which curl > /dev/null; then
+    logE "[setupFunctions.sh/checkEmpowerCredentials()] - Cannot find curl"
+    return 1
+  fi
+
+  resultJson=$(
+  curl --location --request POST 'https://sdc.softwareag.com/services/auth' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"username": "'"${SUIF_EMPOWER_USER}"'","password": "'"${SUIF_EMPOWER_PASSWORD}"'"}' \
+  > /dev/null 2>&1
+  )
+  resultCurl=$?
+  if [ ! ${resultCurl} -eq 0 ]; then
+    logE "[setupFunctions.sh/checkEmpowerCredentials()] - Getting token for user ${SUIF_EMPOWER_USER}: curl failed with result ${resultCurl}; cannot continue"
+    return 2
+  fi
+
+  if [ -n "${resultJson##*access_token*}" ]; then
+    logE "[setupFunctions.sh/checkEmpowerCredentials()] - Provided credentials are incorrect, cannot continue. Result of attempted Empower login with user ${SUIF_EMPOWER_USER} is: ${resultJson}"
+    return 3
+  fi
+
+  logI "[setupFunctions.sh/checkEmpowerCredentials()] - Provided Empower credentials are valid"
 }
 
 logI "Setup Functions sourced"
