@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# WARNING: This is not a strict POSIX script. The following exceptions apply
+# - local variables for functions
+# - pushd / popd
+# - string replacement like ${1//\//-}
+
+# shellcheck disable=SC3043
+# shellcheck disable=SC3044
+# shellcheck disable=SC3060
+
 # Dependency
 if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then 
     echo "sourcing commonFunctions.sh ..."
@@ -7,6 +16,7 @@ if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
         echo "Panic, framework issue! File ${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh does not exist. SUIF_CACHE_HOME=${SUIF_CACHE_HOME}"
         exit 155
     fi
+    # shellcheck source=/dev/null
     . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
 fi
 
@@ -33,8 +43,8 @@ init(){
 init
 
 # Online mode for SDC separated from Online mode for SUIF:
-export SUIF_ONLINE_MODE=${SUIF_ONLINE_MODE:-1} # default is online for SUIF
-export SUIF_SDC_ONLINE_MODE=${SUIF_SDC_ONLINE_MODE:-0} # default if offline for SDC
+export SUIF_ONLINE_MODE="${SUIF_ONLINE_MODE:-1}" # default is online for SUIF
+export SUIF_SDC_ONLINE_MODE="${SUIF_SDC_ONLINE_MODE:-0}" # default if offline for SDC
 
 # Parameters - installProducts
 # $1 - installer binary file
@@ -52,22 +62,23 @@ installProducts(){
         return 2
     fi
 
-    if [ ! $(which envsubst) ]; then
+    if [ ! "$(which envsubst)" ]; then
         logE "[setupFunctions.sh/installProducts()] - Product installation requires envsubst to be installed!"
         return 3
     fi
 
     logI "Installing according to script ${2}"
 
-    local debugLevel=${3:-"verbose"}
-    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local debugLevel="${3:-"verbose"}"
+    local d
+    d=$(date +%y-%m-%dT%H.%M.%S_%3N)
 
     # apply environment substitutions
     envsubst < "${2}" > /dev/shm/install.wmscript || return 5
 
     local installCmd="${1} -readScript /dev/shm/install.wmscript -console"
     local installCmd="${installCmd} -debugLvl ${debugLevel}"
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
         local installCmd="${installCmd} -scriptErrorInteract yes"
     else
         local installCmd="${installCmd} -scriptErrorInteract no"
@@ -81,7 +92,7 @@ installProducts(){
     else
         logE "[setupFunctions.sh/installProducts()] - Product installation failed, code ${RESULT_installProducts}"
         logD "Dumping the install.wmscript file into the session audit folder..."
-        if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+        if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
             cp /dev/shm/install.wmscript "${SUIF_AUDIT_SESSION_DIR}/"
         fi
         return 4
@@ -93,19 +104,19 @@ installProducts(){
 # $2 - Fixes image file, mandatory for offline mode
 # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
 bootstrapSum(){
-    if [ ! -f  ${1} ]; then
+    if [ ! -f  "${1}" ]; then
         logE "[setupFunctions.sh/bootstrapSum()] - Software AG Update Manager boostrap file not found: ${1}"
         return 1
     fi
 
-    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
+    if [ "${SUIF_SDC_ONLINE_MODE}" -eq 0 ]; then
         if [ ! -f  "${2}" ]; then
             logE "[setupFunctions.sh/bootstrapSum()] - Fixes image file not found: ${2}"
             return 2
         fi
     fi
 
-    local SUM_HOME=${3:-"/opt/sag/sum"}
+    local SUM_HOME="${3:-"/opt/sag/sum"}"
 
     if [ -d "${SUM_HOME}/UpdateManager" ]; then
         logI "Update manager already present, skipping bootstrap, attempting to update from given image..."
@@ -113,10 +124,11 @@ bootstrapSum(){
         return 0
     fi
 
-    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local d
+    d=$(date +%y-%m-%dT%H.%M.%S_%3N)
 
     local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
-    if [ ${SUIF_SDC_ONLINE_MODE} -eq 0 ]; then
+    if [ "${SUIF_SDC_ONLINE_MODE}" -eq 0 ]; then
         bootstrapCmd="${bootstrapCmd=} -i ${2}"
         # note: everything is always offline except this, as it is not requiring empower credentials
         logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
@@ -138,7 +150,7 @@ bootstrapSum(){
 # $1 - Fixes Image (this will allways happen offline in this framework)
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 patchSum(){
-    if [ ${SUIF_SDC_ONLINE_MODE} -ne 0 ]; then
+    if [ "${SUIF_SDC_ONLINE_MODE}" -ne 0 ]; then
         logI "patchSum() ignored in online mode"
         return 0
     fi
@@ -147,7 +159,8 @@ patchSum(){
         logE "[setupFunctions.sh/patchSum()] - Fixes images file ${1} does not exist!"
     fi
     local SUM_HOME="${2:-'/opt/sag/sum'}"
-    local d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
+    local d
+    d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
 
     if [ ! -d "${SUM_HOME}/UpdateManager" ]; then
         logI "Update manager missing, nothing to patch..."
@@ -156,14 +169,14 @@ patchSum(){
 
     logI "Updating SUM from image ${1} ..."
     pushd . >/dev/null
-    cd "${SUM_HOME}/bin"
+    cd "${SUM_HOME}/bin" || return 2
     controlledExec "./UpdateManagerCMD.sh -selfUpdate true -installFromImage "'"'"${1}"'"' "${d}.PatchSum"
     RESULT_controlledExec=$?
     if [ "${RESULT_controlledExec}" -ne 0 ]; then
         logE "[setupFunctions.sh/patchSum()] - Update Manager Self Update failed with code ${RESULT_controlledExec}"
         return 1
     fi
-    popd >/dev/null
+    popd >/dev/null || return 3
 }
 
 # Parameters - removeDiagnoserPatch
@@ -172,56 +185,59 @@ patchSum(){
 # $3 - OTPIONAL SUM Home, default /opt/sag/sum
 # $4 - OTPIONAL Products Home, default /opt/sag/products
 removeDiagnoserPatch(){
-    local SUM_HOME=${3:-"/opt/sag/sum"}
+    local SUM_HOME="${3:-"/opt/sag/sum"}"
     if [ ! -f "${SUM_HOME}/bin/UpdateManagerCMD.sh" ]; then
         logE "[setupFunctions.sh/removeDiagnoserPatch()] - Update manager not found at the inficated location ${SUM_HOME}"
         return 1
     fi
-    local PRODUCTS_HOME=${4:-"/opt/sag/products"}
+    local PRODUCTS_HOME="${4:-"/opt/sag/products"}"
     if [ ! -d "${PRODUCTS_HOME}" ]; then
         logE "[setupFunctions.sh/removeDiagnoserPatch()] - Product installation folder is missing: ${PRODUCTS_HOME}"
         return 2
     fi
 
-    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
+    local d
+    d=$(date +%y-%m-%dT%H.%M.%S_%3N)
     local tmpScriptFile="/dev/shm/fixes.${d}.wmscript.txt"
 
-    echo "installSP=Y" > "${tmpScriptFile}"
-    echo "diagnoserKey=${1}" >> "${tmpScriptFile}"
-    echo "installDir=${PRODUCTS_HOME}" >>"${tmpScriptFile}"
-    echo "selectedFixes=${2}" >>"${tmpScriptFile}"
-    echo "action=Uninstall fixes" >> "${tmpScriptFile}"
+    {
+    echo "installSP=Y";
+    echo "diagnoserKey=${1}";
+    echo "installDir=${PRODUCTS_HOME}";
+    echo "selectedFixes=${2}";
+    echo "action=Uninstall fixes";
+    } > "${tmpScriptFile}"
 
     pushd . >/dev/null
-    cd "${SUM_HOME}/bin"
+    cd "${SUM_HOME}/bin" || return 4
 
     logI "Taking a snapshot of existing fixes..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforeSPRemoval"
 
     logI "Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..." 
-    controlledExec "./UpdateManagerCMD.sh -readScript "${tmpScriptFile}"" "${d}.SPFixRemoval"
+    controlledExec "./UpdateManagerCMD.sh -readScript \"${tmpScriptFile}\"" "${d}.SPFixRemoval"
     RESULT_controlledExec=$?
 
     logI "Taking a snapshot of fixes after the execution of SP removal..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterSPRemoval"
 
-    popd >/dev/null
+    popd >/dev/null || return 5
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "Support patch removal was successful"
     else
         logE "[setupFunctions.sh/removeDiagnoserPatch()] - Support patch removal failed, code ${RESULT_controlledExec}"
-        if [ ${SUIF_DEBUG_ON} ]; then
+        if [ "${SUIF_DEBUG_ON}" ]; then
             logD "Recovering Update Manager logs for further investigations"
-            mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
-            cp -r ${SUM_HOME}/logs ${SUIF_AUDIT_SESSION_DIR}/
-            cp -r ${SUM_HOME}/UpdateManager/logs ${SUIF_AUDIT_SESSION_DIR}/UpdateManager/
-            cp "${tmpScriptFile}" ${SUIF_AUDIT_SESSION_DIR}/
+            mkdir -p "${SUIF_AUDIT_SESSION_DIR}/UpdateManager"
+            cp -r "${SUM_HOME}"/logs "${SUIF_AUDIT_SESSION_DIR}"/
+            cp -r "${SUM_HOME}"/UpdateManager/logs "${SUIF_AUDIT_SESSION_DIR}"/UpdateManager/
+            cp "${tmpScriptFile}" "${SUIF_AUDIT_SESSION_DIR}"/
         fi
         return 3
     fi
 
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
         # if we are debugging, we want to see the generated script
         cp "${tmpScriptFile}" "${SUIF_AUDIT_SESSION_DIR}/fixes.D.${d}.wmscript.txt"
     fi
@@ -236,29 +252,32 @@ removeDiagnoserPatch(){
 # $4 - OTPIONAL Engineering patch modifier (default "N")
 # $5 - OTPIONAL Engineering patch diagnoser key (default "5437713_PIE-68082_5", however user must provide if $4=Y)
 patchInstallation(){
-    if [ ! -f ${1} ]; then
+    if [ ! -f "${1}" ]; then
         logE "[setupFunctions.sh/patchInstallation()] - Fixes image file not found: ${1}"
         return 1
     fi
 
-    local SUM_HOME=${2:-"/opt/sag/sum"}
-    local PRODUCTS_HOME=${3:-"/opt/sag/products"}
-    local d=`date +%y-%m-%dT%H.%M.%S_%3N`
-    local epm=${4:-"N"}
+    local SUM_HOME="${2:-"/opt/sag/sum"}"
+    local PRODUCTS_HOME="${3:-"/opt/sag/products"}"
+    local d
+    d=$(date +%y-%m-%dT%H.%M.%S_%3N)
+    local epm="${4:-"N"}"
 
-    echo "installSP=${epm}" >/dev/shm/fixes.wmscript.txt
-    echo "installDir=${PRODUCTS_HOME}" >>/dev/shm/fixes.wmscript.txt
-    echo "selectedFixes=spro:all" >>/dev/shm/fixes.wmscript.txt
-    echo "action=Install fixes from image" >> /dev/shm/fixes.wmscript.txt
-    echo "imageFile=${1}" >> /dev/shm/fixes.wmscript.txt
+    {
+      echo "installSP=${epm}";
+      echo "installDir=${PRODUCTS_HOME}";
+      echo "selectedFixes=spro:all";
+      echo "action=Install fixes from image";
+      echo "imageFile=${1}";
+      if [ "${epm}" = "Y" ]; then
+          local dKey="${5:-"5437713_PIE-68082_5"}"
+          echo "diagnoserKey=${dKey}"
+      fi
+    } > /dev/shm/fixes.wmscript.txt
 
-    if [ "${epm}" == "Y" ]; then
-        local dKey=${5:-"5437713_PIE-68082_5"}
-        echo "diagnoserKey=${dKey}" >> /dev/shm/fixes.wmscript.txt
-    fi
 
     pushd . >/dev/null
-    cd "${SUM_HOME}/bin"
+    cd "${SUM_HOME}/bin" || return 3
 
     logI "Taking a snapshot of existing fixes..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
@@ -274,23 +293,23 @@ patchInstallation(){
     logI "Taking a snapshot of fixes after the patching..."
     controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterPatching"
 
-    popd >/dev/null
+    popd >/dev/null || return 4
 
     if [ ${RESULT_controlledExec} -eq 0 ]; then
         logI "Patch successful"
     else
         logE "[setupFunctions.sh/patchInstallation()] - Patch failed, code ${RESULT_controlledExec}"
-        if [ ${SUIF_DEBUG_ON} ]; then
+        if [ "${SUIF_DEBUG_ON}" ]; then
             logD "Recovering Update Manager logs for further investigations"
-            mkdir -p ${SUIF_AUDIT_SESSION_DIR}/UpdateManager
-            cp -r ${SUM_HOME}/logs ${SUIF_AUDIT_SESSION_DIR}/
-            cp -r ${SUM_HOME}/UpdateManager/logs ${SUIF_AUDIT_SESSION_DIR}/UpdateManager/
-            cp /dev/shm/fixes.wmscript.txt ${SUIF_AUDIT_SESSION_DIR}/
+            mkdir -p "${SUIF_AUDIT_SESSION_DIR}/UpdateManager"
+            cp -r "${SUM_HOME}"/logs "${SUIF_AUDIT_SESSION_DIR}"/
+            cp -r "${SUM_HOME}"/UpdateManager/logs "${SUIF_AUDIT_SESSION_DIR}"/UpdateManager/
+            cp /dev/shm/fixes.wmscript.txt "${SUIF_AUDIT_SESSION_DIR}"/
         fi
         return 2
     fi
 
-    if [ ${SUIF_DEBUG_ON} -ne 0 ]; then
+    if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
         # if we are debugging, we want to see the generated script
         cp /dev/shm/fixes.wmscript.txt "${SUIF_AUDIT_SESSION_DIR}/fixes.${d}.wmscript.txt"
     fi
@@ -311,51 +330,55 @@ setupProductsAndFixes(){
         logE "[setupFunctions.sh/setupProductsAndFixes()] - Installer binary file not found: ${1}"
         return 1
     fi
-    if [ ! -f ${2} ]; then
+    if [ ! -f "${2}" ]; then
         logE "[setupFunctions.sh/setupProductsAndFixes()] - Installer script file not found: ${2}"
         return 2
     fi
 
     if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ];  then 
-        if [ ! -f ${3} ]; then
-                logE "[setupFunctions.sh/setupProductsAndFixes()] - Update Manager bootstrap binary file not found: ${3}"
-                return 3
+        if [ ! -f "${3}" ]; then
+          logE "[setupFunctions.sh/setupProductsAndFixes()] - Update Manager bootstrap binary file not found: ${3}"
+          return 3
         fi
-        if [ ! -f ${4} ]; then
-            logE "[setupFunctions.sh/setupProductsAndFixes()] - Fixes image file not found: ${4}"
-            return 4
+        if [ ! -f "${4}" ]; then
+          logE "[setupFunctions.sh/setupProductsAndFixes()] - Fixes image file not found: ${4}"
+          return 4
         fi
     fi
-    if [ ! $(which envsubst) ]; then
-        logE "[setupFunctions.sh/setupProductsAndFixes()] - Product installation requires envsubst to be installed!"
-        return 5
+    if [ ! "$(which envsubst)" ]; then
+      logE "[setupFunctions.sh/setupProductsAndFixes()] - Product installation requires envsubst to be installed!"
+      return 5
     fi
     # apply environment substitutions
     # Note: this is done twice for reusability reasons
     envsubst < "${2}" > /dev/shm/install.wmscript.tmp
 
-    local lProductImageFile=$(grep imageFile /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+    local lProductImageFile
+    lProductImageFile=$(grep imageFile /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
 
     # note no inline returns from now as we need to clean locally allocated resources
     if [ ! -f "${lProductImageFile}" ]; then
         logE "[setupFunctions.sh/setupProductsAndFixes()] - Product image file not found: ${lProductImageFile}. Does the wmscript have the imageFile=... line?"
         RESULT_setupProductsAndFixes=6
     else
-        local lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
-        if [ -d ${lInstallDir} ]; then 
+        local lInstallDir
+        lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+        if [ -d "${lInstallDir}" ]; then 
             logW "Install folder already present..."
-            if [ $(ls -1A ${lInstallDir} | wc -l) -gt 0 ]; then 
+            # shellcheck disable=SC2012,SC2046
+            if [ $(ls -1A "${lInstallDir}" | wc -l) -gt 0 ]; then 
                 logW "Install folder is not empty!"
             fi
         else
-            mkdir -p ${lInstallDir}
+            mkdir -p "${lInstallDir}"
         fi
-        if [ ! -d ${lInstallDir} ]; then
+        if [ ! -d "${lInstallDir}" ]; then
             logE "[setupFunctions.sh/setupProductsAndFixes()] - Cannot create the installation directory!"
             RESULT_setupProductsAndFixes=7
         else
-            local d=`date +%y-%m-%dT%H.%M.%S_%3N`
-            local installerDebugLevel=${6:-"verbose"}
+            local d
+            d=$(date +%y-%m-%dT%H.%M.%S_%3N)
+            local installerDebugLevel="${6:-verbose}"
 
             # Parameters - installProducts
             # $1 - installer binary file
@@ -373,7 +396,7 @@ setupProductsAndFixes(){
                     # Parameters - bootstrapSum
                     # $1 - Update Manager Boostrap file
                     # $2 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
-                    local lSumHome=${5:-"/opt/sag/sum"}
+                    local lSumHome="${5:-/opt/sag/sum}"
                     bootstrapSum "${3}" "${4}" "${lSumHome}"
                     local RESULT_bootstrapSum=$?
                     if [ ${RESULT_bootstrapSum} -ne 0 ]; then
@@ -400,7 +423,7 @@ setupProductsAndFixes(){
             fi
         fi
     fi
-    return ${RESULT_setupProductsAndFixes}
+    return "${RESULT_setupProductsAndFixes}"
 }
 
 # Parameters - applySetupTemplate
@@ -414,6 +437,7 @@ applySetupTemplate(){
     huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
     huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || return 4
     logI "Sourcing variable values for template ${1} ..."
+    #shellcheck source=/dev/null
     . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
     logI "Checking installation prerequisites for template ${1} ..."
     chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" > /dev/null
@@ -484,7 +508,7 @@ assureDefaultSumBoostrap(){
     local sumBoostrapSha256Sum="d29f20ebeb77a9fbe58815fc621a80c970bdd98bbe95563748ef694acf652b4b"
     SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
     local lSumBootstrap="${1:-SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
-    if ! assureDownloadableFile ${lSumBootstrap} "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
+    if ! assureDownloadableFile "${lSumBootstrap}" "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}" ; then
         logE "[setupFunctions.sh/assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
         return 1
     fi
@@ -500,7 +524,10 @@ assureDefaultSumBoostrap(){
 # $6 -> OPTIONAL - sum-bootstrap binary location, default /tmp/sum-bootstrap.bin
 # NOTE: pass SDC credentials in env variables SUIF_EMPOWER_USER and SUIF_EMPOWER_PASSWORD
 generateFixesImageFromTemplate(){
-    local lCrtDate=$(date +%y-%m-%d)
+    local lCrtDate
+    lCrtDate="$(date +%y-%m-%d)"
+    local d
+    d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
     local lFixesTag="${3:-$lCrtDate}"
     logI "Addressing fixes image for setup template ${1} and tag ${lFixesTag}..."
 
@@ -520,7 +547,7 @@ generateFixesImageFromTemplate(){
     local lSumHome="${5:-/tmp/sumv11}"
     if [ ! -d "${lSumHome}/bin" ]; then
         logW "[setupFunctions.sh/generateFixesImageFromTemplate()] - SUM Home does not contain a SUM installation, trying to bootstrap now..."
-        local lSumBootstrapBin=${6:-/tmp/sum-bootstrap.bin}
+        local lSumBootstrapBin="${6:-/tmp/sum-bootstrap.bin}"
         if [ ! -f "${lSumBootstrapBin}" ]; then
             logW "[setupFunctions.sh/generateFixesImageFromTemplate()] - SUM Bootstrap binary not found, trying to obtain the default one..."
             assureDefaultSumBoostrap "${lSumBootstrapBin}" || return $?
@@ -560,15 +587,17 @@ generateFixesImageFromTemplate(){
         logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Permanent script file ${lPermanentScriptFile} already exists, skipping creation..."
     else
         logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Permanent script file ${lPermanentScriptFile} does not exist, creating now..."
-        echo "# Generated" > "${lPermanentScriptFile}"
-        echo "scriptConfirm=N" >> "${lPermanentScriptFile}"
-        # use before reuse -> diagnosers not covered for now
-        echo "installSP=N " >> "${lPermanentScriptFile}"
-        echo "action=Create or add fixes to fix image" >> "${lPermanentScriptFile}"
-        echo "selectedFixes=spro:all" >> "${lPermanentScriptFile}"
-        echo "installDir=${lPermanentInventoryFile}" >> "${lPermanentScriptFile}"
-        echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
-        echo "createEmpowerImage=C " >> "${lPermanentScriptFile}"
+        {
+          echo "# Generated";
+          echo "scriptConfirm=N";
+          # use before reuse -> diagnosers not covered for now
+          echo "installSP=N ";
+          echo "action=Create or add fixes to fix image";
+          echo "selectedFixes=spro:all";
+          echo "installDir=${lPermanentInventoryFile}";
+          echo "imagePlatform=${lPlatformString}";
+          echo "createEmpowerImage=C ";
+        } > "${lPermanentScriptFile}"
     fi
 
     local lCmd="./UpdateManagerCMD.sh -selfUpdate false -readScript "'"'"${lPermanentScriptFile}"'"'
@@ -580,25 +609,27 @@ generateFixesImageFromTemplate(){
     lCmd="${lCmd} -empowerPass '${SUIF_EMPOWER_PASSWORD}'"
 
     pushd . >/dev/null
-    cd "${lSumHome}/bin"
+
+    cd "${lSumHome}/bin" || return 3
     controlledExec "${lCmd}" "Create-fixes-image-for-template-${1//\//-}-tag-${lFixesTag}"
     local lResultFixCreation=$?
 
     if [ ${lResultFixCreation} -ne 0 ]; then
         logW "Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
         logI "Archiving destination folder results, which are partial at best..."
-        cd "${lFixesDir}"
-        tar czf "dump_$(date +%y-%m-%dT%H.%M.%S_%3N).tgz" ./* --remove-files
-        cd "${lSumHome}"
+        mkdir -p "${lFixesDir}/$d"
+        cd "${lFixesDir}/$d" || return 1
+        tar czf "dump.tgz" ./* --remove-files
+        cd "${lSumHome}" || return 1
         logD "Listing all log files produced by Update Manager"
-        find . -type f -name *.log
-        find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/sum_logs.tgz"
+        find . -type f -name "*.log"
+        find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/$d/sum_logs.tgz"
         logI "Dump complete"
-        popd >/dev/null
+        popd >/dev/null || return 4
         return 3
     fi
 
-    popd >/dev/null
+    popd >/dev/null || return 5
     logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} finished successfully"
 }
 
@@ -612,11 +643,11 @@ generateFixesImageFromTemplate(){
 # NOTE: /dev/shm/productsImagesList.txt may be created upfront if image caches are available
 generateProductsImageFromTemplate(){
 
-    local lDebugOn=${SUIF_DEBUG_ON:-0}
+    local lDebugOn="${SUIF_DEBUG_ON:-0}"
 
     logI "Addressing products image for setup template ${1}..."
     local lInstallerBin="${2:-/tmp/installer.bin}"
-    if [ ! -f ${lInstallerBin} ]; then
+    if [ ! -f "${lInstallerBin}" ]; then
         logE "[setupFunctions.sh/generateProductsImageFromTemplate()] - Installer file ${lInstallerBin} not found, attempting to use the default one..."
         assureDefaultInstaller "${lInstallerBin}" || return 1
     fi
@@ -635,24 +666,20 @@ generateProductsImageFromTemplate(){
         logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file already present... Using the existing one."
     else
         logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file not present, creating now..."
-        local lPlatformString=${4:-LNXAMD64}
-        local lSdcServerUrl=${SUIF_SDC_SERVER_URL:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi"}
+        local lPlatformString="${4:-LNXAMD64}"
 
-        # current default
-        if [[ ${1} == *"/1011/"* ]]; then
-            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"}
-        else
-            if [[ ${1} == *"/1005/"* ]]; then
-                lSdcServerUrl=${SUIF_SDC_SERVER_URL_1005:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"}
-            else
-                if [[ ${1} == *"/1007/"* ]]; then
-                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1007:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"}
-                else
-                    logW "[setupFunctions.sh/generateProductsImageFromTemplate()] - Unsupported version in template ${1}. Continuing using the 10.15 SDC URL..."
-                    lSdcServerUrl=${SUIF_SDC_SERVER_URL_1015:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi"}
-                fi
-            fi
-        fi
+        #Address download server URL
+        local lSdcServerUrl
+        case "${1}" in
+          *"/1005/"*)
+            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM105.cgi"};;
+          *"/1007/"*)
+            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM107.cgi"};;
+          *"/1011/"*)
+            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1011.cgi"};;
+          *)
+            lSdcServerUrl=${SUIF_SDC_SERVER_URL_1011:-"https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi"}
+        esac
 
         huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
 
@@ -662,14 +689,16 @@ generateProductsImageFromTemplate(){
         fi
 
         mkdir -p "${lProductImageOutputDir}/${1}"
-        echo "###Generated" > "${lPermanentScriptFile}"
-        echo "LicenseAgree=Accept" >> "${lPermanentScriptFile}"
-        echo "InstallLocProducts=" >> "${lPermanentScriptFile}"
-        cat "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" | \
-            grep "InstallProducts" >> "${lPermanentScriptFile}"
-        echo "imagePlatform=${lPlatformString}" >> "${lPermanentScriptFile}"
-        echo "imageFile=${lProductsImageFile}" >> "${lPermanentScriptFile}"
-        echo "ServerURL=${lSdcServerUrl}" >> "${lPermanentScriptFile}"
+        {
+          echo "###Generated";
+          echo "LicenseAgree=Accept";
+          echo "InstallLocProducts=";
+          # shellcheck disable=SC2002
+          cat "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" | grep "InstallProducts";
+          echo "imagePlatform=${lPlatformString}";
+          echo "imageFile=${lProductsImageFile}";
+          echo "ServerURL=${lSdcServerUrl}";
+        } > "${lPermanentScriptFile}"
 
         logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Permanent product image creation script file created"
     fi
