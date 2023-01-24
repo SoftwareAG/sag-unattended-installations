@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# WARNING: This is not a strict POSIX script. The following exceptions apply
+# - local variables for functions
+# - pushd / popd
+# - string replacement like ${1//\//-}
+
+# shellcheck disable=SC3043
+# shellcheck disable=SC3044
+# shellcheck disable=SC3060
+
 # This file is a collection of functions used by all the other scripts
 
 # Almost everywhere /bin/sh is actually a symlink. This instruction gives us the actual shell
@@ -109,7 +118,8 @@ logFullEnv(){
 controlledExec(){
     # Param $1 - command to execute in a controlled manner
     # Param $2 - tag for trace files
-    local lCrtEpoch="$(date +%s)"
+    local lCrtEpoch
+    lCrtEpoch="$(date +%s)"
     eval "${1}" >"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.out" 2>"${SUIF_AUDIT_SESSION_DIR}/controlledExec_${lCrtEpoch}_${2}.err"
     return $?
 }
@@ -117,33 +127,44 @@ controlledExec(){
 portIsReachable(){
     # Params: $1 -> host $2 -> port
     if [ -f /usr/bin/nc ]; then 
-        nc -z ${1} ${2}                                         # alpine image
+        nc -z "${1}" "${2}"                                         # alpine image
     else
-        temp=`(echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1`      # centos image
+        # shellcheck disable=SC2006,SC2086,SC3025,SC2034
+        temp=`(echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1`          # centos image
     fi
+    # shellcheck disable=SC2181
     if [ $? -eq 0 ] ; then echo 1; else echo 0; fi
 }
 
 portIsReachable2(){
     # Params: $1 -> host $2 -> port
     if [ -f /usr/bin/nc ]; then 
-        nc -z "${1}" "${2}"                                                 # alpine image
+        # shellcheck disable=SC2086
+        nc -z ${1} ${2}                                               # e.g. alpine image
     else
-        (echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1                         # centos image
+        # shellcheck disable=SC3025,SC2086
+        (echo > /dev/tcp/${1}/${2}) >/dev/null 2>&1                   # e.g. centos image
     fi
-    return $? 
+    return $?
 }
 
 # urlencode / decode taken from https://gist.github.com/cdown/1163649
+# POSIX exceptions only for this function:
+# https://www.shellcheck.net/wiki/SC3005
+# https://www.shellcheck.net/wiki/SC3018
+# https://www.shellcheck.net/wiki/SC3057
+
 urlencode() {
     # urlencode <string>
     # usage A_ENC=$(urlencode ${A})
 
-    local old_lc_collate=$LC_COLLATE
+    local old_lc_collate="$LC_COLLATE"
     LC_COLLATE=C
 
     local length="${#1}"
+    # shellcheck disable=SC3005,SC3018
     for (( i = 0; i < length; i++ )); do
+        # shellcheck disable=SC3057
         local c="${1:$i:1}"
         case $c in
             [a-zA-Z0-9.~_-]) printf '%s' "$c" ;;
@@ -167,7 +188,7 @@ urldecode() {
 # $2 - filename
 huntForSuifFile(){
     if [ ! -f "${SUIF_CACHE_HOME}/${1}/${2}" ]; then
-        if [ ${SUIF_ONLINE_MODE} -eq 0 ]; then
+        if [ "${SUIF_ONLINE_MODE}" -eq 0 ]; then
             logE "File ${SUIF_CACHE_HOME}/${1}/${2} not found!"
             return 1 # File should exist, but it does not
         fi
@@ -227,16 +248,20 @@ debugSuspend(){
     fi
 }
 
+# POSIX exception for this function only:
+# https://www.shellcheck.net/wiki/SC3045
 readSecretFromUser(){
     # params
     # $1 - message -> what to input
     secret="0"
-    while [ "${secret}" == "0" ]; do
-        read -sp "Please input ${1}: " s1
+    while [ "${secret}" = "0" ]; do
+        # shellcheck disable=SC3045
+        read -rsp "Please input ${1}: " s1
         echo ""
-        read -sp "Please input ${1} again: " s2
+        # shellcheck disable=SC3045
+        read -rsp "Please input ${1} again: " s2
         echo ""
-        if [ "${s1}" == "${s2}" ]; then
+        if [ "${s1}" = "${s2}" ]; then
             secret=${s1}
         else
             echo "Input do not match, retry"
