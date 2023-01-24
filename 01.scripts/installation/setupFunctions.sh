@@ -617,9 +617,10 @@ generateFixesImageFromTemplate(){
     if [ ${lResultFixCreation} -ne 0 ]; then
         logW "Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
         logI "Archiving destination folder results, which are partial at best..."
-        mkdir -p "${lFixesDir}/$d"
-        cd "${lFixesDir}/$d" || return 1
+        cd "${lFixesDir}" || return 1
         tar czf "dump.tgz" ./* --remove-files
+        mkdir -p "${lFixesDir}/$d"
+        mv "dump.tgz" "${lFixesDir}/$d"/
         cd "${lSumHome}" || return 1
         logD "Listing all log files produced by Update Manager"
         find . -type f -name "*.log"
