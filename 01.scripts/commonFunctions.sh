@@ -269,6 +269,10 @@ strSubstPOSIX()
   printf '%s' "$1" | tr $2 $3
 }
 
+commonFunctionsSourced(){
+  return 0
+}
+
 logI "SLS common framework functions initialized. Current shell is ${SUIF_CURRENT_SHELL}"
 
 if [ ! "${SUIF_CURRENT_SHELL}" = "/usr/bin/bash" ]; then

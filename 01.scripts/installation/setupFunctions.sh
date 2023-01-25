@@ -623,6 +623,12 @@ generateFixesImageFromTemplate() {
     cd "${lSumHome}" || return 1
     logD "Listing all log files produced by Update Manager"
     find . -type f -name "*.log"
+
+    # ensure the password is not in the logs before sending them to archiving
+    cmd="grep -rl '${SUIF_EMPOWER_PASSWORD}' . | xargs sed -i 's/${SUIF_EMPOWER_PASSWORD}/HIDDEN_PASSWORD/g'"
+    eval "${cmd}"
+    unset cmd
+
     find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/$d/sum_logs.tgz"
     logI "Dump complete"
     cd "${crtDir}" || return 4
@@ -820,6 +826,10 @@ checkEmpowerCredentials(){
   fi
 
   logI "[setupFunctions.sh/checkEmpowerCredentials()] - Provided Empower credentials are valid"
+}
+
+setupFunctionsSourced(){
+  return 0
 }
 
 logI "Setup Functions sourced"
