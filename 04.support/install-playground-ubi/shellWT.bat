@@ -1,0 +1,1 @@
+wt -w 0 -d . powershell -noExit "docker exec -ti install-playground-ubi-1-1 bash"
