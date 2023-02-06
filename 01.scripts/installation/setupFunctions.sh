@@ -361,10 +361,10 @@ setupProductsAndFixes() {
     local lInstallDir
     lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
     if [ -d "${lInstallDir}" ]; then
-      logW "Install folder already present..."
+      logW "[setupFunctions.sh/setupProductsAndFixes()] - Install folder already present..."
       # shellcheck disable=SC2012,SC2046
       if [ $(ls -1A "${lInstallDir}" | wc -l) -gt 0 ]; then
-        logW "Install folder is not empty!"
+        logW "[setupFunctions.sh/setupProductsAndFixes()] - Install folder is not empty!"
       fi
     else
       mkdir -p "${lInstallDir}"
@@ -410,12 +410,12 @@ setupProductsAndFixes() {
               logE "[setupFunctions.sh/setupProductsAndFixes()] - Patch Installation failed, code ${RESULT_patchInstallation}!"
               RESULT_setupProductsAndFixes=10
             else
-              logI "Product and Fixes setup completed successfully"
+              logI "[setupFunctions.sh/setupProductsAndFixes()] - Product and Fixes setup completed successfully"
               RESULT_setupProductsAndFixes=0
             fi
           fi
         else
-          logI "Skipping patch installation, fixes not available."
+          logI "[setupFunctions.sh/setupProductsAndFixes()] - Skipping patch installation, fixes not available."
         fi
       fi
     fi
@@ -429,20 +429,27 @@ setupProductsAndFixes() {
 # Environment must also have valid values for the vars required by the referred template
 applySetupTemplate() {
   # TODO: render checkPrerequisites.sh optional
-  logI "Applying Setup Template ${1}"
+  logI "[setupFunctions.sh/applySetupTemplate()] - Applying Setup Template ${1}"
   huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript" || return 1
+
+  # environment defaults for setup
+  logI "[setupFunctions.sh/applySetupTemplate()] - Sourcing variable values for template ${1} ..."
   huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
-  huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || return 4
-  logI "Sourcing variable values for template ${1} ..."
+  chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" >/dev/null
   #shellcheck source=/dev/null
   . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
-  logI "Checking installation prerequisites for template ${1} ..."
-  chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" >/dev/null
+
+  ### Eventually check prerequisites
+  huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || logI 
   if [ -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" ]; then
+    logI "[setupFunctions.sh/applySetupTemplate()] - Checking installation prerequisites for template ${1} ..."
+    chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" >/dev/null
     "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/checkPrerequisites.sh" || return 5
+  else
+    logI "[setupFunctions.sh/applySetupTemplate()] - Check prerequisites script not present, skipping check..."
   fi
-  chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" >/dev/null
-  logI "Setting up products and fixes for template ${1} ..."
+
+  logI "[setupFunctions.sh/applySetupTemplate()] - Setting up products and fixes for template ${1} ..."
   setupProductsAndFixes \
     "${SUIF_INSTALL_INSTALLER_BIN}" \
     "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" \
@@ -564,14 +571,14 @@ generateFixesImageFromTemplate() {
     huntForSuifFile "01.scripts/pwsh" "generateInventoryFileFromInstallScript.ps1"
 
     if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1" ]; then
-      logE "Required file ${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1 not found, cannot continue"
+      logE "[setupFunctions.sh/generateFixesImageFromTemplate()] - Required file ${SUIF_CACHE_HOME}/01.scripts/pwsh/generateInventoryFileFromInstallScript.ps1 not found, cannot continue"
       return 1
     fi
 
     huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
 
     if [ ! -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
-      logE "Required file ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript not found, cannot continue"
+      logE "[setupFunctions.sh/generateFixesImageFromTemplate()] - Required file ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript not found, cannot continue"
       return 2
     fi
 
@@ -614,14 +621,14 @@ generateFixesImageFromTemplate() {
   local lResultFixCreation=$?
 
   if [ ${lResultFixCreation} -ne 0 ]; then
-    logW "Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
-    logI "Archiving destination folder results, which are partial at best..."
+    logW "[setupFunctions.sh/generateFixesImageFromTemplate()] - Fix image creation for template ${1} failed with code ${lResultFixCreation}! Saving troubleshooting information into the destination folder"
+    logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Archiving destination folder results, which are partial at best..."
     cd "${lFixesDir}" || return 1
     tar czf "dump.tgz" ./* --remove-files
     mkdir -p "${lFixesDir}/$d"
     mv "dump.tgz" "${lFixesDir}/$d"/
     cd "${lSumHome}" || return 1
-    logD "Listing all log files produced by Update Manager"
+    logD "[setupFunctions.sh/generateFixesImageFromTemplate()] - Listing all log files produced by Update Manager"
     find . -type f -name "*.log"
 
     # ensure the password is not in the logs before sending them to archiving
@@ -630,7 +637,7 @@ generateFixesImageFromTemplate() {
     unset cmd
 
     find . -type f -regex '\(.*\.log\|.*\.log\.[0-9]*\)' -print0 | xargs -0 tar cfvz "${lFixesDir}/$d/sum_logs.tgz"
-    logI "Dump complete"
+    logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Dump complete"
     cd "${crtDir}" || return 4
     return 3
   fi
@@ -651,7 +658,7 @@ generateProductsImageFromTemplate() {
 
   local lDebugOn="${SUIF_DEBUG_ON:-0}"
 
-  logI "Addressing products image for setup template ${1}..."
+  logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Addressing products image for setup template ${1}..."
   local lInstallerBin="${2:-/tmp/installer.bin}"
   if [ ! -f "${lInstallerBin}" ]; then
     logE "[setupFunctions.sh/generateProductsImageFromTemplate()] - Installer file ${lInstallerBin} not found, attempting to use the default one..."
@@ -694,7 +701,7 @@ generateProductsImageFromTemplate() {
     huntForSuifFile "02.templates/01.setup/${1}" "template.wmscript"
 
     if [ ! -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" ]; then
-      logE "Template script ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript cannot be recovered, cannot continue"
+      logE "[setupFunctions.sh/generateProductsImageFromTemplate()] - Template script ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript cannot be recovered, cannot continue"
       return 1
     fi
 
@@ -751,51 +758,51 @@ generateProductsImageFromTemplate() {
 # No params. This function checks the basic prerequisites for any setup template
 checkSetupTemplateBasicPrerequisites() {
   if [ -z "${SUIF_INSTALL_INSTALLER_BIN+x}" ]; then
-    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
     return 11
   fi
 
   if [ ! -f "${SUIF_INSTALL_INSTALLER_BIN}" ]; then
-    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
     return 12
   fi
 
   if [ -z "${SUIF_INSTALL_IMAGE_FILE+x}" ]; then
-    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
     return 13
   fi
 
   if [ ! -f "${SUIF_INSTALL_IMAGE_FILE}" ]; then
-    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
     return 14
   fi
 
-  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
-  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}"
-  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE}"
+  logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
 
   if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ]; then
     if [ -z "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN+x}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
       return 21
     fi
 
     if [ ! -f "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
       return 22
     fi
 
     if [ -z "${SUIF_PATCH_FIXES_IMAGE_FILE+x}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
       return 23
     fi
 
     if [ ! -f "${SUIF_PATCH_FIXES_IMAGE_FILE}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
       return 24
     fi
-    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
-    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites] - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
+    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
   fi
 }
 
@@ -832,4 +839,4 @@ setupFunctionsSourced(){
   return 0
 }
 
-logI "Setup Functions sourced"
+logI "[setupFunctions.sh] - Setup Functions sourced"
