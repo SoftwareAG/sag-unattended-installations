@@ -114,7 +114,7 @@ bootstrapSum() {
   local SUM_HOME="${3:-"/opt/sag/sum"}"
 
   if [ -d "${SUM_HOME}/UpdateManager" ]; then
-    logI "Update manager already present, skipping bootstrap, attempting to update from given image..."
+    logI "[setupFunctions.sh/bootstrapSum()] - Update manager already present, skipping bootstrap, attempting to update from given image..."
     patchSum "${2}" "${SUM_HOME}"
     return 0
   fi
@@ -126,15 +126,15 @@ bootstrapSum() {
   if [ "${SUIF_SDC_ONLINE_MODE}" -eq 0 ]; then
     bootstrapCmd="${bootstrapCmd=} -i ${2}"
     # note: everything is always offline except this, as it is not requiring empower credentials
-    logI "Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
+    logI "[setupFunctions.sh/bootstrapSum()] - Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
   else
-    logI "Bootstrapping SUM from ${1} into ${SUM_HOME} using ONLINE mode"
+    logI "[setupFunctions.sh/bootstrapSum()] - Bootstrapping SUM from ${1} into ${SUM_HOME} using ONLINE mode"
   fi
   controlledExec "${bootstrapCmd}" "${d}.sum-bootstrap"
   RESULT_controlledExec=$?
 
   if [ ${RESULT_controlledExec} -eq 0 ]; then
-    logI "SUM Bootstrap successful"
+    logI "[setupFunctions.sh/bootstrapSum()] - SUM Bootstrap successful"
   else
     logE "[setupFunctions.sh/bootstrapSum()] - SUM Boostrap failed, code ${RESULT_controlledExec}"
     return 3
@@ -146,7 +146,7 @@ bootstrapSum() {
 # $2 - OTPIONAL SUM Home, default /opt/sag/sum
 patchSum() {
   if [ "${SUIF_SDC_ONLINE_MODE}" -ne 0 ]; then
-    logI "patchSum() ignored in online mode"
+    logI "[setupFunctions.sh/patchSum()] - patchSum() ignored in online mode"
     return 0
   fi
 
@@ -158,11 +158,11 @@ patchSum() {
   d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
 
   if [ ! -d "${SUM_HOME}/UpdateManager" ]; then
-    logI "Update manager missing, nothing to patch..."
+    logI "[setupFunctions.sh/patchSum()] - Update manager missing, nothing to patch..."
     return 0
   fi
 
-  logI "Updating SUM from image ${1} ..."
+  logI "[setupFunctions.sh/patchSum()] - Updating SUM from image ${1} ..."
   local crtDir
   crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 2
@@ -208,20 +208,20 @@ removeDiagnoserPatch() {
   crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 4
 
-  logI "Taking a snapshot of existing fixes..."
+  logI "[setupFunctions.sh/removeDiagnoserPatch()] - Taking a snapshot of existing fixes..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforeSPRemoval"
 
-  logI "Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
+  logI "[setupFunctions.sh/removeDiagnoserPatch()] - Removing support patch ${1} from installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
   controlledExec "./UpdateManagerCMD.sh -readScript \"${tmpScriptFile}\"" "${d}.SPFixRemoval"
   RESULT_controlledExec=$?
 
-  logI "Taking a snapshot of fixes after the execution of SP removal..."
+  logI "[setupFunctions.sh/removeDiagnoserPatch()] - Taking a snapshot of fixes after the execution of SP removal..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterSPRemoval"
 
   cd "${crtDir}" || return 5
 
   if [ ${RESULT_controlledExec} -eq 0 ]; then
-    logI "Support patch removal was successful"
+    logI "[setupFunctions.sh/removeDiagnoserPatch()] - Support patch removal was successful"
   else
     logE "[setupFunctions.sh/removeDiagnoserPatch()] - Support patch removal failed, code ${RESULT_controlledExec}"
     if [ "${SUIF_DEBUG_ON}" ]; then
@@ -276,28 +276,28 @@ patchInstallation() {
   crtDir=$(pwd)
   cd "${SUM_HOME}/bin" || return 3
 
-  logI "Taking a snapshot of existing fixes..."
+  logI "[setupFunctions.sh/patchInstallation()] - Taking a snapshot of existing fixes..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesBeforePatching"
 
-  logI "Explictly patch SUM itself, if required..."
+  logI "[setupFunctions.sh/patchInstallation()] - Explictly patch SUM itself, if required..."
   patchSum "${1}" "${SUM_HOME}"
 
-  logI "Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
+  logI "[setupFunctions.sh/patchInstallation()] - Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
 
   controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
   RESULT_controlledExec=$?
 
-  logI "Taking a snapshot of fixes after the patching..."
+  logI "[setupFunctions.sh/patchInstallation()] - Taking a snapshot of fixes after the patching..."
   controlledExec './UpdateManagerCMD.sh -action viewInstalledFixes -installDir "'"${PRODUCTS_HOME}"'"' "${d}.FixesAfterPatching"
 
   cd "${crtDir}" || return 4
 
   if [ ${RESULT_controlledExec} -eq 0 ]; then
-    logI "Patch successful"
+    logI "[setupFunctions.sh/patchInstallation()] - Patch successful"
   else
     logE "[setupFunctions.sh/patchInstallation()] - Patch failed, code ${RESULT_controlledExec}"
     if [ "${SUIF_DEBUG_ON}" ]; then
-      logD "Recovering Update Manager logs for further investigations"
+      logD "[setupFunctions.sh/patchInstallation()] - Recovering Update Manager logs for further investigations"
       mkdir -p "${SUIF_AUDIT_SESSION_DIR}/UpdateManager"
       cp -r "${SUM_HOME}"/logs "${SUIF_AUDIT_SESSION_DIR}"/
       cp -r "${SUM_HOME}"/UpdateManager/logs "${SUIF_AUDIT_SESSION_DIR}"/UpdateManager/
@@ -472,7 +472,7 @@ applySetupTemplate() {
 # $5 - Optional (future TODO - BA pass for the URL)
 assureDownloadableFile() {
   if [ ! -f "${1}" ]; then
-    logI "File ${1} does not exist, attempting download from ${2}"
+    logI "[setupFunctions.sh/assureDownloadableFile()] - File ${1} does not exist, attempting download from ${2}"
     if ! which curl > /dev/null; then
       logE "[setupFunctions.sh/assureDownloadableFile()] - Cannot find curl"
       return 1
@@ -533,7 +533,7 @@ generateFixesImageFromTemplate() {
   local d
   d="$(date +%y-%m-%dT%H.%M.%S_%3N)"
   local lFixesTag="${3:-$lCrtDate}"
-  logI "Addressing fixes image for setup template ${1} and tag ${lFixesTag}..."
+  logI "[setupFunctions.sh/generateFixesImageFromTemplate()] - Addressing fixes image for setup template ${1} and tag ${lFixesTag}..."
 
   local lOutputDir="${2:-/tmp/images/fixes}"
   local lFixesDir="${lOutputDir}/${1}/${lFixesTag}"
@@ -726,7 +726,7 @@ generateProductsImageFromTemplate() {
   cp "${lPermanentScriptFile}" "${lVolatileScriptFile}"
   echo "Username=${SUIF_EMPOWER_USER}" >>"${lVolatileScriptFile}"
   echo "Password=${SUIF_EMPOWER_PASSWORD}" >>"${lVolatileScriptFile}"
-  logI "Volatile script created."
+  logI "[setupFunctions.sh/generateProductsImageFromTemplate()] - Volatile script created."
 
   ## TODO: check if error management enforcement is needed: what if the grep produced nothing?
   ## TODO: dela with \ escaping in the password. For now avoid using '\' - backslash in the password string
@@ -808,7 +808,7 @@ checkSetupTemplateBasicPrerequisites() {
 
 checkEmpowerCredentials(){
   # Check if credentials are valid
-  logI "Checking if provided Empower credentials are valid..."
+  logI "[setupFunctions.sh/checkEmpowerCredentials()] - Checking if provided Empower credentials are valid..."
 
   if ! which curl > /dev/null; then
     logE "[setupFunctions.sh/checkEmpowerCredentials()] - Cannot find curl"
@@ -840,3 +840,4 @@ setupFunctionsSourced(){
 }
 
 logI "[setupFunctions.sh] - Setup Functions sourced"
+  
