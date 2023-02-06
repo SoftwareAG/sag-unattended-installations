@@ -272,7 +272,7 @@ commonFunctionsSourced(){
   return 0
 }
 
-logI "SLS common framework functions initialized. Current shell is ${SUIF_CURRENT_SHELL}"
+logI "[commonFunctions.sh] - SLS common framework functions initialized. Current shell is ${SUIF_CURRENT_SHELL}"
 
 if [ ! "${SUIF_CURRENT_SHELL}" = "/usr/bin/bash" ]; then
   logW "[commonFunctions.sh] - This framework has not been tested with this shell. Scripts are not guaranteed to work as expected"
