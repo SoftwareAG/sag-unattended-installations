@@ -2,3 +2,4 @@
 local/
 *.local.bat
 setEnv.bat
+.vscode

@@ -36,7 +36,7 @@ Utilities supporting the considered use cases, e.g. a kernel properties setter f
 
 ## Important notes
 
-All files must have unix style endlines even when using docker desktop for Windows. Clone accordingly!
+All files must have unix style end lines even when using docker desktop for Windows. Clone accordingly!
 
 ------------------------------
 
