@@ -1,0 +1,109 @@
+version: '3.8'
+
+volumes:
+  db-data: {}
+  wm-dbc-audit: {}
+  wm-dbc-home: {}
+  wm-sum-home: {}
+  work-dir: {}
+
+networks:
+    n1:
+      external: false
+
+services:
+
+  db:
+    image: ${SUIF_TEST_ORACLE_IMAGE}
+    container_name: db
+    restart: always
+    environment:
+      - ORACLE_PWD=${SUIF_DBSERVER_SA_PASSWORD}
+      - ORACLE_CHARACTERSET=AL32UTF8
+    networks:
+      n1:
+        aliases:
+          - ${SUIF_DBSERVER_HOSTNAME}
+    # comment out ports, supposed to be used internally only
+    ports:
+      - "${SUIF_TEST_PORT_PREFIX}21:1521"
+      - "${SUIF_TEST_PORT_PREFIX}25:5500"
+    volumes: 
+      - db-data:/opt/oracle/oradata
+
+  # TODO: find out how adminer can connect to oracle xe
+  # adminer:
+  #   image: adminer
+  #   container_name: ora1-adminer
+  #   hostname: adminer
+  #   networks:
+  #     - n1
+  #   ports:
+  #     - "${SUIF_TEST_PORT_PREFIX}80:8080"
+  #   depends_on:
+  #     - db
+
+  dbc:
+    build:
+      context: ..\..\..\..\Framework\GenericUbiMinimalSandbox\build
+      args:
+        - __suif_audit_base_dir=${SUIF_AUDIT_BASE_DIR}
+        - __suif_home=${SUIF_HOME}
+        - __suif_install_image_file=${SUIF_INSTALL_IMAGE_FILE}
+        - __suif_install_install_dir=${SUIF_INSTALL_INSTALL_DIR}
+        - __suif_install_installer_bin=${SUIF_TEST_INSTALLER_BIN_MOUNT_POINT}
+        - __suif_local_scripts_home=${SUIF_LOCAL_SCRIPTS_HOME}
+        - __suif_patch_fixes_image_file=${SUIF_PATCH_FIXES_IMAGE_FILE}
+        - __suif_patch_sum_bootstrap_bin=${SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+        - __suif_sag_user_grp_id=1804
+        - __suif_sag_user_name=sag
+        - __suif_sum_home=${SUIF_SUM_HOME}
+        - __suif_work_dir=${SUIF_TEST_WORK_DIR}
+    hostname: ${SUIF_INSTALL_DECLARED_HOSTNAME}
+    volumes:
+      - wm-dbc-audit:${SUIF_AUDIT_BASE_DIR}/
+      - wm-dbc-home:${SUIF_INSTALL_INSTALL_DIR}/
+      - wm-sum-home:${SUIF_SUM_HOME}/
+      - work-dir:${SUIF_TEST_WORK_DIR}/
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      - ../../../../../:${SUIF_HOME}/
+      #- ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
+      #- ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_TEST_INSTALLER_BIN_MOUNT_POINT}
+      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+      - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+    environment:
+      # build ARGS are already in the image by the means of the Dockerfile ENV command
+      # following variables are required by the templates AT/1011/DBC4AT and AT/1011/server/minimal-on-posgresql
+      # Common template application variables
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_INSTALL_DECLARED_HOSTNAME
+      # DBC4AT files
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      # our test harness context
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_ONLINE_MODE
+      - SUIF_SDC_ONLINE_MODE
+      - SUIF_DEBUG_ON
+      # for database configurator
+      - SUIF_DBSERVER_HOSTNAME
+      - SUIF_DBSERVER_SERVICE_NAME
+      - SUIF_DBSERVER_SA_PASSWORD
+      - SUIF_DBSERVER_USER_NAME
+      - SUIF_DBSERVER_PASSWORD
+      - SUIF_DBSERVER_PORT
+      - SUIF_DBC_COMPONENT_NAME
+      - SUIF_DBC_COMPONENT_VERSION
+      - SUIF_TEST_INSTALLER_BIN_MOUNT_POINT
+      - SUIF_TEST_PORT_PREFIX
+      - SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT
+      - SUIF_TEST_WORK_DIR
+      - SUIF_ORACLE_STORAGE_TABLESPACE_DIR
+    networks:
+      - n1
+    depends_on:
+      - db
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh
