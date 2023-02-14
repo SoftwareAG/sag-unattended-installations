@@ -6,7 +6,7 @@ RUN microdnf -y update ;\
     microdnf -y install \
         gettext \
         gzip \
-        java-11-openjdk-headless \
+        java-11-openjdk-devel \
         less \
         nc \
         procps \
