@@ -38,7 +38,7 @@ services:
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
       - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       # Note: folders must match the ones in the Dockerfile
       - SUIF_INSTALL_INSTALL_DIR=/app/sag/1011/UM-TA/

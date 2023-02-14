@@ -33,7 +33,7 @@ services:
       - SUIF_AUDIT_BASE_DIR=/app/audit
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_SUM_HOME=/app/sag/sum
       - SUIF_FIXES_DATE_TAG=${H_SUIF_FIXES_DATE_TAG}
       - SUIF_PLATFORM_STRING=${H_SUIF_PLATFORM_STRING}

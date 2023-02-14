@@ -6,6 +6,7 @@ RUN microdnf -y update ;\
     microdnf -y install \
         gettext \
         gzip \
+        java-11-openjdk-headless \
         less \
         nc \
         procps \
@@ -20,7 +21,7 @@ RUN microdnf -y update ;\
 # mounting binary files has some limits depending on the host os and FS type
 # in some situations chmod +x doesn't work, in other they remain root owned with no possibility of changing
 # For this reason, installer.bin adn sum-bootstrap.bin will be mounted, but not directly in the executable
-# path declared with ${SUIF_INSTALL_INSTALLER_BIN} and ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+# path declared with ${SUIF_INSTALL_INSTALLER_BIN} and ${SUIF_PATCH_SUM_BOOTSTRAP_BIN}
 
 ARG __suif_audit_base_dir=/app/audit
 ARG __suif_home=/mnt/suif
@@ -39,13 +40,13 @@ ENV \
     JAVA_HOME=${__suif_install_install_dir}/jvm/jvm/ \
     JRE_HOME=${__suif_install_install_dir}/jvm/jvm/jre/ \
     SUIF_AUDIT_BASE_DIR=${__suif_audit_base_dir} \
-    SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT==${__suif_install_installer_bin_mount_point} \
+    SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT=${__suif_install_installer_bin_mount_point} \
     SUIF_HOME=${__suif_home} \
     SUIF_INSTALL_INSTALL_DIR=${__suif_install_install_dir} \
     SUIF_INSTALL_IMAGE_FILE=${__suif_install_image_file} \
     SUIF_LOCAL_SCRIPTS_HOME=${__suif_local_scripts_home} \
     SUIF_PATCH_FIXES_IMAGE_FILE=${__suif_patch_fixes_image_file} \
-    SUIF_PATCH_SUM_BOOSTSTRAP_BIN_MOUNT_POINT=${__suif_patch_sum_bootstrap_bin_mount_point} \
+    SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT=${__suif_patch_sum_bootstrap_bin_mount_point} \
     SUIF_SAG_GROUP_NAME=${__suif_sag_user_name}group \
     SUIF_SAG_USER_NAME=${__suif_sag_user_name} \
     SUIF_SUM_HOME=${__suif_sum_home} \

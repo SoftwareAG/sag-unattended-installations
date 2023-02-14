@@ -52,7 +52,7 @@ services:
       - SUIF_LOCAL_SCRIPTS_HOME
       - SUIF_ONLINE_MODE
       - SUIF_DEBUG_ON
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       - SUIF_SUM_HOME=${SUIF_SUM_HOME}
       # database

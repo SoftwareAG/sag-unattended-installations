@@ -28,7 +28,7 @@ services:
       - SUIF_DEBUG_ON=1
       - SUIF_ONLINE_MODE=0
       - SUIF_AUDIT_BASE_DIR=/app/audit
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/mnt/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/mnt/sum-bootstrap.bin
       - SUIF_OLDER_SUM_FIX_IMAGE=/mnt/fixesImage1.zip
       - SUIF_NEWER_SUM_FIX_IMAGE=/mnt/fixesImage2.zip
     network_mode: none

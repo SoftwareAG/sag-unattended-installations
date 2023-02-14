@@ -22,7 +22,7 @@ init() {
   export SUIF_INSTALL_IMAGE_FILE="${SUIF_INSTALL_IMAGE_FILE:-/path/to/install/product.image.zip}"
   export SUIF_PATCH_AVAILABLE="${SUIF_PATCH_AVAILABLE:-0}"
   ## Framework - Patch
-  export SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-boostrap.bin}"
+  export SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-boostrap.bin}"
   export SUIF_PATCH_FIXES_IMAGE_FILE="${SUIF_PATCH_FIXES_IMAGE_FILE:-/path/to/install/fixes.image.zip}"
 
   # Section 2 - the caller MAY provide
@@ -425,7 +425,7 @@ setupProductsAndFixes() {
 
 # Parameters - applySetupTemplate
 # $1 - Setup template directory, relative to <repo_home>/02.templates/01.setup
-# Environment must have valid values for vars SUIF_CACHE_HOME, SUIF_INSTALL_INSTALLER_BIN, SUIF_PATCH_SUM_BOOSTSTRAP_BIN, SUIF_SUM_HOME
+# Environment must have valid values for vars SUIF_CACHE_HOME, SUIF_INSTALL_INSTALLER_BIN, SUIF_PATCH_SUM_BOOTSTRAP_BIN, SUIF_SUM_HOME
 # Environment must also have valid values for the vars required by the referred template
 applySetupTemplate() {
   # TODO: render checkPrerequisites.sh optional
@@ -453,7 +453,7 @@ applySetupTemplate() {
   setupProductsAndFixes \
     "${SUIF_INSTALL_INSTALLER_BIN}" \
     "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript" \
-    "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" \
+    "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" \
     "${SUIF_PATCH_FIXES_IMAGE_FILE}" \
     "${SUIF_SUM_HOME}" \
     "verbose"
@@ -507,12 +507,12 @@ assureDefaultInstaller() {
 }
 
 # Parameters
-# $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
+# $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
 assureDefaultSumBoostrap() {
   local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20221101-11-LinuxX86.bin"
   local sumBoostrapSha256Sum="d29f20ebeb77a9fbe58815fc621a80c970bdd98bbe95563748ef694acf652b4b"
-  SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${SUIF_PATCH_SUM_BOOSTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
-  local lSumBootstrap="${1:-$SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+  SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
+  local lSumBootstrap="${1:-$SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
   if ! assureDownloadableFile "${lSumBootstrap}" "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}"; then
     logE "[setupFunctions.sh:assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
     return 1
@@ -784,13 +784,13 @@ checkSetupTemplateBasicPrerequisites() {
   logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_AVAILABLE=${SUIF_PATCH_AVAILABLE}"
 
   if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ]; then
-    if [ -z "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN+x}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN was not set!"
+    if [ -z "${SUIF_PATCH_SUM_BOOTSTRAP_BIN+x}" ]; then
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_SUM_BOOTSTRAP_BIN was not set!"
       return 21
     fi
 
-    if [ ! -f "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN} does not point to a valid file."
+    if [ ! -f "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" ]; then
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN} does not point to a valid file."
       return 22
     fi
 
@@ -803,7 +803,7 @@ checkSetupTemplateBasicPrerequisites() {
       logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
       return 24
     fi
-    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+    logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
     logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
   fi
 }

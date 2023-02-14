@@ -37,7 +37,7 @@ services:
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
       - SUIF_INSTALL_INSTALL_DIR
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_SUM_HOME=/app/sag/sumv11/
       # even when not using SPM, installer / update manager are spinning it up nonetheless
     entrypoint: /mnt/scripts/containerEntrypoint.sh

@@ -28,7 +28,7 @@ else
     # $1 - Update Manager Boostrap file
     # $2 - Fixes image file, mandatory for offline mode
     # $3 - OTPIONAL Where to install (SUM Home), default /opt/sag/sum
-    bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "" "${SUIF_SUM_HOME}" 
+    bootstrapSum "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" "" "${SUIF_SUM_HOME}" 
 fi
 
 logI "Attempting to update Update Manager itself..."

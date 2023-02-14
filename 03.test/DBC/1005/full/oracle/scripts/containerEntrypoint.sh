@@ -21,11 +21,13 @@ fi
 #shellcheck source=/dev/null
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
 
-rm "${SUIF_INSTALL_INSTALLER_BIN}" 2>/dev/null
-cp "${SUIF_TEST_INSTALLER_BIN_MOUNT_POINT}" "${SUIF_INSTALL_INSTALLER_BIN}"
+logFullEnv
 
-rm "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" 2>/dev/null
-cp "${SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT}" "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
+rm "${SUIF_INSTALL_INSTALLER_BIN}" 2>/dev/null
+cp "${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}" "${SUIF_INSTALL_INSTALLER_BIN}"
+
+rm "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" 2>/dev/null
+cp "${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}" "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
 
 # If the DBC installation is not present, do it now
 if [ ! -f "${SUIF_INSTALL_INSTALL_DIR}/common/db/bin/dbConfigurator.sh" ]; then

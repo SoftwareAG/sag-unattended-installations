@@ -18,7 +18,7 @@ The following environment variables will always have to be provided by the calle
 |SUIF_INSTALL_INSTALLER_BIN|Installer binary|
 |SUIF_INSTALL_IMAGE_FILE|Installer products image file|
 |SUIF_PATCH_AVAILABLE|0 if post-install are not available or not applicable|
-|SUIF_PATCH_SUM_BOOSTSTRAP_BIN|Software AG Update Manager boostrap binary|
+|SUIF_PATCH_SUM_BOOTSTRAP_BIN|Software AG Update Manager bootstrap binary|
 |SUIF_PATCH_FIXES_IMAGE_FILE|Fixes image file|
 
 The following environment variables may to be provided by the caller, otherwise the framework will use default values.
@@ -34,6 +34,6 @@ The following environment variables may to be provided by the caller, otherwise 
 
 The following variables MUST always be set by the template accordingly
 
-|Anvironment Variable|Notes|
+|Environment Variable|Notes|
 |-|-|
 |SUIF_CURRENT_SETUP_TEMPLATE_PATH|the template relative path of the current template (e.g. AT/1005%default)|

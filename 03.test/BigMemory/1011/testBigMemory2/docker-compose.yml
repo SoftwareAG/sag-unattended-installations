@@ -43,7 +43,7 @@ services:
       # These must be provided, they are prerequisites
       - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
       - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
-      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN}
       - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE} 
       - ${H_SUIF_WMSCRIPT_TSALicenseFile}:${SUIF_WMSCRIPT_TSALicenseFile}
     environment:
@@ -55,7 +55,7 @@ services:
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN
       - SUIF_INSTALL_IMAGE_FILE
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN
       - SUIF_PATCH_FIXES_IMAGE_FILE
       # even when not using SPM, installer / update manager are spinning it up nonetheless
       - SUIF_INSTALL_SPM_HTTPS_PORT

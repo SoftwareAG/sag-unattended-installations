@@ -28,7 +28,7 @@ ENV SUIF_SUM_HOME=/tmp/sumv11 \
     SUIF_ONLINE_MODE=0 \
     SUIF_PATCH_AVAILABLE=1 \
     SUIF_PATCH_FIXES_IMAGE_FILE="/tmp/fixes.zip" \
-    SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${__s_bin}" \
+    SUIF_PATCH_SUM_BOOTSTRAP_BIN="${__s_bin}" \
     SUIF_SDC_ONLINE_MODE=0 \
     SUIF_SETUP_TEMPLATE_CSS_LICENSE_FILE="/tmp/msr-license.xml"
 

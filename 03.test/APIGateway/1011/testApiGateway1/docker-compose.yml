@@ -36,7 +36,7 @@ services:
       # setupFunctions prerequisites map, declared here because provided by host
       - SUIF_INSTALL_INSTALLER_BIN=/tmp/installer.bin
       - SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       - SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       # declare install dir and SUM dir because they are mounted here
       # setup template specifics - license provided by host

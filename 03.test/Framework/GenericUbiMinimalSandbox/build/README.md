@@ -25,4 +25,4 @@ The prepared image is a minimal UBI image having some tools installed and the fo
 |`__suif_install_image_file`|`/mnt/products.zip`|`SUIF_INSTALL_IMAGE_FILE`|
 |`__suif_install_installer_bin_mount_point`|`/mnt/installer.bin`|`SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT`
 |`__suif_patch_fixes_image_file`|`/mnt/fixes.zip`|`SUIF_PATCH_FIXES_IMAGE_FILE`
-|`__suif_patch_sum_bootstrap_bin_mount_point`|`/mnt/sum-bootstrap.bin`|`SUIF_PATCH_SUM_BOOSTSTRAP_BIN_MOUNT_POINT`
+|`__suif_patch_sum_bootstrap_bin_mount_point`|`/mnt/sum-bootstrap.bin`|`SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT`

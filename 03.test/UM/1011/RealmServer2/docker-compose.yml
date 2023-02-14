@@ -38,7 +38,7 @@ services:
       # setup assets
       - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
       - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
-      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
+      - ${H_SUIF_PATCH_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN}
       - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
       - ${H_SUIF_WMSCRIPT_NUMLicenseFile}:${SUIF_WMSCRIPT_NUMLicenseFile}
     environment:
@@ -50,7 +50,7 @@ services:
       # setupFunctions
       - SUIF_INSTALL_INSTALLER_BIN
       - SUIF_INSTALL_IMAGE_FILE
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN
       - SUIF_PATCH_FIXES_IMAGE_FILE
       # even when not using SPM, installer / update manager are spinning it up nonetheless
       - SUIF_WMSCRIPT_SPMHttpPort

@@ -9,7 +9,7 @@ fi
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh" || exit 2
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 3
 
-bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "${SUIF_OLDER_SUM_FIX_IMAGE}" "${SUIF_SUM_HOME}"
+bootstrapSum "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" "${SUIF_OLDER_SUM_FIX_IMAGE}" "${SUIF_SUM_HOME}"
 
 patchSum "${SUIF_NEWER_SUM_FIX_IMAGE}" "${SUIF_SUM_HOME}"
  

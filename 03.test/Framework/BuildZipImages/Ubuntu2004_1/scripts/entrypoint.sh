@@ -12,8 +12,8 @@ assureVariables(){
   SUIF_INSTALL_INSTALLER_BIN="${TEST_OUTPUT_FOLDER}/installer.bin"
   export SUIF_INSTALL_INSTALLER_BIN
 
-  SUIF_PATCH_SUM_BOOSTSTRAP_BIN="${TEST_OUTPUT_FOLDER}/sum-bootstrap.bin"
-  export SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+  SUIF_PATCH_SUM_BOOTSTRAP_BIN="${TEST_OUTPUT_FOLDER}/sum-bootstrap.bin"
+  export SUIF_PATCH_SUM_BOOTSTRAP_BIN
 
   SUIF_PRODUCT_IMAGES_SHARED_DIRECTORY="${TEST_OUTPUT_FOLDER}/products"
   export SUIF_PRODUCT_IMAGES_SHARED_DIRECTORY
@@ -47,7 +47,7 @@ assureDefaultSumBoostrap   || logW "Default Update Manager Bootstrap not assured
 
 logI "Installing Update Manager..."
 # mkdir -p "${SUIF_SUM_HOME}"
-if ! bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "" "${SUIF_SUM_HOME}"; then
+if ! bootstrapSum "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" "" "${SUIF_SUM_HOME}"; then
   logE "SUM bootstrap failed with code $?, stopping for debug. CTRL-C for the next instructions"
   tail -f /dev/null
 fi

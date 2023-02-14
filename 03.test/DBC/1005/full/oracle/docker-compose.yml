@@ -51,26 +51,26 @@ services:
         - __suif_home=${SUIF_HOME}
         - __suif_install_image_file=${SUIF_INSTALL_IMAGE_FILE}
         - __suif_install_install_dir=${SUIF_INSTALL_INSTALL_DIR}
-        - __suif_install_installer_bin=${SUIF_TEST_INSTALLER_BIN_MOUNT_POINT}
+        - __suif_install_installer_bin=${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
         - __suif_local_scripts_home=${SUIF_LOCAL_SCRIPTS_HOME}
         - __suif_patch_fixes_image_file=${SUIF_PATCH_FIXES_IMAGE_FILE}
-        - __suif_patch_sum_bootstrap_bin=${SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+        - __suif_patch_sum_bootstrap_bin=${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
         - __suif_sag_user_grp_id=1804
         - __suif_sag_user_name=sag
         - __suif_sum_home=${SUIF_SUM_HOME}
-        - __suif_work_dir=${SUIF_TEST_WORK_DIR}
+        - __suif_work_dir=${SUIF_WORK_DIR}
     hostname: ${SUIF_INSTALL_DECLARED_HOSTNAME}
     volumes:
       - wm-dbc-audit:${SUIF_AUDIT_BASE_DIR}/
       - wm-dbc-home:${SUIF_INSTALL_INSTALL_DIR}/
       - wm-sum-home:${SUIF_SUM_HOME}/
-      - work-dir:${SUIF_TEST_WORK_DIR}/
+      - work-dir:${SUIF_WORK_DIR}/
       - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
       - ../../../../../:${SUIF_HOME}/
       #- ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN}
-      #- ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}
-      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_TEST_INSTALLER_BIN_MOUNT_POINT}
-      - ${H_SUIF_PATCH_SUM_BOOSTSTRAP_BIN}:${SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+      #- ${H_SUIF_PATCH_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN}
+      - ${H_SUIF_INSTALL_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
+      - ${H_SUIF_PATCH_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
       - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
       - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
     environment:
@@ -78,7 +78,7 @@ services:
       # following variables are required by the templates AT/1011/DBC4AT and AT/1011/server/minimal-on-posgresql
       # Common template application variables
       - SUIF_INSTALL_INSTALLER_BIN
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN
       - SUIF_INSTALL_DECLARED_HOSTNAME
       # DBC4AT files
       - SUIF_INSTALL_IMAGE_FILE
@@ -97,10 +97,10 @@ services:
       - SUIF_DBSERVER_PORT
       - SUIF_DBC_COMPONENT_NAME
       - SUIF_DBC_COMPONENT_VERSION
-      - SUIF_TEST_INSTALLER_BIN_MOUNT_POINT
+      - SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT
       - SUIF_TEST_PORT_PREFIX
-      - SUIF_TEST_SUM_BOOTSTRAP_BIN_MOUNT_POINT
-      - SUIF_TEST_WORK_DIR
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT
+      - SUIF_WORK_DIR
       - SUIF_ORACLE_STORAGE_TABLESPACE_DIR
     networks:
       - n1

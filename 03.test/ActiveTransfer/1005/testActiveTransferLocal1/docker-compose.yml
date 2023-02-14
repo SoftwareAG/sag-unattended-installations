@@ -81,7 +81,7 @@ services:
       #- SUIF_INSTALL_IMAGE_FILE=/tmp/products.zip
       - SUIF_DBC4AT_INSTALL_IMAGE_FILE=/tmp/dbc4at.product.image.zip
       - SUIF_AT_INSTALL_IMAGE_FILE=/tmp/at.product.image.zip
-      - SUIF_PATCH_SUM_BOOSTSTRAP_BIN=/tmp/sum-bootstrap.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-bootstrap.bin
       #- SUIF_PATCH_FIXES_IMAGE_FILE=/tmp/fixes.zip
       - SUIF_DBC4AT_PATCH_FIXES_IMAGE_FILE=/tmp/dbc4at.fixes.image.zip
       - SUIF_AT_PATCH_FIXES_IMAGE_FILE=/tmp/at.fixes.image.zip
