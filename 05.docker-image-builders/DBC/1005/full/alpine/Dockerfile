@@ -45,6 +45,8 @@ RUN cd /tmp/install; chmod u+x ./install.sh; ./install.sh
 
 FROM alpine:latest as jre-packager-and-picker
 
+ARG __sag_home=/opt/softwareag
+
 RUN apk --no-cache add openjdk11-jdk openjdk11-jmods
 
 # build minimal JRE
@@ -56,8 +58,8 @@ RUN /usr/lib/jvm/java-11-openjdk/bin/jlink \
     --release-info="add:IMPLEMENTOR=softwareag:IMPLEMENTOR_VERSION=softwareag_JRE_DBC_11" \
     --output "${__sag_home}/jvm/jvm/jre"
 
-COPY --from=installer ${__sag_home}./common/lib ${__sag_home}/common/lib
-COPY --from=installer ${__sag_home}./common/db ${__sag_home}/common/db
+COPY --from=installer ${__sag_home}/common/lib/ ${__sag_home}/common/lib/
+COPY --from=installer ${__sag_home}/common/db/ ${__sag_home}/common/db/
 
 
 FROM ${__from_img}
@@ -70,12 +72,12 @@ ARG __sag_user_name=SAG_USER
 
 ENV \
     JAVA_HOME="${__sag_home}/jvm/jvm/jre" \
-    PATH="$PATH:$${__sag_home}/jvm/jvm/jre/bin" \
+    PATH="$PATH:${__sag_home}/jvm/jvm/jre/bin" \
     SAG_HOME="${__sag_home}"
 
 RUN addgroup -g ${__sag_grp_id} "${__sag_grp_name}" && \
     adduser --shell /sbin/nologin --disabled-password \
-    --no-create-home --uid ${__sag_user_id} --ingroup ${__sag_grp_id}  "${__sag_user_name}"
+    --no-create-home --uid ${__sag_user_id} --ingroup "${__sag_grp_name}"  "${__sag_user_name}"
 
 COPY --chown=${__sag_user_id}:${__sag_grp_id} --from=jre-packager-and-picker ${__sag_home} ${__sag_home}
 

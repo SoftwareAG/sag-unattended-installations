@@ -14,10 +14,10 @@ COPY "%FIXES_ZIP%" build_context\fixes.zip
 
 cd build_context
 
-docker build -t dbc-1005-full-alipne-test-1 .
+docker build -t dbc-1005-full-alpine-test-1 .
 
 cd ..
 
-::del /q build_context\*
+del /q build_context\*
 
-::rd /q build_context
+rd /q build_context
