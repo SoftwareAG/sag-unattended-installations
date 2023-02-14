@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  dbc-builder-1:
+    image: my-alpine-bind-1
+    build: ../../../../../../05.docker-image-builders/Common/buildah-in-docker-rootless-builder
+    security_opt:
+      - "seccomp=../../../../../../05.docker-image-builders/Common/buildah-in-docker-rootless-builder/seccomp.json"
+      # use this only for debugging
+      # - seccomp=unconfined
+    devices:
+      - "/dev/fuse"
+    volumes:
+      - ${H_INSTALLER_BIN}:/tmp/installer.bin
+      - ${H_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_PRODUCTS_ZIP}:/tmp/products.zip
+      - ${H_FIXES_ZIP}:/tmp/fixes.zip
+      - ../../../../../../05.docker-image-builders/DBC/1005/full/alpine/Dockerfile:/tmp/Dockerfile
+      - ../../../../../../05.docker-image-builders/DBC/1005/full/alpine/install.sh:/tmp/install.sh
+      - ./localScripts:/mnt/localScripts
+    entrypoint: /mnt/localScripts/entrypoint.sh

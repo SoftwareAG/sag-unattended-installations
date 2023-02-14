@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-export SUIF_TAG=${SUIF_TAG:-main}
-export SUIF_HOME=${SUIF_HOME:-"/tmp/SUIF_HOME"}
-export SUIF_TEMPLATE=${SUIF_TEMPLATE:-"MSR/1015/BrSapJdbc"}
+export SUIF_TAG="${SUIF_TAG:-main}"
+export SUIF_HOME="${SUIF_HOME:-/tmp/SUIF_HOME}"
+export SUIF_TEMPLATE="${SUIF_TEMPLATE:-DBC/1005/full}"
 
 echo "Cloning SUIF for tag ${SUIF_TAG}..."
 
@@ -12,6 +12,7 @@ git clone -b "${SUIF_TAG}" --single-branch \
 
 # shellcheck source=/dev/null
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh"
+
 # shellcheck source=/dev/null
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh"
 
