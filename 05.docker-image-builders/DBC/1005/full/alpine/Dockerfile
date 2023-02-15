@@ -53,7 +53,7 @@ RUN apk --no-cache add openjdk11-jdk openjdk11-jmods
 RUN /usr/lib/jvm/java-11-openjdk/bin/jlink \
     --verbose \
     --add-modules \
-        java.base,java.sql,java.xml,java.desktop \
+        java.base,java.sql,java.xml,java.desktop,java.management,java.security.jgss,java.instrument  \
     --compress 2 --strip-debug --no-header-files --no-man-pages \
     --release-info="add:IMPLEMENTOR=softwareag:IMPLEMENTOR_VERSION=softwareag_JRE_DBC_11" \
     --output "${__sag_home}/jvm/jvm/jre"

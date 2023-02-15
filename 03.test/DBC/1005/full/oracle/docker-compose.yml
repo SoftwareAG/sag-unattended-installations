@@ -102,8 +102,10 @@ services:
       - SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT
       - SUIF_WORK_DIR
       - SUIF_ORACLE_STORAGE_TABLESPACE_DIR
+      - SUIF_INSTALL_InstallDir=${SUIF_INSTALL_INSTALL_DIR}
     networks:
       - n1
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh

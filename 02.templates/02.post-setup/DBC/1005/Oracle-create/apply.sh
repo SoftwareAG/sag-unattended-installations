@@ -166,7 +166,7 @@ eventuallyInitializeDB(){
   local crtDir
   crtDir=$(pwd)
 
-  cd "${SUIF_INSTALL_INSTALL_DIR}/common/db/bin" || return 102
+  cd "${SUIF_INSTALL_InstallDir}/common/db/bin" || return 102
 
   local lDbcSh="./dbConfigurator.sh"
   local lDBC_DB_URL_M="jdbc:wm:oracle://${SUIF_DBSERVER_HOSTNAME}:${SUIF_DBSERVER_PORT};serviceName=${SUIF_DBSERVER_SERVICE_NAME};sysLoginRole=sysdba"
