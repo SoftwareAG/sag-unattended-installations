@@ -1,0 +1,139 @@
+version: '3.8'
+
+
+networks:
+  n1: 
+    external: false
+
+volumes:
+
+  ora-db-is-core-data-vol: {}
+  # ora-db-mws-data-vol: {}
+  dbc-logs: {}
+  esb-install-home: {}
+  esb-sum-home: {}
+  esb-audit: {}
+  esb-workdir: {}
+
+services:
+
+  ora-db-is-core:
+    image: container-registry.oracle.com/database/express:18.4.0-xe
+    container_name: ${SUIF_DBSERVER_HOSTNAME}
+    hostname: ${SUIF_DBSERVER_HOSTNAME}
+    volumes:
+      - ora-db-is-core-data-vol:/opt/oracle/oradata
+    environment:
+      - ORACLE_PWD=${SUIF_DBSERVER_SA_PASSWORD}
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      # fixed for this container image
+      - ${SUIF_TEST_PORT_PREFIX}21:1521
+      - ${SUIF_TEST_PORT_PREFIX}25:5500
+    networks:
+      n1:
+        aliases:
+          - ${SUIF_DBSERVER_HOSTNAME}
+
+  dbc:
+    image: ${SUIF_TEST_DBC_IMAGE}
+    depends_on:
+      ora-db-is-core:
+        condition: service_healthy
+    networks:
+      n1:
+        aliases:
+          - dbc
+    volumes:
+      - ./scripts/dbc:/mnt/scripts
+      - dbc-logs:${SUIF_TEST_DBC_SAG_HOME}/common/db/logs
+      - ../../../../../:${SUIF_HOME}
+    environment:
+      - SUIF_TEST_DBC_SAG_HOME
+      - SUIF_HOME
+      - SUIF_DBSERVER_HOSTNAME
+      - SUIF_DBSERVER_SERVICE_NAME
+      - SUIF_DBSERVER_SA_PASSWORD
+      - SUIF_DBSERVER_USER_NAME
+      - SUIF_DBSERVER_PASSWORD
+      - SUIF_DBSERVER_PORT
+      - SUIF_DBC_COMPONENT_NAME
+      - SUIF_DBC_COMPONENT_VERSION
+      - SUIF_ORACLE_STORAGE_TABLESPACE_DIR
+      - SUIF_INSTALL_InstallDir=${SUIF_TEST_DBC_SAG_HOME}
+      - SUIF_ONLINE_MODE=0
+    entrypoint: /mnt/scripts/entrypoint.sh
+
+  esb-monolith1:
+    image: esb-monolith1
+    build:
+      context: ../../../../Framework/GenericUbiMinimalSandbox/build
+      args:
+        - __suif_audit_base_dir=${SUIF_AUDIT_BASE_DIR}
+        - __suif_home=${SUIF_HOME}
+        - __suif_install_image_file=${SUIF_INSTALL_IMAGE_FILE}
+        - __suif_install_install_dir=${SUIF_INSTALL_INSTALL_DIR}
+        - __suif_install_installer_bin_mount_point=${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
+        - __suif_local_scripts_home=${SUIF_TEST_LOCAL_SCRIPTS_DIR}
+        - __suif_patch_fixes_image_file=${SUIF_PATCH_FIXES_IMAGE_FILE}
+        - __suif_patch_sum_bootstrap_bin_mount_point=${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+        - __suif_sag_user_grp_id=1804
+        - __suif_sag_user_name=sag
+        - __suif_sum_home=${SUIF_SUM_HOME}
+        - __suif_work_dir=${SUIF_WORK_DIR}
+    depends_on:
+      ora-db-is-core:
+        condition: service_healthy
+    networks:
+      n1:
+        aliases:
+          - esb1
+    volumes:
+      - ../../../../../:${SUIF_HOME}
+      - ./scripts/esb-monolith1/:${SUIF_TEST_LOCAL_SCRIPTS_DIR}/
+      - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN_FILE}:${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
+      - ${H_SUIF_LICENCE_FILE_NUM}:${SUIF_TEST_LICENCE_FILE_NUM}
+      - ${H_SUIF_LICENSE_FILE_BRMS}:${SUIF_TEST_LICENSE_FILE_BRMS}
+      - ${H_SUIF_LICENSE_FILE_IS}:${SUIF_TEST_LICENSE_FILE_IS}
+      - ${H_SUIF_LICENSE_FILE_PRESTO}:${SUIF_TEST_LICENSE_FILE_PRESTO}
+      - ${H_SUIF_PATCH_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ${H_SUIF_PATCH_SUM_BOOTSTRAP_BIN_FILE}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+      - esb-audit:${SUIF_AUDIT_BASE_DIR}
+      - esb-install-home:${SUIF_INSTALL_INSTALL_DIR}
+      - esb-sum-home:${SUIF_SUM_HOME}
+      - esb-workdir:${SUIF_WORK_DIR}
+    environment:
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_DBSERVER_HOSTNAME
+      - SUIF_DBSERVER_PASSWORD='231ewy-43223X'
+      - SUIF_DBSERVER_PORT=1521
+      - SUIF_DBSERVER_SERVICE_NAME
+      - SUIF_DBSERVER_USER_NAME
+      - SUIF_HOME
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_INSTALL_INSTALL_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT
+      - SUIF_TEST_LOCAL_SCRIPTS_DIR
+      - SUIF_WORK_DIR
+      # other parameters necessary for the setup template
+      - SUIF_SETUP_ISCORE_DB_CONN_EXTRA_PARAMS=""
+      - SUIF_SETUP_ISCORE_DB_SERVER_FQDN=${SUIF_DBSERVER_HOSTNAME}
+      - SUIF_SETUP_ISCORE_DB_SERVER_PORT=${SUIF_DBSERVER_PORT}
+      - SUIF_SETUP_ISCORE_DB_SERVICE_NAME=${SUIF_DBSERVER_SERVICE_NAME}
+      - SUIF_WMSCRIPT_BRMS_LICENSE_FILE=${SUIF_TEST_LICENSE_FILE_BRMS}
+      - SUIF_WMSCRIPT_integrationServer_LicenseFile=${SUIF_TEST_LICENSE_FILE_IS}
+      - SUIF_WMSCRIPT_IntegrationServerDBPass_Name=${SUIF_DBSERVER_PASSWORD}
+      - SUIF_WMSCRIPT_IntegrationServerDBUser_Name=${SUIF_DBSERVER_USER_NAME}
+      - SUIF_WMSCRIPT_IntegrationServerPool_Name=is-core
+      - SUIF_WMSCRIPT_mwsDBPwdField=${SUIF_DBSERVER_PASSWORD}
+      - SUIF_WMSCRIPT_mwsDBUserField=${SUIF_DBSERVER_USER_NAME}
+      - SUIF_WMSCRIPT_mwsNameField=mws
+      - SUIF_WMSCRIPT_NUMRealmServer_LicenseFile=${SUIF_TEST_LICENCE_FILE_NUM}
+      - SUIF_WMSCRIPT_PrestoLicenseChooser_LICENSE_FILE=${SUIF_TEST_LICENSE_FILE_PRESTO}
+    entrypoint: ${SUIF_TEST_LOCAL_SCRIPTS_DIR}/entrypoint.sh
