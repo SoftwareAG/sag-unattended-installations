@@ -503,7 +503,7 @@ assureDefaultInstaller() {
     logE "[setupFunctions.sh:assureDefaultInstaller()] - Cannot assure default installer!"
     return 1
   fi
-  chmmod u+x "${installerBin}"
+  chmod u+x "${installerBin}"
 }
 
 # Parameters
@@ -517,7 +517,7 @@ assureDefaultSumBoostrap() {
     logE "[setupFunctions.sh:assureDefaultSumBoostrap()] - Cannot assure default sum bootstrap!"
     return 1
   fi
-  chmmod u+x "${lSumBootstrap}"
+  chmod u+x "${lSumBootstrap}"
 }
 
 # TODO: generalize
