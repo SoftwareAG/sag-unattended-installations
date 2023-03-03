@@ -51,7 +51,15 @@ checkSysCatalog(){
     --password '"'${SUIF_DBSERVER_SA_PASSWORD}'"' \
     --url '"'${lDBC_DB_URL_M}'"
 
-  logI "[${thisFolder}/apply.sh:checkSysCatalog()] - Command to execute is ${lCmdChkMaster}"
+  if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
+    local lCmdChkMasterToLog="${lDbcSh} "' \
+    --action catalog  \
+    --dbms oracle  \
+    --user '"'sys'"'  \
+    --password '"'****'"' \
+    --url '"'${lDBC_DB_URL_M}'"
+    logD "[${thisFolder}/apply.sh:checkSysCatalog()] - Command to execute is ${lCmdChkMasterToLog}"
+  fi
 
   logI "[${thisFolder}/apply.sh:checkSysCatalog()] - Checking if database service is reachable by dbConfigurator..."
   controlledExec "${lCmdChkMaster}" "$(date +%s).CheckMasterReachable"
@@ -73,7 +81,15 @@ checkStorageAlreadyExists(){
     --password '"'${SUIF_DBSERVER_PASSWORD}'"' \
     --url '"'${lDBC_DB_URL}'"
 
-  logI "[${thisFolder}/apply.sh:checkStorageAlreadyExists()] - Command to execute is ${lCmdChkAlreadyCreated}"
+  if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
+    local lCmdChkAlreadyCreatedToLog="${lDbcSh}"' \
+    --action catalog \
+    --dbms oracle \
+    --user '"'${SUIF_DBSERVER_USER_NAME}'"' \
+    --password '"'****'"' \
+    --url '"'${lDBC_DB_URL}'"
+    logD "[${thisFolder}/apply.sh:checkStorageAlreadyExists()] - Command to execute is ${lCmdChkAlreadyCreatedToLog}"
+  fi
 
   logI "[${thisFolder}/apply.sh:checkStorageAlreadyExists()] - Checking if product database exists"
   controlledExec "${lCmdChkAlreadyCreated}" "$(date +%s).CheckDatabaseExists"
