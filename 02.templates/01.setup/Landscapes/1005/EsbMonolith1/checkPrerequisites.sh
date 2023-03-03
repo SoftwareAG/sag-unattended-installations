@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #shellcheck disable=SC3043
-
+	
 if ! commonFunctionsSourced 2>/dev/null; then
 	if [ ! -f "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh" ]; then
 		echo "Panic, common functions not sourced and not present locally! Cannot continue"

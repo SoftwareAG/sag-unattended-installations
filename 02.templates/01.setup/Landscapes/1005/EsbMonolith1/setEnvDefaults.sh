@@ -84,12 +84,13 @@ export SUIF_WMSCRIPT_IntegrationServerPool_Name="${SUIF_WMSCRIPT_IntegrationServ
 DB_SERVER_FQDN=${SUIF_SETUP_ISCORE_DB_SERVER_FQDN:-oracle-db-server}
 DB_SERVER_PORT=${SUIF_SETUP_ISCORE_DB_SERVER_PORT:-1521}
 DB_SERVICE_NAME=${SUIF_SETUP_ISCORE_DB_SERVICE_NAME:-oradbservicename}
-DB_CONN_EXTRA_PARAMS=${SUIF_SETUP_ISCORE_DB_CONN_EXTRA_PARAMS:-}
+DB_CONN_EXTRA_PARAMS=${SUIF_SETUP_ISCORE_DB_CONN_EXTRA_PARAMS:-";"}
 
 SUIF_WMSCRIPT_IntegrationServerDBURL_Name_UrlEncoded=\
 $(urlencode \
 "jdbc:wm:oracle://${DB_SERVER_FQDN}:${DB_SERVER_PORT};serviceName=${DB_SERVICE_NAME}${DB_CONN_EXTRA_PARAMS}")
 export SUIF_WMSCRIPT_IntegrationServerDBURL_Name_UrlEncoded
+logD "SUIF_WMSCRIPT_IntegrationServerDBURL_Name_UrlEncoded=||${SUIF_WMSCRIPT_IntegrationServerDBURL_Name_UrlEncoded}||"
 
 # Section 3 - the caller SHOULD provide database coordinates for Central Users DB
 # If not passed, the jdbc pool is initialized with default values and would most probably not work
@@ -103,12 +104,14 @@ export SUIF_WMSCRIPT_mwsNameField="${SUIF_WMSCRIPT_mwsNameField:-mws}"
 DB_SERVER_FQDN=${SUIF_SETUP_MWS_DB_SERVER_FQDN:-oracle-db-server}
 DB_SERVER_PORT=${SUIF_SETUP_MWS_DB_SERVER_PORT:-1521}
 DB_SERVICE_NAME=${SUIF_SETUP_MWS_DB_SERVICE_NAME:-oradbservicename}
-DB_CONN_EXTRA_PARAMS=${SUIF_SETUP_MWS_DB_CONN_EXTRA_PARAMS:-}
+DB_CONN_EXTRA_PARAMS=${SUIF_SETUP_MWS_DB_CONN_EXTRA_PARAMS:-";"}
 
 SUIF_WMSCRIPT_mwsDBURLField_UrlEncoded=\
 $(urlencode \
 "jdbc:wm:oracle://${DB_SERVER_FQDN}:${DB_SERVER_PORT};serviceName=${DB_SERVICE_NAME}${DB_CONN_EXTRA_PARAMS}")
 export SUIF_WMSCRIPT_mwsDBURLField_UrlEncoded
+
+logD "SUIF_WMSCRIPT_mwsDBURLField_UrlEncoded=||${SUIF_WMSCRIPT_mwsDBURLField_UrlEncoded}||"
 
 # Section 4 - the caller MAY provide UM Realm Parameters
 export SUIF_WMSCRIPT_NUM_Realm_Server_Name_ID="${SUIF_WMSCRIPT_NUM_Realm_Server_Name_ID:-umserver}"

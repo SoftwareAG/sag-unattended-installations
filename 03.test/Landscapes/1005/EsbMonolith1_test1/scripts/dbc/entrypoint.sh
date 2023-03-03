@@ -29,5 +29,6 @@ createDbComponents(){
 
 createDbComponents
 
+logI "Finished, exitting with success..."
 # Stopping for debug
-tail -f /dev/null
+# tail -f /dev/null

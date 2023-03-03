@@ -61,9 +61,15 @@ checkStorageAlreadyExists(){
 
   cd "${SUIF_INSTALL_INSTALL_DIR}/common/db/bin" || return 222
 
+  # for some reason I found these not executable
+  chmod u+x ./*.sh 
+
   logI "Waiting for the database service to be available on server ${1} port ${2}..."
 
-  waitForExternalServicePort "${1}" "${2}" || logI "DB Server unavailable, cannot continue" && exit 201
+  if ! waitForExternalServicePort "${1}" "${2}" ; then
+      logI "DB Server unavailable, cannot continue"
+    exit 201
+  fi
 
   local lDBC_DB_URL="jdbc:wm:oracle://${1}:${2};serviceName=${3}"
   local lCmdChkAlreadyCreated="./dbConfigurator.sh"' \
@@ -120,6 +126,15 @@ onInterrupt() {
   echo "Shutting down Integration server ..."
   cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/IS_default/bin" || return 1
   ./shutdown.sh
+
+  logI "Stopping MWS ..."
+  cd "${SUIF_INSTALL_INSTALL_DIR}/MWS/server/mws/bin" || exit 8
+  ./shutdown.sh
+
+  logI "Stopping Universal Messaging ..."
+  cd "${SUIF_INSTALL_INSTALL_DIR}/UniversalMessaging/server/umserver/bin" || exit 9
+  ./nserverdaemon stop
+
   echo "Shutting down Platform manager ..."
   cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/SPM/bin" || return 2
   ./shutdown.sh
@@ -137,13 +152,20 @@ waitForDb
 
 trap "onInterrupt" INT TERM
 
-echo "Starting up Integration server"
+logI "Starting up MWS ..."
+cd "${SUIF_INSTALL_INSTALL_DIR}/MWS/server/mws/bin" || exit 8
+./startup.sh
+
+logI "Starting up Universal Messaging ..."
+cd "${SUIF_INSTALL_INSTALL_DIR}/UniversalMessaging/server/umserver/bin" || exit 9
+./nserverdaemon start
+
+
+logI "Starting up Integration server ..."
 cd "${SUIF_INSTALL_INSTALL_DIR}/profiles/IS_default/bin" || exit 7
 ./console.sh &
 
 WPID=$!
-
-logI "Waiting for Integration Server to come up"
 
 until portIsReachable2 localhost 5555; do
   logI "Waiting for Integration Server to come up, sleeping 5..."
