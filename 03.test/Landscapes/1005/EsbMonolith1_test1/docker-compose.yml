@@ -47,7 +47,7 @@ services:
     volumes:
       - ./scripts/dbc:/mnt/scripts
       - dbc-logs:${SUIF_TEST_DBC_SAG_HOME}/common/db/logs
-      - ../../../../../:${SUIF_HOME}
+      - ../../../../:${SUIF_HOME}
     environment:
       - SUIF_TEST_DBC_SAG_HOME
       - SUIF_HOME
@@ -67,7 +67,7 @@ services:
   esb-monolith1:
     image: esb-monolith1
     build:
-      context: ../../../../Framework/GenericUbiMinimalSandbox/build
+      context: ../../../Framework/GenericUbiMinimalSandbox/build
       args:
         - __suif_audit_base_dir=${SUIF_AUDIT_BASE_DIR}
         - __suif_home=${SUIF_HOME}
@@ -89,7 +89,7 @@ services:
         aliases:
           - esb1
     volumes:
-      - ../../../../../:${SUIF_HOME}
+      - ../../../../:${SUIF_HOME}
       - ./scripts/esb-monolith1/:${SUIF_TEST_LOCAL_SCRIPTS_DIR}/
       - ${H_SUIF_INSTALL_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
       - ${H_SUIF_INSTALLER_BIN_FILE}:${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
@@ -115,6 +115,7 @@ services:
       - SUIF_INSTALL_INSTALL_DIR
       - SUIF_INSTALL_INSTALLER_BIN
       - SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT
+      - SUIF_ONLINE_MODE=0
       - SUIF_PATCH_AVAILABLE
       - SUIF_PATCH_FIXES_IMAGE_FILE
       - SUIF_PATCH_SUM_BOOTSTRAP_BIN
