@@ -105,5 +105,5 @@ for template in ${TEST_Templates}; do
   processTemplate "${template}"
 done
 
-logI "stopping for debug"
-tail -f /dev/null
+#logI "stopping for debug"
+#tail -f /dev/null
