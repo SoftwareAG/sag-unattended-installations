@@ -141,12 +141,39 @@ portIsReachable2() {
   return $?
 }
 
+# Wait for another service to open a certain port
+# Params:
+# $1 -> host
+# $2 -> port
+# $3 -> OPTIONAL - maximum trials number, default is 30
+# $4 -> OPTIONAL - sleep time between retries, in seconds, default is 5
+waitForExternalServicePort() {
+  local count=0
+  local maxCount="${3:-30}"
+  local sleepSeconds="${4:-5}"
+  until portIsReachable2 "$1" "$2"; do
+    logI "Waiting for port $2 to be open on host $1 ..."
+    sleep "$sleepSeconds"
+    count=$((count + 1))
+    if [ "$count" -ge "$maxCount" ]; then
+      logW "The port $2 on host $1 is not reachable after the maximum number of retries of $maxCount"
+      return 1
+    fi
+  done
+}
+
 # New urlencode approach, to render the script more portable
 # Code taken from https://stackoverflow.com/questions/38015239/url-encoding-a-string-in-shell-script-in-a-portable-way
 urlencodepipe() {
-  local LANG=C; local c; while IFS= read -r c; do
+  local LANG=C
+  local c
+  while IFS= read -r c; do
     # shellcheck disable=SC2059
-    case $c in [a-zA-Z0-9.~_-]) printf "$c"; continue ;; esac
+    case $c in [a-zA-Z0-9.~_-])
+      printf "$c"
+      continue
+      ;;
+    esac
     # shellcheck disable=SC2059
     printf "$c" | od -An -tx1 | tr ' ' % | tr -d '\n'
   done <<EOF
@@ -156,7 +183,7 @@ EOF
 }
 
 # shellcheck disable=SC2059
-urlencode() { printf "$*" | urlencodepipe ;}
+urlencode() { printf "$*" | urlencodepipe; }
 
 # deprecated, not POSIX portable
 urldecode() {
@@ -236,7 +263,7 @@ debugSuspend() {
 
 # Rewritten for portability
 # code inspired from https://stackoverflow.com/questions/3980668/how-to-get-a-password-from-a-shell-script-without-echoing
-readSecretFromUser(){
+readSecretFromUser() {
   stty -echo
   secret="0"
   local s1 s2
@@ -258,17 +285,17 @@ readSecretFromUser(){
 }
 
 # POSIX string substitution
-# Parameters 
+# Parameters
 # $1 - original string
 # $2 - charset what to substitute
 # $3 - replacement charset
 # ATTN: works char by char, not with substrings
-strSubstPOSIX(){
+strSubstPOSIX() {
   # shellcheck disable=SC2086
   printf '%s' "$1" | tr $2 $3
 }
 
-commonFunctionsSourced(){
+commonFunctionsSourced() {
   return 0
 }
 
@@ -277,3 +304,39 @@ logI "[commonFunctions.sh] - SLS common framework functions initialized. Current
 if [ ! "${SUIF_CURRENT_SHELL}" = "/usr/bin/bash" ]; then
   logW "[commonFunctions.sh] - This framework has not been tested with this shell. Scripts are not guaranteed to work as expected"
 fi
+
+# parse_yaml - Function to load env variables from a yaml file
+# Parameters
+# $1 - file to parse
+# $2 - OPTIONAL - PREFIX
+# Credits: https://gist.github.com/pkuczynski/8665367
+parse_yaml() {
+  
+  local prefix=$2
+  local s='[[:space:]]*'
+  local w='[a-zA-Z0-9_]*'
+  local fs
+  fs="$(echo @|tr @ '\034')"
+
+  sed "h;s/^[^:]*//;x;s/:.*$//;y/-/_/;G;s/\n//" $1 |
+  sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
+      -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p" |
+  awk -F"$fs" '{
+    indent = length($1)/2;
+    vname[indent] = $2;
+
+    for (i in vname) {if (i > indent) {delete vname[i]}}
+    if (length($3) > 0) {
+        vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+        printf("export %s%s%s=\"%s\"\n", "'"$prefix"'",vn, $2, $3);
+    }
+  }'
+}
+
+# Function to load SUIF environment variables from a yaml file
+# Parameters
+# $1 - yaml file containing SUIF variables
+load_env_from_yaml(){
+  # shellcheck disable=SC2046
+  eval $(parse_yaml "${1}" SUIF_)
+}

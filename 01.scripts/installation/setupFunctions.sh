@@ -62,7 +62,7 @@ installProducts() {
     return 3
   fi
 
-  logI "Installing according to script ${2}"
+  logI "[setupFunctions.sh:installProducts()] - Installing according to script ${2}"
 
   local debugLevel="${3:-"verbose"}"
   local d

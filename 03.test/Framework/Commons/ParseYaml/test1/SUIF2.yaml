@@ -1,0 +1,22 @@
+INSTALL:
+  INSTALLER:
+    BIN: "/tmp/installer.bin"
+  IMAGE:
+    FILE: "/tmp/products.zip"
+  INSTALL:
+    DIR: "/opt/softwareag"
+    DECLARED:
+      HOSTNAME: "localhost"
+  SPM:
+    HTTPS_PORT: "9083"
+    HTTP_PORT: "9082"
+PATCH:
+  AVAILABLE: "1"
+  SUM:
+    BOOTSTRAP:
+      BIN: /tmp/sum bootstrap.bin
+  FIXES:
+    IMAGE:
+      FILE: "/tmp/my fixes.zip"
+SUM:
+  HOME: "/opt/sag/sum"

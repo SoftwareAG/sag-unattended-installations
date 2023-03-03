@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  parse-yaml-test1:
+    image: ${SUIF_TEST_IMAGE}
+    volumes:
+      - ./scripts/:/mnt/scripts/
+      - ${SUIF_TEST_YAML_FILE}:/mnt/SUIF1.yaml
+      - ../../../../../:/mnt/SUIF/
+    environment:
+      - SUIF_HOME=/mnt/SUIF
+      - SUIF_DEBUG_ON=1
+    entrypoint: /mnt/scripts/entrypoint.sh
