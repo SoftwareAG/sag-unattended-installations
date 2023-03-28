@@ -1,17 +1,17 @@
 <mxfile host="65bd71144e">
     <diagram id="Ctlm13mbMicQcKdTrapp" name="Page-1">
-        <mxGraphModel dx="1770" dy="1006" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="980" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="30" value="" style="shape=mxgraph.mockup.containers.marginRect;rectMarginTop=10;strokeColor=#666666;strokeWidth=1;dashed=0;rounded=1;arcSize=5;recursiveResize=0;fontColor=#000000;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="30" y="10" width="760" height="400" as="geometry"/>
+                    <mxGeometry x="10" y="10" width="550" height="320" as="geometry"/>
                 </mxCell>
                 <mxCell id="31" value="Test Host" style="shape=rect;strokeColor=none;fillColor=#008cff;strokeWidth=1;dashed=0;rounded=1;arcSize=20;fontColor=#ffffff;fontSize=17;spacing=2;spacingTop=-2;align=left;autosize=1;spacingLeft=4;resizeWidth=0;resizeHeight=0;perimeter=none;" vertex="1" parent="30">
                     <mxGeometry x="5" width="100" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="27" value="" style="shape=mxgraph.mockup.containers.marginRect;rectMarginTop=10;strokeColor=#666666;strokeWidth=1;dashed=0;rounded=1;arcSize=5;recursiveResize=0;fontColor=#000000;fillColor=none;" vertex="1" parent="30">
-                    <mxGeometry x="130" y="30" width="620" height="360" as="geometry"/>
+                    <mxGeometry x="130" y="30" width="410" height="280" as="geometry"/>
                 </mxCell>
                 <mxCell id="28" value="Docker Compose project" style="shape=rect;strokeColor=none;fillColor=#008cff;strokeWidth=1;dashed=0;rounded=1;arcSize=20;fontColor=#ffffff;fontSize=17;spacing=2;spacingTop=-2;align=left;autosize=1;spacingLeft=4;resizeWidth=0;resizeHeight=0;perimeter=none;" vertex="1" parent="27">
                     <mxGeometry x="5" width="210" height="30" as="geometry"/>
@@ -19,71 +19,25 @@
                 <mxCell id="6" value="test-client" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
                     <mxGeometry x="20" y="90" width="50" height="48" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="caddy-lb" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="120" y="90" width="50" height="48" as="geometry"/>
-                </mxCell>
-                <mxCell id="10" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="27" source="6" target="8">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="10" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="27" source="6" target="3">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="120.25" y="120.24000000000001" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="21" value="elasticvue" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="120" y="240" width="50" height="48" as="geometry"/>
+                    <mxGeometry x="70" y="190" width="50" height="48" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="api-gw-node1" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="310" y="80" width="50" height="48" as="geometry"/>
+                <mxCell id="3" value="api-gw-server" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
+                    <mxGeometry x="215" y="120" width="50" height="48" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" style="edgeStyle=none;html=1;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="27" source="8" target="3">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="350" y="251.125" as="sourcePoint"/>
-                        <mxPoint x="485" y="289.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0.128;entryY=0.859;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="21" target="3">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="529.75" y="310.24" as="sourcePoint"/>
-                        <mxPoint x="650.25" y="310.24" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="4" value="api-gw-node2" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="310" y="160" width="50" height="48" as="geometry"/>
-                </mxCell>
-                <mxCell id="12" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="8" target="4">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="380" y="460" as="sourcePoint"/>
-                        <mxPoint x="495" y="299.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="23" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="27" source="3" target="4">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="24" style="edgeStyle=none;html=1;entryX=0.104;entryY=0.867;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="21" target="4">
+                <mxCell id="24" style="edgeStyle=none;html=1;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="21" target="3">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="539.75" y="320.24" as="sourcePoint"/>
-                        <mxPoint x="660.25" y="320.24" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="5" value="api-gw-node3" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="310" y="240" width="50" height="48" as="geometry"/>
-                </mxCell>
-                <mxCell id="13" style="edgeStyle=none;html=1;entryX=0.1;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.72;exitY=0.99;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="8" target="5">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="370" y="271.125" as="sourcePoint"/>
-                        <mxPoint x="505" y="309.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="25" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="21" target="5">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="549.75" y="330.24" as="sourcePoint"/>
-                        <mxPoint x="670.25" y="330.24" as="targetPoint"/>
+                        <mxPoint x="315.20000000000005" y="201.61599999999999" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="17" value="clam-av" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="520" y="80" width="50" height="48" as="geometry"/>
-                </mxCell>
-                <mxCell id="18" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="4" target="17">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="559.75" y="70.24000000000001" as="sourcePoint"/>
-                        <mxPoint x="745" y="247.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
+                    <mxGeometry x="330" y="80" width="50" height="48" as="geometry"/>
                 </mxCell>
                 <mxCell id="19" style="edgeStyle=none;html=1;entryX=0.1;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="3" target="17">
                     <mxGeometry relative="1" as="geometry">
@@ -91,31 +45,13 @@
                         <mxPoint x="740.25" y="70.24000000000001" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="20" style="edgeStyle=none;html=1;entryX=0.28;entryY=0.99;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="5" target="17">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="565" y="199.5999999999999" as="sourcePoint"/>
-                        <mxPoint x="750.25" y="80.24000000000001" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="2" value="mock-server" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod;fontColor=#000000;" vertex="1" parent="27">
-                    <mxGeometry x="520" y="222" width="50" height="48" as="geometry"/>
+                    <mxGeometry x="330" y="180" width="50" height="48" as="geometry"/>
                 </mxCell>
                 <mxCell id="14" style="edgeStyle=none;html=1;entryX=0.1;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="3" target="2">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="240" y="181.125" as="sourcePoint"/>
                         <mxPoint x="375" y="219.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="15" style="edgeStyle=none;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="4" target="2">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="540" y="200" as="sourcePoint"/>
-                        <mxPoint x="385" y="229.5999999999999" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="16" style="edgeStyle=none;html=1;entryX=0.28;entryY=0.99;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;fillColor=#0050ef;strokeColor=#001DBC;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="27" source="5" target="2">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="260" y="201.125" as="sourcePoint"/>
-                        <mxPoint x="395" y="239.5999999999999" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="33" style="edgeStyle=none;html=1;fontColor=#000000;fillColor=#60a917;strokeColor=#2D7600;entryX=-0.001;entryY=0.199;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="30" source="26" target="27">
