@@ -106,7 +106,6 @@ services:
       - SAG_IS_CONFIG_PROPERTIES=/tmp/application.properties
       - JAVA_MIN_MEM=256m
       - JAVA_MAX_MEM=256m
-      - IS_ADMIN_PWD
       - SUIF_TEST_MOCK_SERVER_ADMIN_PASSWORD
       - SAG_SERVICE_MOCKUP_USER_NAME
       - SAG_SERVICE_MOCKUP_USER_PASS
@@ -114,3 +113,29 @@ services:
       n1:
         aliases:
           - mock-server
+  test-client:
+    image: ${SUIF_TEST_CLIENT_SERVER_IMAGE}
+    ports:
+      - ${H_SUIF_PORT_PREFIX}15:5555
+    volumes:
+      - ${H_MSR_LICENSE_FILE}:/tmp/license.xml
+      - ./config/test-client/application.properties:/tmp/application.properties
+      # dependency 
+      - ${WX_IS_TEST_TOOLS_PACKAGE_HOME}:${SUIF_TEST_MOCK_SERVER_GUEST_IS_HOME}/packages/WxIsTestTools
+      # our test code
+      - ./code/isPackages/ApiGwBaseTests:${SUIF_TEST_MOCK_SERVER_GUEST_IS_HOME}/packages/ApiGwBaseTests
+    mem_reservation: 100m
+    mem_limit: 370m
+    container_name: test-client
+    hostname: test-client
+    cpus: 1
+    environment:
+      - SAG_IS_LICENSE_FILE=/tmp/license.xml
+      - SAG_IS_CONFIG_PROPERTIES=/tmp/application.properties
+      - JAVA_MIN_MEM=256m
+      - JAVA_MAX_MEM=256m
+      - SUIF_TEST_CLIENT_SERVER_ADMIN_PASSWORD
+    networks:
+      n1:
+        aliases:
+          - test-client
