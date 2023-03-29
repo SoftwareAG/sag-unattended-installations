@@ -3,6 +3,7 @@ version: "3.5"
 volumes:
   install-home: {}
   sum-home: {}
+  suif-cache: {}
   audit: {}
 
 networks:
@@ -14,7 +15,7 @@ services:
       context: ../../../Framework/GenericUbiMinimalWithToolsSandbox/build
       args:
         - __suif_audit_base_dir=${SUIF_AUDIT_BASE_DIR}
-        - __suif_home=${SUIF_HOME}
+        - __suif_home=${SUIF_CACHE_HOME}
         - __suif_install_image_file=${SUIF_INSTALL_IMAGE_FILE}
         - __suif_install_install_dir=${SUIF_INSTALL_INSTALL_DIR}
         - __suif_install_installer_bin_mount_point=${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
@@ -39,6 +40,7 @@ services:
       - install-home:${SUIF_INSTALL_INSTALL_DIR}
       - sum-home:${SUIF_SUM_HOME}
       - audit:${SUIF_AUDIT_BASE_DIR}
+      - suif-cache:${SUIF_CACHE_HOME}
       - ./scripts/ApiGateway:${SUIF_TEST_LOCAL_SCRIPTS_DIR}
       # These must be provided, they are prerequisites
       - ${H_API_GW_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_YAI_LICENSE_FILE}
@@ -46,10 +48,9 @@ services:
       - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
       - ${H_SUIF_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
       - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
-      - ../../../../:${SUIF_HOME}
     environment:
-      # we declare SUIF_HOME because we mount it here
-      - SUIF_HOME
+      # we declare SUIF_CACHE_HOME instead of SUIF_HOME because we are working online and mount it here
+      - SUIF_CACHE_HOME
       # setupFunctions prerequisites map, declared here because provided by host
       - SUIF_INSTALL_INSTALLER_BIN
       - SUIF_INSTALL_IMAGE_FILE

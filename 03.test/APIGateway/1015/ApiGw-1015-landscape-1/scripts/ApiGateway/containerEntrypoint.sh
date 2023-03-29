@@ -1,26 +1,63 @@
 #!/bin/sh
 
-# shellcheck source-path=SCRIPTDIR/../../../../..
+# shellcheck source-path=SCRIPTDIR/../../../../../..
 # shellcheck disable=SC2153,SC2046,SC3043
 
 # This scripts sets up the local installation if it doesn't already exist
-export SUIF_TEST_HARNESS_FOLDER="03.test/APIGateway/1015/ApiGw-1015-default-test-1"
+export SUIF_TEST_HARNESS_FOLDER="03.test/APIGateway/1015/ApiGw-1015-landscape-1"
 export lLOG_PREFIX="$SUIF_TEST_HARNESS_FOLDER/containerEntrypoint.sh - "
 
-if [ ! -d "${SUIF_HOME}" ]; then
-  echo "[$lLOG_PREFIX] - FATAL - SUIF_HOME variable MUST point to an existing local folder! Current value is ${SUIF_HOME}"
+# default values
+export SUIF_CACHE_HOME="${SUIF_CACHE_HOME:-/tmp}"
+export SUIF_HOME_URL="${SUIF_HOME_URL:-https://raw.githubusercontent.com/SoftwareAG/sag-unattended-installations/main}"
+
+# Validations
+if ! which curl; then
+  echo "[$lLOG_PREFIX] - FATAL - curl is not installed! Cannot continue..."
   exit 1
 fi
 
-# Source framework functions
-. "${SUIF_HOME}/01.scripts/commonFunctions.sh" || exit 4
-. "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
+mkdir -p "$SUIF_CACHE_HOME/01.scripts"
+ls -lrt /mnt
 
+curl "$SUIF_HOME_URL/01.scripts/commonFunctions.sh" --silent -o "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+
+if [ ! -f "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh" ]; then
+  echo "[$lLOG_PREFIX] - FATAL - the common functions file was NOT downloaded from $SUIF_HOME_URL/01.scripts/commonFunctions.sh. Cannot continue"
+  ls -lrt "$SUIF_CACHE_HOME"
+  ls -lrt "$SUIF_CACHE_HOME/01.scripts"
+  ls -lrt "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+  exit 2
+fi
+
+# Source framework functions
+chmod u+x "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+. "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+
+# Dependency
+if ! command -V "logI" 2>/dev/null | grep function >/dev/null; then
+  echo "[$lLOG_PREFIX] - FATAL - common functions have not been sourced successfully from file $SUIF_CACHE_HOME/01.scripts/commonFunctions.sh! Listing the file now"
+  ls -lrt "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+  cat "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
+  exit 3
+fi
+
+huntForSuifFile "01.scripts/installation" "setupFunctions.sh"
+
+. "$SUIF_CACHE_HOME/01.scripts/installation/setupFunctions.sh"
+
+# Dependency
+if ! command -V "applySetupTemplate" 2>/dev/null | grep function >/dev/null; then
+  logE "[$lLOG_PREFIX] - FATAL - setup functions have not been sourced successfully from file $SUIF_CACHE_HOME/01.scripts/installation/setupFunctions.sh! Listing the file now"
+  ls -lrt "$SUIF_CACHE_HOME/01.scripts/installation/setupFunctions.sh"
+  cat "$SUIF_CACHE_HOME/01.scripts/installation/setupFunctions.sh"
+  exit 4
+fi
 
 # our configuration takes precedence in front of framework defaults, set it before sourcing the framework functions
 if [ ! -d "${SUIF_LOCAL_SCRIPTS_HOME}" ]; then
     logE "[$lLOG_PREFIX] - Scripts folder not found: ${SUIF_LOCAL_SCRIPTS_HOME}"
-    exit 2
+    exit 5
 fi
 
 checkEnvVariables() {
