@@ -1,0 +1,207 @@
+{
+  "apiResponse": {
+    "api": {
+      "apiDefinition": {
+        "wsdl": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsdl:definitions name=\"dataTypesSet1\" targetNamespace=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\" xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:soapjms=\"http://www.w3.org/2010/soapjms/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:tns=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:soap12=\"http://schemas.xmlsoap.org/wsdl/soap12/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <wsdl:types>\n    <xsd:schema targetNamespace=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\" xmlns:tns=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n          <xsd:element name=\"dataTypesSet1\" type=\"tns:dataTypesSet1\"/>\n          <xsd:element name=\"dataTypesSet1Response\" type=\"tns:dataTypesSet1Response\"/>\n          <xsd:element name=\"genericGet\" type=\"tns:genericGet\"/>\n          <xsd:element name=\"genericGetResponse\" type=\"tns:genericGetResponse\"/>\n          <xsd:complexType name=\"dataTypesSet1\">\n            <xsd:sequence>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"dataTypesSet1Response\">\n            <xsd:sequence>\n              <xsd:element name=\"genericString\" nillable=\"true\" type=\"tns:genericString\"/>\n              <xsd:element name=\"jFloat\" nillable=\"true\" type=\"tns:jFloat\"/>\n              <xsd:element name=\"constrainedStringCurrency1\" nillable=\"true\" type=\"tns:constrainedStringCurrency1\"/>\n              <xsd:element name=\"constrainedStringCurrency2\" nillable=\"true\" type=\"tns:constrainedStringCurrency2\"/>\n              <xsd:element name=\"constrainedStringDecimal\" nillable=\"true\" type=\"tns:constrainedStringDecimal\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"genericString\">\n            <xsd:sequence>\n              <xsd:element name=\"mandatoryWithValue\" type=\"xsd:string\"/>\n              <xsd:element name=\"mandatoryNullableWithValue\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element name=\"mandatoryNullableWithNull\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableWithValue\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableAbsent\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithValue\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithNull\" nillable=\"true\" type=\"xsd:string\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"jFloat\">\n            <xsd:sequence>\n              <xsd:element name=\"mandatoryWithValue\" type=\"xsd:float\"/>\n              <xsd:element name=\"mandatoryNullableWithValue\" nillable=\"true\" type=\"xsd:float\"/>\n              <xsd:element name=\"mandatoryNullableWithNull\" nillable=\"true\" type=\"xsd:float\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableWithValue\" type=\"xsd:float\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableAbsent\" type=\"xsd:float\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithValue\" nillable=\"true\" type=\"xsd:float\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithNull\" nillable=\"true\" type=\"xsd:float\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"constrainedStringCurrency1\">\n            <xsd:sequence>\n              <xsd:element name=\"mandatoryWithValue\" type=\"tns:mandatoryWithValue2\"/>\n              <xsd:element name=\"mandatoryNullableWithValue\" nillable=\"true\" type=\"tns:mandatoryNullableWithValue2\"/>\n              <xsd:element name=\"mandatoryNullableWithNull\" nillable=\"true\" type=\"tns:mandatoryNullableWithNull2\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableWithValue\" type=\"tns:optionalNonNullableWithValue2\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableAbsent\" type=\"tns:optionalNonNullableAbsent2\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithValue\" nillable=\"true\" type=\"tns:optionalNullableWithValue2\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithNull\" nillable=\"true\" type=\"tns:optionalNullableWithNull2\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:simpleType name=\"mandatoryWithValue2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"mandatoryNullableWithValue2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"mandatoryNullableWithNull2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNonNullableWithValue2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNonNullableAbsent2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNullableWithValue2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNullableWithNull2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"3\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:complexType name=\"constrainedStringCurrency2\">\n            <xsd:sequence>\n              <xsd:element name=\"mandatoryWithValue\" type=\"tns:mandatoryWithValue3\"/>\n              <xsd:element name=\"mandatoryNullableWithValue\" nillable=\"true\" type=\"tns:mandatoryNullableWithValue3\"/>\n              <xsd:element name=\"mandatoryNullableWithNull\" nillable=\"true\" type=\"tns:mandatoryNullableWithNull3\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableWithValue\" type=\"tns:optionalNonNullableWithValue3\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableAbsent\" type=\"tns:optionalNonNullableAbsent3\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithValue\" nillable=\"true\" type=\"tns:optionalNullableWithValue3\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithNull\" nillable=\"true\" type=\"tns:optionalNullableWithNull3\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:simpleType name=\"mandatoryWithValue3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"mandatoryNullableWithValue3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"mandatoryNullableWithNull3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNonNullableWithValue3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNonNullableAbsent3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNullableWithValue3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"optionalNullableWithNull3\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:fractionDigits value=\"2\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:complexType name=\"constrainedStringDecimal\">\n            <xsd:sequence>\n              <xsd:element name=\"mandatoryWithValue\" type=\"xsd:decimal\"/>\n              <xsd:element name=\"mandatoryNullableWithValue\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element name=\"mandatoryNullableWithNull\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableWithValue\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNonNullableAbsent\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithValue\" nillable=\"true\" type=\"xsd:string\"/>\n              <xsd:element minOccurs=\"0\" name=\"optionalNullableWithNull\" nillable=\"true\" type=\"xsd:string\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"genericGet\">\n            <xsd:sequence>\n              <xsd:element minOccurs=\"0\" name=\"sleepIntervalMilliseconds\" nillable=\"true\" type=\"tns:sleepIntervalMilliseconds\"/>\n              <xsd:element minOccurs=\"0\" name=\"unmanagedExceptionProbability\" nillable=\"true\" type=\"tns:unmanagedExceptionProbability\"/>\n              <xsd:element minOccurs=\"0\" name=\"managedExceptionProbability\" nillable=\"true\" type=\"tns:managedExceptionProbability\"/>\n              <xsd:element minOccurs=\"0\" name=\"outputBodySize\" nillable=\"true\" type=\"xsd:decimal\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:simpleType name=\"sleepIntervalMilliseconds\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:minInclusive value=\"0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"unmanagedExceptionProbability\">\n            <xsd:restriction base=\"xsd:float\">\n              <xsd:minInclusive value=\"0.0\"/>\n              <xsd:maxExclusive value=\"1.0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"managedExceptionProbability\">\n            <xsd:restriction base=\"xsd:float\">\n              <xsd:minInclusive value=\"0.0\"/>\n              <xsd:maxExclusive value=\"1.0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:complexType name=\"genericGetResponse\">\n            <xsd:sequence>\n              <xsd:element name=\"genericGetResult\" nillable=\"true\" type=\"tns:genericGetResult\"/>\n              <xsd:element name=\"bodyString\" type=\"xsd:string\"/>\n              <xsd:element name=\"code\" type=\"xsd:decimal\"/>\n              <xsd:element name=\"description\" nillable=\"true\" type=\"xsd:string\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"genericGetResult\">\n            <xsd:sequence>\n              <xsd:element name=\"actualInput\" nillable=\"true\" type=\"tns:actualInput\"/>\n              <xsd:element name=\"currentHostName\" type=\"xsd:string\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:complexType name=\"actualInput\">\n            <xsd:sequence>\n              <xsd:element minOccurs=\"0\" name=\"sleepIntervalMilliseconds\" nillable=\"true\" type=\"tns:sleepIntervalMilliseconds2\"/>\n              <xsd:element minOccurs=\"0\" name=\"unmanagedExceptionProbability\" nillable=\"true\" type=\"tns:unmanagedExceptionProbability2\"/>\n              <xsd:element minOccurs=\"0\" name=\"managedExceptionProbability\" nillable=\"true\" type=\"tns:managedExceptionProbability2\"/>\n              <xsd:element minOccurs=\"0\" name=\"outputBodySize\" nillable=\"true\" type=\"xsd:decimal\"/>\n            </xsd:sequence>\n          </xsd:complexType>\n          <xsd:simpleType name=\"sleepIntervalMilliseconds2\">\n            <xsd:restriction base=\"xsd:decimal\">\n              <xsd:minInclusive value=\"0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"unmanagedExceptionProbability2\">\n            <xsd:restriction base=\"xsd:float\">\n              <xsd:minInclusive value=\"0.0\"/>\n              <xsd:maxExclusive value=\"1.0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n          <xsd:simpleType name=\"managedExceptionProbability2\">\n            <xsd:restriction base=\"xsd:float\">\n              <xsd:minInclusive value=\"0.0\"/>\n              <xsd:maxExclusive value=\"1.0\"/>\n            </xsd:restriction>\n          </xsd:simpleType>\n        \t</xsd:schema>\n  </wsdl:types>\n  <wsdl:message name=\"dataTypesSet1_PortType_genericGet\">\n    <wsdl:part name=\"parameters\" element=\"tns:genericGet\">\n    </wsdl:part>\n  </wsdl:message>\n  <wsdl:message name=\"dataTypesSet1_PortType_genericGetResponse\">\n    <wsdl:part name=\"parameters\" element=\"tns:genericGetResponse\">\n    </wsdl:part>\n  </wsdl:message>\n  <wsdl:message name=\"dataTypesSet1_PortType_dataTypesSet1Response\">\n    <wsdl:part name=\"parameters\" element=\"tns:dataTypesSet1Response\">\n    </wsdl:part>\n  </wsdl:message>\n  <wsdl:message name=\"dataTypesSet1_PortType_dataTypesSet1\">\n    <wsdl:part name=\"parameters\" element=\"tns:dataTypesSet1\">\n    </wsdl:part>\n  </wsdl:message>\n  <wsdl:portType name=\"dataTypesSet1_PortType\">\n    <wsdl:operation name=\"dataTypesSet1\">\n      <wsdl:input message=\"tns:dataTypesSet1_PortType_dataTypesSet1\">\n    </wsdl:input>\n      <wsdl:output message=\"tns:dataTypesSet1_PortType_dataTypesSet1Response\">\n    </wsdl:output>\n    </wsdl:operation>\n    <wsdl:operation name=\"genericGet\">\n      <wsdl:input message=\"tns:dataTypesSet1_PortType_genericGet\">\n    </wsdl:input>\n      <wsdl:output message=\"tns:dataTypesSet1_PortType_genericGetResponse\">\n    </wsdl:output>\n    </wsdl:operation>\n  </wsdl:portType>\n  <wsdl:binding name=\"SoftwareAG_Mockup_ws_dataTypesSet1_Binder\" type=\"tns:dataTypesSet1_PortType\">\n    <soap12:binding style=\"document\" transport=\"http://schemas.xmlsoap.org/soap/http\"/>\n    <wsdl:operation name=\"dataTypesSet1\">\n      <soap12:operation soapAction=\"SoftwareAG_Mockup_ws_dataTypesSet1_Binder_dataTypesSet1\" style=\"document\"/>\n      <wsdl:input>\n        <soap12:body parts=\"parameters\" use=\"literal\"/>\n      </wsdl:input>\n      <wsdl:output>\n        <soap12:body parts=\"parameters\" use=\"literal\"/>\n      </wsdl:output>\n    </wsdl:operation>\n    <wsdl:operation name=\"genericGet\">\n      <soap12:operation soapAction=\"SoftwareAG_Mockup_ws_dataTypesSet1_Binder_genericGet\" style=\"document\"/>\n      <wsdl:input>\n        <soap12:body parts=\"parameters\" use=\"literal\"/>\n      </wsdl:input>\n      <wsdl:output>\n        <soap12:body parts=\"parameters\" use=\"literal\"/>\n      </wsdl:output>\n    </wsdl:operation>\n  </wsdl:binding>\n  <wsdl:service name=\"SoftwareAG.Mockup.ws.dataTypesSet1\">\n    <wsdl:port name=\"SoftwareAG_Mockup_ws_dataTypesSet1_Port\" binding=\"tns:SoftwareAG_Mockup_ws_dataTypesSet1_Binder\">\n      <soap12:address location=\"http://host.docker.internal:45655/ws/SoftwareAG.Mockup.ws:dataTypesSet1/SoftwareAG_Mockup_ws_dataTypesSet1_Port\"/>\n    </wsdl:port>\n  </wsdl:service>\n</wsdl:definitions>\n",
+        "nativeUri": [
+          "http://host.docker.internal:45655/ws/SoftwareAG.Mockup.ws:dataTypesSet1/SoftwareAG_Mockup_ws_dataTypesSet1_Port"
+        ],
+        "serviceName": "mockApi1",
+        "operationsInfo": [
+          {
+            "name": "dataTypesSet1",
+            "namespace": "http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1",
+            "enabled": true,
+            "bindings": [
+              {
+                "name": "SoftwareAG_Mockup_ws_dataTypesSet1_Binder",
+                "type": "soap12",
+                "specifier": "",
+                "inputMessage": "<sof:dataTypesSet1 xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\"/>",
+                "outputMessage": "<sof:dataTypesSet1Response xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <genericString>\n    <mandatoryWithValue>string</mandatoryWithValue>\n    <mandatoryNullableWithValue>string</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>string</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>string</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>string</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>string</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>string</optionalNullableWithNull>\n  </genericString>\n  <jFloat>\n    <mandatoryWithValue>1.5E2</mandatoryWithValue>\n    <mandatoryNullableWithValue>1.5E2</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1.5E2</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1.5E2</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1.5E2</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1.5E2</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1.5E2</optionalNullableWithNull>\n  </jFloat>\n  <constrainedStringCurrency1>\n    <mandatoryWithValue>1000.000</mandatoryWithValue>\n    <mandatoryNullableWithValue>1000.000</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1000.000</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1000.000</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1000.000</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1000.000</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1000.000</optionalNullableWithNull>\n  </constrainedStringCurrency1>\n  <constrainedStringCurrency2>\n    <mandatoryWithValue>1000.00</mandatoryWithValue>\n    <mandatoryNullableWithValue>1000.00</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1000.00</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1000.00</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1000.00</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1000.00</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1000.00</optionalNullableWithNull>\n  </constrainedStringCurrency2>\n  <constrainedStringDecimal>\n    <mandatoryWithValue>1000.00</mandatoryWithValue>\n    <mandatoryNullableWithValue>string</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>string</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>string</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>string</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>string</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>string</optionalNullableWithNull>\n  </constrainedStringDecimal>\n</sof:dataTypesSet1Response>"
+              }
+            ],
+            "mockedResponses": {},
+            "mockedConditionsBasedCustomResponsesList": [],
+            "defined": true,
+            "soapAction": "SoftwareAG_Mockup_ws_dataTypesSet1_Binder_dataTypesSet1",
+            "isRESTInvokeEnabled": true,
+            "restEnabledPath": {
+              "get": {
+                "consumes": ["application/json", "application/xml"],
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                  "200": {
+                    "headersV3": {},
+                    "content": {
+                      "application/json": {
+                        "schema": { "type": "gateway" },
+                        "examples": {},
+                        "example": "{\"dataTypesSet1Response\":{\"$\":\"\\n  \\n  \\n  \\n  \\n  \\n\",\"genericString\":{\"$\":\"\\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n  \",\"mandatoryWithValue\":\"string\",\"mandatoryNullableWithValue\":\"string\",\"mandatoryNullableWithNull\":\"string\",\"optionalNonNullableWithValue\":\"string\",\"optionalNonNullableAbsent\":\"string\",\"optionalNullableWithValue\":\"string\",\"optionalNullableWithNull\":\"string\"},\"jFloat\":{\"$\":\"\\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n  \",\"mandatoryWithValue\":\"1.5E2\",\"mandatoryNullableWithValue\":\"1.5E2\",\"mandatoryNullableWithNull\":\"1.5E2\",\"optionalNonNullableWithValue\":\"1.5E2\",\"optionalNonNullableAbsent\":\"1.5E2\",\"optionalNullableWithValue\":\"1.5E2\",\"optionalNullableWithNull\":\"1.5E2\"},\"constrainedStringCurrency1\":{\"$\":\"\\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n  \",\"mandatoryWithValue\":\"1000.000\",\"mandatoryNullableWithValue\":\"1000.000\",\"mandatoryNullableWithNull\":\"1000.000\",\"optionalNonNullableWithValue\":\"1000.000\",\"optionalNonNullableAbsent\":\"1000.000\",\"optionalNullableWithValue\":\"1000.000\",\"optionalNullableWithNull\":\"1000.000\"},\"constrainedStringCurrency2\":{\"$\":\"\\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n  \",\"mandatoryWithValue\":\"1000.00\",\"mandatoryNullableWithValue\":\"1000.00\",\"mandatoryNullableWithNull\":\"1000.00\",\"optionalNonNullableWithValue\":\"1000.00\",\"optionalNonNullableAbsent\":\"1000.00\",\"optionalNullableWithValue\":\"1000.00\",\"optionalNullableWithNull\":\"1000.00\"},\"constrainedStringDecimal\":{\"$\":\"\\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n    \\n  \",\"mandatoryWithValue\":\"1000.00\",\"mandatoryNullableWithValue\":\"string\",\"mandatoryNullableWithNull\":\"string\",\"optionalNonNullableWithValue\":\"string\",\"optionalNonNullableAbsent\":\"string\",\"optionalNullableWithValue\":\"string\",\"optionalNullableWithNull\":\"string\"}}}"
+                      },
+                      "application/xml": {
+                        "schema": { "type": "gateway" },
+                        "examples": {},
+                        "example": "<sof:dataTypesSet1Response xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <genericString>\n    <mandatoryWithValue>string</mandatoryWithValue>\n    <mandatoryNullableWithValue>string</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>string</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>string</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>string</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>string</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>string</optionalNullableWithNull>\n  </genericString>\n  <jFloat>\n    <mandatoryWithValue>1.5E2</mandatoryWithValue>\n    <mandatoryNullableWithValue>1.5E2</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1.5E2</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1.5E2</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1.5E2</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1.5E2</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1.5E2</optionalNullableWithNull>\n  </jFloat>\n  <constrainedStringCurrency1>\n    <mandatoryWithValue>1000.000</mandatoryWithValue>\n    <mandatoryNullableWithValue>1000.000</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1000.000</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1000.000</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1000.000</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1000.000</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1000.000</optionalNullableWithNull>\n  </constrainedStringCurrency1>\n  <constrainedStringCurrency2>\n    <mandatoryWithValue>1000.00</mandatoryWithValue>\n    <mandatoryNullableWithValue>1000.00</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>1000.00</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>1000.00</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>1000.00</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>1000.00</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>1000.00</optionalNullableWithNull>\n  </constrainedStringCurrency2>\n  <constrainedStringDecimal>\n    <mandatoryWithValue>1000.00</mandatoryWithValue>\n    <mandatoryNullableWithValue>string</mandatoryNullableWithValue>\n    <mandatoryNullableWithNull>string</mandatoryNullableWithNull>\n    <!--Optional:-->\n    <optionalNonNullableWithValue>string</optionalNonNullableWithValue>\n    <!--Optional:-->\n    <optionalNonNullableAbsent>string</optionalNonNullableAbsent>\n    <!--Optional:-->\n    <optionalNullableWithValue>string</optionalNullableWithValue>\n    <!--Optional:-->\n    <optionalNullableWithNull>string</optionalNullableWithNull>\n  </constrainedStringDecimal>\n</sof:dataTypesSet1Response>"
+                      }
+                    },
+                    "links": {},
+                    "schema": {},
+                    "examples": {},
+                    "headers": {}
+                  }
+                },
+                "mockedResponses": {},
+                "mockedConditionsBasedCustomResponsesList": [],
+                "enabled": true,
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": { "type": "gateway" },
+                      "examples": {},
+                      "example": "{\"dataTypesSet1\":\"\"}"
+                    },
+                    "application/xml": {
+                      "schema": { "type": "gateway" },
+                      "examples": {},
+                      "example": "<sof:dataTypesSet1 xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\"/>"
+                    }
+                  },
+                  "name": "requestBody"
+                }
+              },
+              "parameters": [],
+              "enabled": true,
+              "name": "dataTypesSet1",
+              "invokePath": "/dataTypesSet1"
+            },
+            "scopes": [],
+            "tags": [],
+            "headers": []
+          },
+          {
+            "name": "genericGet",
+            "namespace": "http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1",
+            "enabled": true,
+            "bindings": [
+              {
+                "name": "SoftwareAG_Mockup_ws_dataTypesSet1_Binder",
+                "type": "soap12",
+                "specifier": "",
+                "inputMessage": "<sof:genericGet xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <!--Optional:-->\n  <sleepIntervalMilliseconds>1000.00</sleepIntervalMilliseconds>\n  <!--Optional:-->\n  <unmanagedExceptionProbability>1.5E2</unmanagedExceptionProbability>\n  <!--Optional:-->\n  <managedExceptionProbability>1.5E2</managedExceptionProbability>\n  <!--Optional:-->\n  <outputBodySize>1000.00</outputBodySize>\n</sof:genericGet>",
+                "outputMessage": "<sof:genericGetResponse xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <genericGetResult>\n    <actualInput>\n      <!--Optional:-->\n      <sleepIntervalMilliseconds>1000.00</sleepIntervalMilliseconds>\n      <!--Optional:-->\n      <unmanagedExceptionProbability>1.5E2</unmanagedExceptionProbability>\n      <!--Optional:-->\n      <managedExceptionProbability>1.5E2</managedExceptionProbability>\n      <!--Optional:-->\n      <outputBodySize>1000.00</outputBodySize>\n    </actualInput>\n    <currentHostName>string</currentHostName>\n  </genericGetResult>\n  <bodyString>string</bodyString>\n  <code>1000.00</code>\n  <description>string</description>\n</sof:genericGetResponse>"
+              }
+            ],
+            "mockedResponses": {},
+            "mockedConditionsBasedCustomResponsesList": [],
+            "defined": true,
+            "soapAction": "SoftwareAG_Mockup_ws_dataTypesSet1_Binder_genericGet",
+            "isRESTInvokeEnabled": false,
+            "restEnabledPath": {
+              "post": {
+                "consumes": ["application/json", "application/xml"],
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                  "200": {
+                    "headersV3": {},
+                    "content": {
+                      "application/json": {
+                        "schema": { "type": "gateway", "schema": "{}" },
+                        "examples": {},
+                        "example": "{\"genericGetResponse\":{\"$\":\"\\n  \\n  \\n  \\n  \\n\",\"genericGetResult\":{\"$\":\"\\n    \\n    \\n  \",\"actualInput\":{\"$\":\"\\n      \\n      \\n      \\n      \\n      \\n      \\n      \\n      \\n    \",\"sleepIntervalMilliseconds\":\"1000.00\",\"unmanagedExceptionProbability\":\"1.5E2\",\"managedExceptionProbability\":\"1.5E2\",\"outputBodySize\":\"1000.00\"},\"currentHostName\":\"string\"},\"bodyString\":\"string\",\"code\":\"1000.00\",\"description\":\"string\"}}"
+                      },
+                      "application/xml": {
+                        "schema": { "type": "gateway", "schema": "{}" },
+                        "examples": {},
+                        "example": "<sof:genericGetResponse xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <genericGetResult>\n    <actualInput>\n      <!--Optional:-->\n      <sleepIntervalMilliseconds>1000.00</sleepIntervalMilliseconds>\n      <!--Optional:-->\n      <unmanagedExceptionProbability>1.5E2</unmanagedExceptionProbability>\n      <!--Optional:-->\n      <managedExceptionProbability>1.5E2</managedExceptionProbability>\n      <!--Optional:-->\n      <outputBodySize>1000.00</outputBodySize>\n    </actualInput>\n    <currentHostName>string</currentHostName>\n  </genericGetResult>\n  <bodyString>string</bodyString>\n  <code>1000.00</code>\n  <description>string</description>\n</sof:genericGetResponse>"
+                      }
+                    },
+                    "links": {},
+                    "schema": {},
+                    "examples": {},
+                    "headers": {}
+                  }
+                },
+                "mockedResponses": {},
+                "mockedConditionsBasedCustomResponsesList": [],
+                "enabled": true,
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "examples": {},
+                      "example": "{\"genericGet\":{\"$\":\"\\n  \\n  \\n  \\n  \\n  \\n  \\n  \\n  \\n\",\"sleepIntervalMilliseconds\":\"1000.00\",\"unmanagedExceptionProbability\":\"1.5E2\",\"managedExceptionProbability\":\"1.5E2\",\"outputBodySize\":\"1000.00\"}}"
+                    },
+                    "application/xml": {
+                      "examples": {},
+                      "example": "<sof:genericGet xmlns:sof=\"http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1\">\n  <!--Optional:-->\n  <sleepIntervalMilliseconds>1000.00</sleepIntervalMilliseconds>\n  <!--Optional:-->\n  <unmanagedExceptionProbability>1.5E2</unmanagedExceptionProbability>\n  <!--Optional:-->\n  <managedExceptionProbability>1.5E2</managedExceptionProbability>\n  <!--Optional:-->\n  <outputBodySize>1000.00</outputBodySize>\n</sof:genericGet>"
+                    }
+                  },
+                  "name": "requestBody"
+                }
+              },
+              "parameters": [],
+              "enabled": true,
+              "name": "genericGet",
+              "invokePath": "/genericGet"
+            },
+            "scopes": [],
+            "tags": [],
+            "headers": []
+          }
+        ],
+        "type": "soap",
+        "serviceRegistryDisplayName": "mockApi1_1",
+        "operationPolicies": { "dataTypesSet1": "", "genericGet": "" },
+        "isRESTInvokeEnabled": false,
+        "soapToRestConfigurations": {
+          "useSchemaForTransformation": true,
+          "removeRootElement": false,
+          "useDefaultElements": false
+        },
+        "differentBindings": false
+      },
+      "nativeEndpoint": [
+        {
+          "passSecurityHeaders": true,
+          "uri": "http://host.docker.internal:45655/ws/SoftwareAG.Mockup.ws:dataTypesSet1/SoftwareAG_Mockup_ws_dataTypesSet1_Port",
+          "connectionTimeoutDuration": 0,
+          "alias": false
+        }
+      ],
+      "apiName": "mockApi1",
+      "apiVersion": "1",
+      "maturityState": "Beta",
+      "isActive": true,
+      "type": "SOAP",
+      "owner": "Administrator",
+      "policies": ["e64253f2-e585-4915-9d26-fee912475ed7"],
+      "tracingEnabled": false,
+      "scopes": [],
+      "publishedPortals": [],
+      "creationDate": "2023-03-27 09:55:59 GMT",
+      "lastModified": "2023-03-27 10:28:15 GMT",
+      "systemVersion": 1,
+      "gatewayEndpoints": {},
+      "deployments": ["APIGateway"],
+      "microgatewayEndpoints": [],
+      "appMeshEndpoints": [],
+      "id": "23b1b341-e238-47b1-8be5-5b71bffdbe48"
+    },
+    "responseStatus": "SUCCESS",
+    "gatewayEndPoints": [
+      "https://host.docker.internal:47155/ws/mockApi1/1"
+    ],
+    "gatewayEndPointList": [
+      {
+        "endpointName": "DEFAULT_GATEWAY_ENDPOINT",
+        "endpointDisplayName": "Default",
+        "endpoint": "ws/mockApi1/1",
+        "endpointType": "DEFAULT",
+        "endpointUrls": ["https://host.docker.internal:47155/ws/mockApi1/1"]
+      }
+    ],
+    "versions": [
+      { "versionNumber": "1", "apiId": "23b1b341-e238-47b1-8be5-5b71bffdbe48" }
+    ]
+  }
+}

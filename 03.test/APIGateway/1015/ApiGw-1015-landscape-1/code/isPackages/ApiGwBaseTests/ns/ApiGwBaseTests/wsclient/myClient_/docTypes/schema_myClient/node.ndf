@@ -1,0 +1,2661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Values version="2.0">
+  <record name="schema" javaclass="com.wm.util.Values">
+    <value name="node_type">schema</value>
+    <value name="node_subtype">unknown</value>
+    <value name="node_nsName">ApiGwBaseTests.wsclient.myClient_.docTypes:schema_myClient</value>
+    <value name="node_pkg">ApiGwBaseTests</value>
+    <value name="is_public">false</value>
+    <value name="contentType">3</value>
+    <value name="targetNamespace">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+    <value name="schemaDomain">a1e46f604a02461189c2bafaa9aeaa73</value>
+    <record name="attributes" javaclass="com.wm.util.Values">
+      <list name="table">
+      </list>
+    </record>
+    <record name="elements" javaclass="com.wm.util.Values">
+      <list name="table">
+        <record javaclass="com.wm.util.Values">
+          <value name="tagType">element</value>
+          <value name="name">dataTypesSet1</value>
+          <record name="type" javaclass="com.wm.util.Values">
+            <value name="contentType">2</value>
+            <value name="internalType">reference</value>
+            <record name="targetName" javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">dataTypesSet1</value>
+            </record>
+          </record>
+          <value name="internalType">instance</value>
+          <value name="classname">com.wm.lang.schema.WmElement</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="tagType">element</value>
+          <value name="name">genericGet</value>
+          <record name="type" javaclass="com.wm.util.Values">
+            <value name="contentType">2</value>
+            <value name="internalType">reference</value>
+            <record name="targetName" javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericGet</value>
+            </record>
+          </record>
+          <value name="internalType">instance</value>
+          <value name="classname">com.wm.lang.schema.WmElement</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="tagType">element</value>
+          <value name="name">genericGetResponse</value>
+          <record name="type" javaclass="com.wm.util.Values">
+            <value name="contentType">2</value>
+            <value name="internalType">reference</value>
+            <record name="targetName" javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericGetResponse</value>
+            </record>
+          </record>
+          <value name="internalType">instance</value>
+          <value name="classname">com.wm.lang.schema.WmElement</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="tagType">element</value>
+          <value name="name">dataTypesSet1Response</value>
+          <record name="type" javaclass="com.wm.util.Values">
+            <value name="contentType">2</value>
+            <value name="internalType">reference</value>
+            <record name="targetName" javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">dataTypesSet1Response</value>
+            </record>
+          </record>
+          <value name="internalType">instance</value>
+          <value name="classname">com.wm.lang.schema.WmElement</value>
+        </record>
+      </list>
+    </record>
+    <record name="types" javaclass="com.wm.util.Values">
+      <list name="table">
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">0.0</value>
+          </record>
+          <record name="maxExclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">1.0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+          <value name="name">managedExceptionProbability</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">float</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">managedExceptionProbability</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmFloat</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryNullableWithValue3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryNullableWithValue3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">4</value>
+            <value name="lexRep">0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">sleepIntervalMilliseconds</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">sleepIntervalMilliseconds</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryNullableWithValue2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryNullableWithValue2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">jFloat</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableAbsent</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">float</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithNull</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableAbsent</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithNull</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">jFloat</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">constrainedStringCurrency2</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryWithValue3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryNullableWithValue3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryNullableWithNull3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNonNullableWithValue3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableAbsent</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNonNullableAbsent3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNullableWithValue3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNullableWithNull3</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithNull</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableAbsent</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithNull</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">constrainedStringCurrency2</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">constrainedStringCurrency1</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryWithValue2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryNullableWithValue2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">mandatoryNullableWithNull2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNonNullableWithValue2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableAbsent</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNonNullableAbsent2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNullableWithValue2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">optionalNullableWithNull2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithNull</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableAbsent</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithNull</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">constrainedStringCurrency1</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">genericGetResult</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">actualInput</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">actualInput</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">currentHostName</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">actualInput</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">currentHostName</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericGetResult</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">genericGetResponse</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">genericGetResult</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">genericGetResult</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">bodyString</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">code</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">decimal</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">description</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">genericGetResult</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">bodyString</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">code</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">description</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericGetResponse</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNullableWithNull3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNullableWithNull3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNullableWithNull2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNullableWithNull2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">0.0</value>
+          </record>
+          <record name="maxExclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">1.0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+          <value name="name">managedExceptionProbability2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">float</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">managedExceptionProbability2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmFloat</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">genericString</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableAbsent</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithNull</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableAbsent</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithNull</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericString</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">dataTypesSet1Response</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">genericString</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">genericString</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">jFloat</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">jFloat</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">constrainedStringCurrency1</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">constrainedStringCurrency1</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">constrainedStringCurrency2</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">constrainedStringCurrency2</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">constrainedStringDecimal</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">2</value>
+                <value name="internalType">reference</value>
+                <record name="targetName" javaclass="com.wm.util.Values">
+                  <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                  <value name="ncName">constrainedStringDecimal</value>
+                </record>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">genericString</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">jFloat</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">constrainedStringCurrency1</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">constrainedStringCurrency2</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">constrainedStringDecimal</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">dataTypesSet1Response</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">0.0</value>
+          </record>
+          <record name="maxExclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">1.0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+          <value name="name">unmanagedExceptionProbability2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">float</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">unmanagedExceptionProbability2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmFloat</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryWithValue3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryWithValue3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryWithValue2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryWithValue2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryNullableWithNull3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryNullableWithNull3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">mandatoryNullableWithNull2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">mandatoryNullableWithNull2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNullableWithValue3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNullableWithValue3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNonNullableAbsent3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNonNullableAbsent3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNonNullableAbsent2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNonNullableAbsent2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">2</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNonNullableWithValue3</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNonNullableWithValue3</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNullableWithValue2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNullableWithValue2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">actualInput</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">sleepIntervalMilliseconds</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">sleepIntervalMilliseconds2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">unmanagedExceptionProbability</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">unmanagedExceptionProbability2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">managedExceptionProbability</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">managedExceptionProbability2</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">outputBodySize</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">decimal</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">sleepIntervalMilliseconds</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">unmanagedExceptionProbability</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">managedExceptionProbability</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">outputBodySize</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">actualInput</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="fractionDigits" javaclass="com.wm.util.Values">
+            <record name="FacetFDCValue" javaclass="com.wm.util.Values">
+              <value name="cDecimalValue">3</value>
+            </record>
+            <value name="facetFixed">false</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">optionalNonNullableWithValue2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">optionalNonNullableWithValue2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">constrainedStringDecimal</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">decimal</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">mandatoryNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNonNullableAbsent</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithValue</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">optionalNullableWithNull</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">string</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithValue</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">mandatoryNullableWithNull</value>
+                </record>
+                <value name="minOccurs">1</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNonNullableAbsent</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithValue</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">optionalNullableWithNull</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">constrainedStringDecimal</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">genericGet</value>
+          <list name="elements">
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">sleepIntervalMilliseconds</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">sleepIntervalMilliseconds</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">unmanagedExceptionProbability</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">unmanagedExceptionProbability</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">managedExceptionProbability</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+                    <value name="ncName">managedExceptionProbability</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="tagType">element</value>
+              <value name="name">outputBodySize</value>
+              <record name="type" javaclass="com.wm.util.Values">
+                <value name="contentType">1</value>
+                <value name="internalType">reference</value>
+                <value name="dataTypeVersion">dtVersion2</value>
+                <array name="targetNames" type="record" depth="1">
+                  <record javaclass="com.wm.util.Values">
+                    <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+                    <value name="ncName">decimal</value>
+                  </record>
+                </array>
+              </record>
+              <value name="internalType">instance</value>
+              <value name="nullable">true</value>
+              <value name="nillable">true</value>
+            </record>
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">sleepIntervalMilliseconds</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">unmanagedExceptionProbability</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">managedExceptionProbability</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+              <record javaclass="com.wm.util.Values">
+                <record name="symbol" javaclass="com.wm.util.Values">
+                  <value name="ncName">outputBodySize</value>
+                </record>
+                <value name="minOccurs">0</value>
+                <value name="maxOccurs">1</value>
+                <value name="modelType">simple</value>
+              </record>
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">genericGet</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">4</value>
+            <value name="lexRep">0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+          <value name="name">sleepIntervalMilliseconds2</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">decimal</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">sleepIntervalMilliseconds2</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmDecimal</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmDecimal</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <record name="minInclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">0.0</value>
+          </record>
+          <record name="maxExclusive" javaclass="com.wm.util.Values">
+            <value name="facetFixed">false</value>
+            <value name="primitiveType">2</value>
+            <value name="lexRep">1.0</value>
+          </record>
+          <value name="contentType">1</value>
+          <value name="internalType">instance</value>
+          <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+          <value name="name">unmanagedExceptionProbability</value>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anySimpleType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">float</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">unmanagedExceptionProbability</value>
+            </record>
+          </array>
+          <record name="baseType" javaclass="com.wm.util.Values">
+            <record name="whiteSpace" javaclass="com.wm.util.Values">
+              <record name="FacetWSCValue" javaclass="com.wm.util.Values">
+                <value name="cDecimalValue">1</value>
+              </record>
+              <value name="facetFixed">true</value>
+            </record>
+            <value name="contentType">1</value>
+            <value name="internalType">instance</value>
+            <value name="ct_class">com.wm.lang.schema.datatypev2.WmFloat</value>
+            <value name="dataTypeVersion">dtVersion2</value>
+          </record>
+          <value name="dataTypeVersion">dtVersion2</value>
+          <value name="classname">com.wm.lang.schema.datatypev2.WmFloat</value>
+        </record>
+        <record javaclass="com.wm.util.Values">
+          <value name="contentType">2</value>
+          <value name="internalType">instance</value>
+          <value name="name">dataTypesSet1</value>
+          <list name="elements">
+          </list>
+          <list name="attributes">
+          </list>
+          <record name="contentModel" javaclass="com.wm.util.Values">
+            <record name="symbol" javaclass="com.wm.util.Values">
+              <value name="ncName">$$SEQUENCE</value>
+            </record>
+            <value name="minOccurs">1</value>
+            <value name="maxOccurs">1</value>
+            <value name="modelType">sequence</value>
+            <list name="children">
+            </list>
+          </record>
+          <array name="parent-ancestors" type="record" depth="1">
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://www.w3.org/2001/XMLSchema</value>
+              <value name="ncName">anyType</value>
+            </record>
+            <record javaclass="com.wm.util.Values">
+              <value name="xmlns">http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1</value>
+              <value name="ncName">dataTypesSet1</value>
+            </record>
+          </array>
+          <value name="classname">com.wm.lang.schema.WmComplexType</value>
+        </record>
+      </list>
+    </record>
+    <record name="uriReferencePrefixPairs" javaclass="com.wm.util.Values">
+      <value name="http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1">tns</value>
+      <value name="http://schemas.xmlsoap.org/soap/encoding/">wmns1</value>
+      <value name="http://www.w3.org/2001/XMLSchema">xsd</value>
+      <value name="http://www.w3.org/1999/XMLSchema">ns</value>
+    </record>
+    <value name="originURI">file://C:\t\view-source_localhost_45655_ws_SoftwareAG.Mockup.ws_dataTypesSet1_SoftwareAG_Mockup_ws_dataTypesSet1_Port_wsdl.xml</value>
+    <value name="modifiable">false</value>
+  </record>
+</Values>

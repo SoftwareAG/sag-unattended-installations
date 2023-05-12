@@ -1,0 +1,38 @@
+{
+  "policy": {
+    "id": "0f584281-cd79-44d0-ab42-c7ecf5bd4261",
+    "names": [
+      { "value": "Default Policy for API mockApi1", "locale": "English" }
+    ],
+    "descriptions": [{ "value": "", "locale": "English" }],
+    "scope": { "scopeConditions": [] },
+    "policyEnforcements": [
+      {
+        "enforcements": [
+          {
+            "enforcementObjectId": "46708584-a5e4-4731-bdc3-c7190e51fa1a",
+            "order": "0"
+          },
+          {
+            "enforcementObjectId": "6fed4b5a-25ce-41b0-9a67-b274d95273b3",
+            "order": "1"
+          }
+        ],
+        "stageKey": "routing"
+      },
+      {
+        "enforcements": [
+          {
+            "enforcementObjectId": "36ca6e87-0479-4626-9390-686adaf88eb2",
+            "order": "0"
+          }
+        ],
+        "stageKey": "transport"
+      }
+    ],
+    "policyScope": "SERVICE",
+    "global": false,
+    "active": false,
+    "systemPolicy": false
+  }
+}

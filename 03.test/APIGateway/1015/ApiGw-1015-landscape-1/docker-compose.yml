@@ -29,7 +29,7 @@ services:
     image: api-gw-1015-landscape-1-t-1
     container_name: api-gw-1015-landscape-1-t-1
     hostname: api-gw-1015-landscape-1-t-1
-    mem_reservation: 512m
+    mem_reservation: 2g
     mem_limit: 5g
     cpus: 4
     ulimits:
@@ -67,6 +67,12 @@ services:
       - H_SUIF_PORT_PREFIX
       - JAVA_MIN_MEM=512m
       - JAVA_MAX_MEM=1536m
+      # For change Admin Password template
+      - SUIF_APIGW_ADMINISTRATOR_PASSWORD=${SUIF_TEST_API_GW_ADMINSTRATOR_PASSWORD}
+      - SUIF_APIGW_OLD_ADMINISTRATOR_PASSWORD=manage
+      - SUIF_APIGW_NEW_ADMINISTRATOR_PASSWORD=${SUIF_TEST_API_GW_ADMINSTRATOR_PASSWORD}
+      # For LB setting template
+      - SUIF_APIGW_LB_JSON_FILE=${SUIF_TEST_LOCAL_SCRIPTS_DIR}/config/lb.json
     ports:
       - "${H_SUIF_PORT_PREFIX}20:9240"
       - "${H_SUIF_PORT_PREFIX}73:9073"
@@ -75,7 +81,7 @@ services:
     networks:
       n1:
         aliases:
-          - apigw-server
+          - api-gw-1015-landscape-1-t-1
     entrypoint: ${SUIF_TEST_LOCAL_SCRIPTS_DIR}/containerEntrypoint.sh
   elasticvue:
     image: cars10/elasticvue
@@ -124,6 +130,8 @@ services:
       - ${WX_IS_TEST_TOOLS_PACKAGE_HOME}:${SUIF_TEST_MOCK_SERVER_GUEST_IS_HOME}/packages/WxIsTestTools
       # our test code
       - ./code/isPackages/ApiGwBaseTests:${SUIF_TEST_MOCK_SERVER_GUEST_IS_HOME}/packages/ApiGwBaseTests
+      # API Gateway related artifacts
+      - ./code/ApiGw:/mnt/ApiGw
     mem_reservation: 100m
     mem_limit: 370m
     container_name: test-client
@@ -134,7 +142,12 @@ services:
       - SAG_IS_CONFIG_PROPERTIES=/tmp/application.properties
       - JAVA_MIN_MEM=256m
       - JAVA_MAX_MEM=256m
+      # Test related variables below
       - SUIF_TEST_CLIENT_SERVER_ADMIN_PASSWORD
+      # To connect to API Gateway as administrator:
+      - SUIF_TEST_API_GW_ADMINSTRATOR_PASSWORD
+      - SUIF_TEST_API_GW_LB_ENDPOINT_FOR_APIS=http://host.docker.internal:${H_SUIF_PORT_PREFIX}55
+      - SUIF_TEST_API_GW_DIRECT_ENDPOINT_FOR_APIS=http://api-gw-1015-landscape-1-t-1:5555
     networks:
       n1:
         aliases:

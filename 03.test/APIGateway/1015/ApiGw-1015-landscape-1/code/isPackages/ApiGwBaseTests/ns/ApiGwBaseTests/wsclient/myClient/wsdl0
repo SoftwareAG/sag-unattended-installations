@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="dataTypesSet1" targetNamespace="http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soapjms="http://www.w3.org/2010/soapjms/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1" xmlns:tns="http://api-mockup-dev-01/SoftwareAG.Mockup.ws:dataTypesSet1" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+          <xsd:element name="dataTypesSet1" type="tns:dataTypesSet1"/>
+          <xsd:element name="dataTypesSet1Response" type="tns:dataTypesSet1Response"/>
+          <xsd:element name="genericGet" type="tns:genericGet"/>
+          <xsd:element name="genericGetResponse" type="tns:genericGetResponse"/>
+          <xsd:complexType name="dataTypesSet1">
+            <xsd:sequence>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="dataTypesSet1Response">
+            <xsd:sequence>
+              <xsd:element name="genericString" nillable="true" type="tns:genericString"/>
+              <xsd:element name="jFloat" nillable="true" type="tns:jFloat"/>
+              <xsd:element name="constrainedStringCurrency1" nillable="true" type="tns:constrainedStringCurrency1"/>
+              <xsd:element name="constrainedStringCurrency2" nillable="true" type="tns:constrainedStringCurrency2"/>
+              <xsd:element name="constrainedStringDecimal" nillable="true" type="tns:constrainedStringDecimal"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="genericString">
+            <xsd:sequence>
+              <xsd:element name="mandatoryWithValue" type="xsd:string"/>
+              <xsd:element name="mandatoryNullableWithValue" nillable="true" type="xsd:string"/>
+              <xsd:element name="mandatoryNullableWithNull" nillable="true" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableWithValue" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableAbsent" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithValue" nillable="true" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithNull" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="jFloat">
+            <xsd:sequence>
+              <xsd:element name="mandatoryWithValue" type="xsd:float"/>
+              <xsd:element name="mandatoryNullableWithValue" nillable="true" type="xsd:float"/>
+              <xsd:element name="mandatoryNullableWithNull" nillable="true" type="xsd:float"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableWithValue" type="xsd:float"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableAbsent" type="xsd:float"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithValue" nillable="true" type="xsd:float"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithNull" nillable="true" type="xsd:float"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="constrainedStringCurrency1">
+            <xsd:sequence>
+              <xsd:element name="mandatoryWithValue" type="tns:mandatoryWithValue2"/>
+              <xsd:element name="mandatoryNullableWithValue" nillable="true" type="tns:mandatoryNullableWithValue2"/>
+              <xsd:element name="mandatoryNullableWithNull" nillable="true" type="tns:mandatoryNullableWithNull2"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableWithValue" type="tns:optionalNonNullableWithValue2"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableAbsent" type="tns:optionalNonNullableAbsent2"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithValue" nillable="true" type="tns:optionalNullableWithValue2"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithNull" nillable="true" type="tns:optionalNullableWithNull2"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:simpleType name="mandatoryWithValue2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="mandatoryNullableWithValue2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="mandatoryNullableWithNull2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNonNullableWithValue2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNonNullableAbsent2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNullableWithValue2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNullableWithNull2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="3"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:complexType name="constrainedStringCurrency2">
+            <xsd:sequence>
+              <xsd:element name="mandatoryWithValue" type="tns:mandatoryWithValue3"/>
+              <xsd:element name="mandatoryNullableWithValue" nillable="true" type="tns:mandatoryNullableWithValue3"/>
+              <xsd:element name="mandatoryNullableWithNull" nillable="true" type="tns:mandatoryNullableWithNull3"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableWithValue" type="tns:optionalNonNullableWithValue3"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableAbsent" type="tns:optionalNonNullableAbsent3"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithValue" nillable="true" type="tns:optionalNullableWithValue3"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithNull" nillable="true" type="tns:optionalNullableWithNull3"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:simpleType name="mandatoryWithValue3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="mandatoryNullableWithValue3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="mandatoryNullableWithNull3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNonNullableWithValue3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNonNullableAbsent3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNullableWithValue3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="optionalNullableWithNull3">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:fractionDigits value="2"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:complexType name="constrainedStringDecimal">
+            <xsd:sequence>
+              <xsd:element name="mandatoryWithValue" type="xsd:decimal"/>
+              <xsd:element name="mandatoryNullableWithValue" nillable="true" type="xsd:string"/>
+              <xsd:element name="mandatoryNullableWithNull" nillable="true" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableWithValue" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNonNullableAbsent" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithValue" nillable="true" type="xsd:string"/>
+              <xsd:element minOccurs="0" name="optionalNullableWithNull" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="genericGet">
+            <xsd:sequence>
+              <xsd:element minOccurs="0" name="sleepIntervalMilliseconds" nillable="true" type="tns:sleepIntervalMilliseconds"/>
+              <xsd:element minOccurs="0" name="unmanagedExceptionProbability" nillable="true" type="tns:unmanagedExceptionProbability"/>
+              <xsd:element minOccurs="0" name="managedExceptionProbability" nillable="true" type="tns:managedExceptionProbability"/>
+              <xsd:element minOccurs="0" name="outputBodySize" nillable="true" type="xsd:decimal"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:simpleType name="sleepIntervalMilliseconds">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:minInclusive value="0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="unmanagedExceptionProbability">
+            <xsd:restriction base="xsd:float">
+              <xsd:minInclusive value="0.0"/>
+              <xsd:maxExclusive value="1.0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="managedExceptionProbability">
+            <xsd:restriction base="xsd:float">
+              <xsd:minInclusive value="0.0"/>
+              <xsd:maxExclusive value="1.0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:complexType name="genericGetResponse">
+            <xsd:sequence>
+              <xsd:element name="genericGetResult" nillable="true" type="tns:genericGetResult"/>
+              <xsd:element name="bodyString" type="xsd:string"/>
+              <xsd:element name="code" type="xsd:decimal"/>
+              <xsd:element name="description" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="genericGetResult">
+            <xsd:sequence>
+              <xsd:element name="actualInput" nillable="true" type="tns:actualInput"/>
+              <xsd:element name="currentHostName" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:complexType name="actualInput">
+            <xsd:sequence>
+              <xsd:element minOccurs="0" name="sleepIntervalMilliseconds" nillable="true" type="tns:sleepIntervalMilliseconds2"/>
+              <xsd:element minOccurs="0" name="unmanagedExceptionProbability" nillable="true" type="tns:unmanagedExceptionProbability2"/>
+              <xsd:element minOccurs="0" name="managedExceptionProbability" nillable="true" type="tns:managedExceptionProbability2"/>
+              <xsd:element minOccurs="0" name="outputBodySize" nillable="true" type="xsd:decimal"/>
+            </xsd:sequence>
+          </xsd:complexType>
+          <xsd:simpleType name="sleepIntervalMilliseconds2">
+            <xsd:restriction base="xsd:decimal">
+              <xsd:minInclusive value="0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="unmanagedExceptionProbability2">
+            <xsd:restriction base="xsd:float">
+              <xsd:minInclusive value="0.0"/>
+              <xsd:maxExclusive value="1.0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="managedExceptionProbability2">
+            <xsd:restriction base="xsd:float">
+              <xsd:minInclusive value="0.0"/>
+              <xsd:maxExclusive value="1.0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        	</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="dataTypesSet1_PortType_genericGet">
+    <wsdl:part name="parameters" element="tns:genericGet">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dataTypesSet1_PortType_genericGetResponse">
+    <wsdl:part name="parameters" element="tns:genericGetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dataTypesSet1_PortType_dataTypesSet1Response">
+    <wsdl:part name="parameters" element="tns:dataTypesSet1Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dataTypesSet1_PortType_dataTypesSet1">
+    <wsdl:part name="parameters" element="tns:dataTypesSet1">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="dataTypesSet1_PortType">
+    <wsdl:operation name="dataTypesSet1">
+      <wsdl:input message="tns:dataTypesSet1_PortType_dataTypesSet1">
+    </wsdl:input>
+      <wsdl:output message="tns:dataTypesSet1_PortType_dataTypesSet1Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="genericGet">
+      <wsdl:input message="tns:dataTypesSet1_PortType_genericGet">
+    </wsdl:input>
+      <wsdl:output message="tns:dataTypesSet1_PortType_genericGetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SoftwareAG_Mockup_ws_dataTypesSet1_Binder" type="tns:dataTypesSet1_PortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="dataTypesSet1">
+      <soap12:operation soapAction="SoftwareAG_Mockup_ws_dataTypesSet1_Binder_dataTypesSet1" style="document"/>
+      <wsdl:input>
+        <soap12:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body parts="parameters" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="genericGet">
+      <soap12:operation soapAction="SoftwareAG_Mockup_ws_dataTypesSet1_Binder_genericGet" style="document"/>
+      <wsdl:input>
+        <soap12:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body parts="parameters" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SoftwareAG.Mockup.ws.dataTypesSet1">
+    <wsdl:port name="SoftwareAG_Mockup_ws_dataTypesSet1_Port" binding="tns:SoftwareAG_Mockup_ws_dataTypesSet1_Binder">
+      <soap12:address location="http://localhost:5555/ws/SoftwareAG.Mockup.ws:dataTypesSet1/SoftwareAG_Mockup_ws_dataTypesSet1_Port"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,12 @@
+{
+    "webAppUrl": "http://host.docker.internal:${H_SUIF_PORT_PREFIX}72",
+    "websocketUrls": [
+        "ws://host.docker.internal:${H_SUIF_PORT_PREFIX}57"
+    ],
+    "httpsUrls": [
+        "https://host.docker.internal:${H_SUIF_PORT_PREFIX}56"
+    ],
+    "httpUrls": [
+        "http://host.docker.internal:${H_SUIF_PORT_PREFIX}55"
+    ]
+}
