@@ -416,6 +416,7 @@ setupProductsAndFixes() {
           fi
         else
           logI "[setupFunctions.sh:setupProductsAndFixes()] - Skipping patch installation, fixes not available."
+          RESULT_setupProductsAndFixes=0
         fi
       fi
     fi
