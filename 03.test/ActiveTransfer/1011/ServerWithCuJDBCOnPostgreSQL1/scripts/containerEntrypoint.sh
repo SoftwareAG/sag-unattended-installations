@@ -2,7 +2,9 @@
 
 # This scripts sets up the local installation
 
-if [ ! -d ${SUIF_HOME} ]; then
+# shellcheck disable=SC3043,SC2006
+
+if [ ! -d "${SUIF_HOME}" ]; then
     echo "SUIF_HOME variable MUST point to an existing local folder! Current value is ${SUIF_HOME}"
     exit 1
 fi
@@ -14,8 +16,17 @@ if [ ! -d "${SUIF_LOCAL_SCRIPTS_HOME}" ]; then
 fi
 
 # Source framework functions
+# shellcheck source=../../../../../01.scripts/commonFunctions.sh
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh" || exit 4
+# shellcheck source=../../../../../01.scripts/installation/setupFunctions.sh
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh" || exit 5
+
+## Work Around for Rancher Desktop
+cp "$SUIF_INSTALL_INSTALLER_BIN" "/tmp/installer2.bin"
+cp "$SUIF_PATCH_SUM_BOOTSTRAP_BIN" "/tmp/sum-boot2.bin"
+
+export SUIF_INSTALL_INSTALLER_BIN=/tmp/installer2.bin
+export SUIF_PATCH_SUM_BOOTSTRAP_BIN=/tmp/sum-boot2.bin
 
 # If the DBC installation is not present, do it now
 if [ ! -f "${SUIF_INSTALL_INSTALL_DIR_DBC}/common/db/bin/dbConfigurator.sh" ]; then
@@ -34,11 +45,12 @@ createDbComponents(){
 
     logI "Eventually creating DB components..."
     sleep 5 # this container is starting too quickly...
-    local p=`portIsReachable ${SUIF_DBSERVER_HOSTNAME} ${SUIF_DBSERVER_PORT}`
+    # shellcheck disable=SC2046 
+    local p=`portIsReachable "${SUIF_DBSERVER_HOSTNAME}" "${SUIF_DBSERVER_PORT}"`
     while [ $p -eq 0 ]; do
         logI "Waiting for the database to come up, sleeping 5..."
         sleep 5
-        p=`portIsReachable ${SUIF_DBSERVER_HOSTNAME} ${SUIF_DBSERVER_PORT}`
+        p=`portIsReachable "${SUIF_DBSERVER_HOSTNAME}" "${SUIF_DBSERVER_PORT}"`
         # TODO: add an maximum retry number
     done
 
@@ -62,10 +74,10 @@ fi
 
 onInterrupt(){
 	echo "Interrupted! Shutting Activetransfer Server..."
-    pushd . >/dev/null
-    cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/"
+    # pushd . >/dev/null
+    cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/" || exit 101
     ./shutdown.sh
-    popd >/dev/null
+    # popd >/dev/null
 	exit 0 # managed expected exit
 }
 
@@ -73,15 +85,15 @@ onKill(){
 	logW "Killed!"
 }
 
-trap "onInterrupt" SIGINT SIGTERM
-trap "onKill" SIGKILL
+trap "onInterrupt" INT TERM
+
 
 logI "Starting Active Transfer Server..."
-pushd . > /dev/null
-cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/"
+# pushd . > /dev/null
+cd "${SUIF_INSTALL_INSTALL_DIR_ATS}/profiles/IS_default/bin/" || exit 102
 ./console.sh & wait
 
-popd > /dev/null
+# popd > /dev/null
 
 if [ "${SUIF_DEBUG_ON}" -eq 1 ]; then
   logW "Stopping for debug"
