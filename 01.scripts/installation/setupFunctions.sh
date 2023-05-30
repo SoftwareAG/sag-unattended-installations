@@ -435,10 +435,17 @@ applySetupTemplate() {
 
   # environment defaults for setup
   logI "[setupFunctions.sh:applySetupTemplate()] - Sourcing variable values for template ${1} ..."
-  huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" || return 2
-  chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" >/dev/null
-  #shellcheck source=/dev/null
-  . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
+  huntForSuifFile "02.templates/01.setup/${1}" "setEnvDefaults.sh" 
+  if [ ! -f "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" ]; then
+    logI "[setupFunctions.sh:applySetupTemplate()] - Template ${1} does not have any default variable values, file ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh has not been provided."
+  else
+    logI "[setupFunctions.sh:applySetupTemplate()] - Sourcing ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh ..."
+    chmod u+x "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh" >/dev/null
+    #shellcheck source=/dev/null
+    . "${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/setEnvDefaults.sh"
+  fi
+  
+  checkSetupTemplateBasicPrerequisites || return 4
 
   ### Eventually check prerequisites
   huntForSuifFile "02.templates/01.setup/${1}" "checkPrerequisites.sh" || logI 
@@ -760,24 +767,31 @@ generateProductsImageFromTemplate() {
 
 # No params. This function checks the basic prerequisites for any setup template
 checkSetupTemplateBasicPrerequisites() {
+
+  errCount=0
+
   if [ -z "${SUIF_INSTALL_INSTALLER_BIN+x}" ]; then
     logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_INSTALL_INSTALLER_BIN was not set!"
-    return 11
+    errCount=$((errCount+1))
+    #return 11
   fi
 
-  if [ ! -f "${SUIF_INSTALL_INSTALLER_BIN}" ]; then
-    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid file."
-    return 12
+  if [ ! -x "${SUIF_INSTALL_INSTALLER_BIN}" ]; then
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN} does not point to a valid executable file."
+    errCount=$((errCount+1))
+    #return 12
   fi
 
   if [ -z "${SUIF_INSTALL_IMAGE_FILE+x}" ]; then
     logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_INSTALL_IMAGE_FILE was not set!"
-    return 13
+    errCount=$((errCount+1))
+    #return 13
   fi
 
   if [ ! -f "${SUIF_INSTALL_IMAGE_FILE}" ]; then
     logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_INSTALL_IMAGE_FILE=${SUIF_INSTALL_IMAGE_FILE} does not point to a valid file."
-    return 14
+    errCount=$((errCount+1))
+    #return 14
   fi
 
   logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_INSTALL_INSTALLER_BIN=${SUIF_INSTALL_INSTALLER_BIN}"
@@ -787,25 +801,34 @@ checkSetupTemplateBasicPrerequisites() {
   if [ "${SUIF_PATCH_AVAILABLE}" -ne 0 ]; then
     if [ -z "${SUIF_PATCH_SUM_BOOTSTRAP_BIN+x}" ]; then
       logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_SUM_BOOTSTRAP_BIN was not set!"
-      return 21
+      errCount=$((errCount+1))
+      #return 21
     fi
 
-    if [ ! -f "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" ]; then
-      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN} does not point to a valid file."
-      return 22
+    if [ ! -x "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" ]; then
+      logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN} does not point to a valid executable file."
+      errCount=$((errCount+1))
+      #return 22
     fi
 
     if [ -z "${SUIF_PATCH_FIXES_IMAGE_FILE+x}" ]; then
       logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Variable SUIF_PATCH_FIXES_IMAGE_FILE was not set!"
-      return 23
+      errCount=$((errCount+1))
+      #return 23
     fi
 
     if [ ! -f "${SUIF_PATCH_FIXES_IMAGE_FILE}" ]; then
       logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - Declared variable SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE} does not point to a valid file."
-      return 24
+      errCount=$((errCount+1))
+      #return 24
     fi
     logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_SUM_BOOTSTRAP_BIN=${SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
     logI "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - SUIF_PATCH_FIXES_IMAGE_FILE=${SUIF_PATCH_FIXES_IMAGE_FILE}"
+  fi
+
+  if [ $errCount -ne 0 ]; then
+    logE "[setupFunctions.sh:checkSetupTemplateBasicPrerequisites()] - $errCount errors found! Cannot continue!"
+    return 11
   fi
 }
 
