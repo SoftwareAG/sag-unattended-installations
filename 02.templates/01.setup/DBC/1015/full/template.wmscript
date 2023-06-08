@@ -1,4 +1,5 @@
-# Authored templat for Full Database Configurator Installation
+# Authored template for Full Database Configurator Installation
+LicenseAgree=Accept
 ServerURL=https\://sdc-hq.softwareag.com/cgi-bin/dataservewebM1015.cgi
 selectedFixes=
 InstallLocProducts=
