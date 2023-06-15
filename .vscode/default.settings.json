@@ -1,0 +1,9 @@
+{
+  "dotenv.enableAutocloaking": true,
+  "files.associations": {
+    "*.env*": "dotenv",
+    "*.wmscript": "properties"
+  },
+  "editor.useTabStops": false,
+  "editor.tabSize": 2
+}
