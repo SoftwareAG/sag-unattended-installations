@@ -2,4 +2,5 @@
 local/
 *.local.bat
 setEnv.bat
-.vscode
+.vscode/**/*
+!.vscode/default.settings.json

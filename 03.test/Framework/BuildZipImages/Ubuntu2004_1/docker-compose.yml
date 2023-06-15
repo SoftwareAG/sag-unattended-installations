@@ -1,19 +1,24 @@
 version: '3.8'
 
+volumes:
+  img-builder-audit: {}
+
 services:
   img-builder-ubuntu-2004-1:
     image: my-ubuntu:20.04
     build: ./build
     container_name: img-builder-ubuntu-2004-1
     volumes:
+      - img-builder-audit:${SUIF_AUDIT_BASE_DIR}
       - ./scripts/:/mnt/local/scripts
       - ../../../../:${SUIF_HOME}/
       - ${H_TEST_OUTPUT_FOLDER}/:${TEST_OUTPUT_FOLDER}/
     environment:
-      - SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR
       - SUIF_EMPOWER_USER
       - SUIF_EMPOWER_PASSWORD
       - SUIF_DEBUG_ON
+      - SUIF_HOME
       - TEST_Templates
       - TEST_OUTPUT_FOLDER
       - SUIF_ONLINE_MODE=0        # this test mounts the local folder, no need to hunt for the sources
