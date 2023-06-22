@@ -33,7 +33,7 @@ services:
       interval: 30s
       timeout: 60s
       retries: 5
-      start_period: 80s
+      start_period: 18s
   adminer:
     image: adminer
     hostname: adminer
@@ -66,6 +66,7 @@ services:
       - ats-wm-dbc-home:${SUIF_INSTALL_INSTALL_DIR_DBC}
       - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}
       - ../../../../:${SUIF_HOME}
+      - ./code/is-packages/WxMFTExamples:${SUIF_INSTALL_INSTALL_DIR_ATS}/IntegrationServer/instances/default/packages/WxMFTExamples
     environment:
       # our test harness context
       - SUIF_ONLINE_MODE
