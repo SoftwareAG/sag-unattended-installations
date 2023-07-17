@@ -481,21 +481,30 @@ applySetupTemplate() {
 assureDownloadableFile() {
   if [ ! -f "${1}" ]; then
     logI "[setupFunctions.sh:assureDownloadableFile()] - File ${1} does not exist, attempting download from ${2}"
+    if ! which sha256sum > /dev/null; then
+      logE "[setupFunctions.sh:assureDownloadableFile()] - Cannot find sha256sum"
+      return 5
+    fi
+
     if ! which curl > /dev/null; then
       logE "[setupFunctions.sh:assureDownloadableFile()] - Cannot find curl"
       return 1
     fi
+    
     if ! curl "${2}" -o "${1}"; then
       logE "[setupFunctions.sh:assureDownloadableFile()] - Cannot download from ${2}"
       return 2
     fi
+
     if [ ! -f "${1}" ]; then
       logE "[setupFunctions.sh:assureDownloadableFile()] - File ${1} waa not downloaded even if curl command succeded"
       return 3
     fi
   fi
-  if ! echo "${3} ${1}" | sha256sum -c -; then
+  if ! echo "${3}  ${1}" | sha256sum -c -; then
     logE "[setupFunctions.sh:assureDownloadableFile()] - sha256sum check for file ${1} failed"
+    logE "[setupFunctions.sh:assureDownloadableFile()] - sha256sum expected was ${3}, actual is"
+    sha256sum "${1}"
     return 4
   fi
 }
@@ -503,8 +512,8 @@ assureDownloadableFile() {
 # Parameters
 # $1 - OPTIONAL installer binary location, defaulted to ${SUIF_INSTALL_INSTALLER_BIN}, which is also defaulted to /tmp/installer.bin
 assureDefaultInstaller() {
-  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20230503-Linux_x86_64.bin"
-  local installerSha256Sum="5f621c45cea463274658b7763469d9013f45e69f7aab441474d8bb5acfa52ac6"
+  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20230614-Linux_x86_64.bin"
+  local installerSha256Sum="719c1a7e60eb976900bff996794791d8ec7d0c05f5b568535f7a9e02abbfe21b"
   SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
   local installerBin="${1:-$SUIF_INSTALL_INSTALLER_BIN}"
   if ! assureDownloadableFile "${installerBin}" "${installerUrl}" "${installerSha256Sum}"; then
@@ -517,8 +526,8 @@ assureDefaultInstaller() {
 # Parameters
 # $1 - OPTIONAL SUM bootstrap binary location, defaulted to ${SUIF_PATCH_SUM_BOOTSTRAP_BIN}, which is also defaulted to /tmp/sum-bootstrap.bin
 assureDefaultSumBoostrap() {
-  local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20221101-11-LinuxX86.bin"
-  local sumBoostrapSha256Sum="d29f20ebeb77a9fbe58815fc621a80c970bdd98bbe95563748ef694acf652b4b"
+  local sumBoostrapUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGUpdateManagerInstaller20230322-11-LinuxX86.bin"
+  local sumBoostrapSha256Sum="5cc65ee20a80d0ea0b82c770c8902978ff9718806a18362e43f327c4886a71e6"
   SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
   local lSumBootstrap="${1:-$SUIF_PATCH_SUM_BOOTSTRAP_BIN}"
   if ! assureDownloadableFile "${lSumBootstrap}" "${sumBoostrapUrl}" "${sumBoostrapSha256Sum}"; then

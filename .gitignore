@@ -1,5 +1,6 @@
 .env
-local/
+**/local/*
+!**/local/README.md
 *.local.bat
 setEnv.bat
 .vscode/**/*

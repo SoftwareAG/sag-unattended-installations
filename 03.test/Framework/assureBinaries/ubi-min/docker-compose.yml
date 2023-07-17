@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  d:
+    # downloader service
+    image: registry.access.redhat.com/ubi8/ubi-minimal
+    volumes:
+      - ../../../../:/mnt/SUIF
+      - ./scripts/:/mnt/scripts
+      - ./local/:/mnt/local/
+    environment:
+      - SUIF_INSTALL_INSTALLER_BIN=/mnt/local/default-installer.bin
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN=/mnt/local/default-sum-bootstrap.bin
+    entrypoint: /mnt/scripts/entrypoint.sh
+
