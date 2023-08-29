@@ -5,3 +5,4 @@
 setEnv.bat
 .vscode/**/*
 !.vscode/default.settings.json
+*.bak
