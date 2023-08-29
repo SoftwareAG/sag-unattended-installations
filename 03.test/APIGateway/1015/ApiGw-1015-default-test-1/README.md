@@ -8,9 +8,10 @@ The tested code is the one in the current branch, mounted locally.
 
 - Local docker and docker compose
 - GitHub project cloned locally
-- The following Software AG assets (cannot be downloaded publicly)
+- The following Software AG assets (can be downloaded publicly)
   - installer binary for Linux 64 bit
   - update manager bootstrap for Linux 64 bit
+- The following Software AG assets (cannot be downloaded publicly)
   - product image containing the products in the template
   - product fix image containing the latest relevant fixes
   - license for API Gateway
