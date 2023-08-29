@@ -27,11 +27,11 @@ ls /mnt/sag-licenses/Integration_Server.xml
 
 ```sh
 ${SUIF_INSTALL_INSTALLER_BIN} \
-    -installDir ${SUIF_INSTALL_InstallDir} \
-    -writeScript /mnt/output/yourTemplateNameHere.wmscript
+-installDir ${SUIF_INSTALL_InstallDir} \
+-writeScript /mnt/output/yourTemplateNameHere.wmscript
 ```
 
-- After all choices are made and immediately before the actual installation, installer writes the script file. Watch for the destination, when the file is created exit the installer. This moment may also be identified with the wizzard step where you can see 
+- After all choices are made and immediately before the actual installation, installer writes the script file. Watch for the destination, when the file is created exit the installer. This moment may also be identified with the wizard step where you can see 
 
 ```sh
 The products listed below are ready to be saved to script /mnt/output/yourTemplateNameHere.wmscript and installed.
