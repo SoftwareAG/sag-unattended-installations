@@ -1,4 +1,4 @@
-# Lean Microservides Runtime
+# Lean Microservices Runtime
 
 This template installs a Microservices Runtime with no addition whatsoever.
 
