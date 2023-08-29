@@ -1,6 +1,6 @@
-# MSR 10.15 Lean Test #2
+# MSR 10.15 with JDBC Adapter Test #2
 
-Purpose of this test is to verify the minimum installation of template `MSR/1015/lean`.
+Purpose of this test is to verify the minimum installation of template `MSR/1015/jdbc`.
 
 By minimum we intend that only the mandatory variables are provided, everything else will be initialized by default.
 
