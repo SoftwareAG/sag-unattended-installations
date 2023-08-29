@@ -2,6 +2,7 @@ FROM alpine
 
 RUN apk add --no-cache --update \
         buildah \
+        fuse-overlayfs \
         git \
         ; \
     echo bind:10000:65536 >> /etc/subuid; \
