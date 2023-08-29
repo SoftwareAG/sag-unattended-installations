@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  msr-jdbc-builder-1:
+    image: my-alpine-bind-1
+    build: ../../../../../05.docker-image-builders/Common/buildah-in-docker-rootless-builder
+    security_opt:
+      - "seccomp=../../../../../05.docker-image-builders/Common/buildah-in-docker-rootless-builder/seccomp.json"
+      # use this only for debugging
+      # - seccomp=unconfined
+    devices:
+      - "/dev/fuse"
+    volumes:
+      - ${H_INSTALLER_BIN}:/tmp/installer.bin
+      - ${H_SUM_BOOTSTRAP_BIN}:/tmp/sum-bootstrap.bin
+      - ${H_PRODUCTS_ZIP}:/tmp/products.zip
+      - ${H_FIXES_ZIP}:/tmp/fixes.zip
+      - ${H_MSR_LICENSE}:/tmp/msr-license.xml
+      - ../../../../../05.docker-image-builders/MSR/1015/msr-jdbc-custom-builder-01/Dockerfile:/tmp/Dockerfile
+      - ../../../../../05.docker-image-builders/MSR/1015/msr-jdbc-custom-builder-01/install.sh:/tmp/install.sh
+      - ./localScripts:/mnt/localScripts
+    entrypoint: /mnt/localScripts/entrypoint.sh
