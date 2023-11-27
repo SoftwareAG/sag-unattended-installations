@@ -7,4 +7,4 @@ This setup mimics an Azure DevOps pipelines situation in terms of ash shell comp
 ## Quick Start
 
 After cloning copy `EXAMPLE.env` into `.env` and insert the credentials. Also verify the output folder to be something that works on your box.
-Launch the docker-compose project.
+Launch the docker-compose project eventually using the command in `run.bat`.
