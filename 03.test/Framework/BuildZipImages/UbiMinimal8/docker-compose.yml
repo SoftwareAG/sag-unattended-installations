@@ -9,7 +9,7 @@ services:
     build: ./build
     container_name: img-builder-ubi-minimal-8-1
     volumes:
-      - img-builder-audit:${SUIF_AUDIT_BASE_DIR}
+      - audit:${SUIF_AUDIT_BASE_DIR}
       - ./scripts/:/mnt/local/scripts
       - ../../../../:${SUIF_HOME}/
       - ${H_TEST_OUTPUT_FOLDER}/:${TEST_OUTPUT_FOLDER}/
