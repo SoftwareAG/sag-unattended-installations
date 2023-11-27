@@ -513,7 +513,7 @@ assureDownloadableFile() {
 # $1 - OPTIONAL installer binary location, defaulted to ${SUIF_INSTALL_INSTALLER_BIN}, which is also defaulted to /tmp/installer.bin
 assureDefaultInstaller() {
   local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20231017-Linux_x86_64.bin"
-  local installerSha256Sum="1b6a53031c044863d07a9a281de361651e755695f2fb3c517e84f9650d8cd6db"
+  local installerSha256Sum="2df4fbc15e6764a0399eaac62137bb6bd0b0f386ae0e3f8d5773f76273765b4f"
   SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
   local installerBin="${1:-$SUIF_INSTALL_INSTALLER_BIN}"
   if ! assureDownloadableFile "${installerBin}" "${installerUrl}" "${installerSha256Sum}"; then
