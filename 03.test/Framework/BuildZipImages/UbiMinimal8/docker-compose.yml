@@ -7,7 +7,7 @@ services:
   img-builder-ubi-minimal-8:
     image: my-ubi-minimal:8
     build: ./build
-    container_name: img-builder-ubuntu-2004-1
+    container_name: img-builder-ubi-minimal-8-1
     volumes:
       - img-builder-audit:${SUIF_AUDIT_BASE_DIR}
       - ./scripts/:/mnt/local/scripts
