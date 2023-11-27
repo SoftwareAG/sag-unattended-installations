@@ -13,9 +13,9 @@ The Dockerfile requires that the installer, update manager and the product and f
   - ./sum-bootstrap.bin
     - linux Update Manager Bootstrapper binary
   - ./products.zip
-    - Installer image containing MSR/1011/AdapterSet1 component
+    - Installer image containing MSR/1015/jdbc component
   - ./fixes.zip
-    - Update Manage fixes image containing MSR/1011/AdapterSet1 fixes
+    - Update Manage fixes image containing MSR/1015/jdbc fixes
   - ./msr-license.xml
     - Microservices runtime license file
 - build against the build context folder
