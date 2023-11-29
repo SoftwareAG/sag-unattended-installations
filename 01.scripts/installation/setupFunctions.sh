@@ -22,7 +22,7 @@ init() {
   export SUIF_INSTALL_IMAGE_FILE="${SUIF_INSTALL_IMAGE_FILE:-/path/to/install/product.image.zip}"
   export SUIF_PATCH_AVAILABLE="${SUIF_PATCH_AVAILABLE:-0}"
   ## Framework - Patch
-  export SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-boostrap.bin}"
+  export SUIF_PATCH_SUM_BOOTSTRAP_BIN="${SUIF_PATCH_SUM_BOOTSTRAP_BIN:-/tmp/sum-bootstrap.bin}"
   export SUIF_PATCH_FIXES_IMAGE_FILE="${SUIF_PATCH_FIXES_IMAGE_FILE:-/path/to/install/fixes.image.zip}"
 
   # Section 2 - the caller MAY provide
@@ -124,7 +124,7 @@ bootstrapSum() {
 
   local bootstrapCmd="${1} --accept-license -d "'"'"${SUM_HOME}"'"'
   if [ "${SUIF_SDC_ONLINE_MODE}" -eq 0 ]; then
-    bootstrapCmd="${bootstrapCmd=} -i ${2}"
+    bootstrapCmd="${bootstrapCmd} -i ${2}"
     # note: everything is always offline except this, as it is not requiring empower credentials
     logI "[setupFunctions.sh:bootstrapSum()] - Bootstrapping SUM from ${1} using image ${2} into ${SUM_HOME}..."
   else
