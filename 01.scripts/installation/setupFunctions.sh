@@ -86,10 +86,13 @@ installProducts() {
     logI "Product installation successful"
   else
     logE "[setupFunctions.sh:installProducts()] - Product installation failed, code ${RESULT_installProducts}"
-    logD "Dumping the install.wmscript file into the session audit folder..."
+    logD "[setupFunctions.sh:installProducts()] - Dumping the install.wmscript file into the session audit folder..."
     if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
       cp /dev/shm/install.wmscript "${SUIF_AUDIT_SESSION_DIR}/"
     fi
+    logE "[setupFunctions.sh:installProducts()] - Looking for APP_ERROR in the debug file..."
+    grep 'APP_ERROR' "${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"
+    logE "[setupFunctions.sh:installProducts()] - returning code 4"
     return 4
   fi
 }
