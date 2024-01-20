@@ -1,14 +1,15 @@
 ARG __from_img=centos:8
-# checkov:skip=CKV_DOCKER_2: TODO
+# checkov:skip=CKV_DOCKER_2: TODO in the future - add HEALTHCHECK
 
 # Linters exceptions:
 # terrascan/AC_DOCKER_0041,hadolint/DL3006,hadolint/DL3007 - We refer to the latest images on purpose.
 # hadolint/DL3003 - our own scripts require a contextual cd, in order to run from the same folder
-# trunk-ignore-begin(terrascan/AC_DOCKER_0041,hadolint/DL3006,hadolint/DL3007,hadolint/DL3003,hadolint/DL3025,hadolint/DL3041)
+# trunk-ignore-begin(terrascan/AC_DOCKER_0041,hadolint/DL3006,hadolint/DL3007,hadolint/DL3003,hadolint/DL3025)
 
 # ARG __from_img used below on the final stage
 FROM registry.access.redhat.com/ubi8/ubi-minimal:latest as installer
-# checkov:skip=CKV_DOCKER_7: TODO
+# checkov:skip=CKV_DOCKER_7: This is an example code and we want the latest version
+
 
 # Tamporary until buildah fix will be available: one argument for ARG
 ARG __i_bin=/tmp/installer.bin
@@ -16,9 +17,10 @@ ARG __s_bin=/tmp/sum-bootstrap.bin
 ARG __sag_home=/opt/softwareag
 ARG __sp_id=001_PIE-85951_1
 
+# this is for an example, not for production and we do not agree with the recommendation in this context
+# trunk-ignore(hadolint/DL3041)
 RUN microdnf -y update ;\
     microdnf -y install \
-        findutils \
         gettext \
         git \
         gzip \
@@ -94,11 +96,6 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/.tc.custom.log4j2.properties
 COPY --from=installer ${SAG_HOME}/IntegrationServer/config/ ${SAG_HOME}/IntegrationServer/config/
 
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/Default/ ${SAG_HOME}/IntegrationServer/packages/Default/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/packages/WmAdmin/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmART/ ${SAG_HOME}/IntegrationServer/packages/WmART/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/
-
-COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmCloud/ ${SAG_HOME}/IntegrationServer/packages/WmCloud/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmPublic/ ${SAG_HOME}/IntegrationServer/packages/WmPublic/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmRoot/ ${SAG_HOME}/IntegrationServer/packages/WmRoot/
 
@@ -114,9 +111,9 @@ ENV SAG_HOME=${__sag_home} \
     JRE_HOME=${__sag_home}/jvm/jvm/
 
 RUN groupadd -g ${__user_group_id} sagadmin ;\
-    useradd -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
+    useradd -l -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
 
-# Need to ignore the following because SAG products need more than execution permissions on their home folder
+# terrascan/AC_DOCKER_00024 not applicable: user need more than just execution permissions. SAG products write in the folder too
 # trunk-ignore(terrascan/AC_DOCKER_00024)
 COPY --from=packer --chown=${__user_group_id}:${__user_group_id} ${SAG_HOME} ${SAG_HOME}
 
@@ -127,6 +124,6 @@ EXPOSE 5555
 EXPOSE 9999
 EXPOSE 5553
 
-ENTRYPOINT "/bin/bash" "-c" "${SAG_HOME}/IntegrationServer/bin/startContainer.sh"
+ENTRYPOINT "/bin/bash" "-c" "${__sag_home}/IntegrationServer/bin/startContainer.sh"
 
-# trunk-ignore-end(terrascan/AC_DOCKER_0041,hadolint/DL3006,hadolint/DL3007,hadolint/DL3003,hadolint/DL3025,hadolint/DL3041)
+# trunk-ignore-end(terrascan/AC_DOCKER_0041,hadolint/DL3006,hadolint/DL3007,hadolint/DL3003,hadolint/DL3025)
