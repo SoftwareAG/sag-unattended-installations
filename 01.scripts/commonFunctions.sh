@@ -312,12 +312,13 @@ fi
 # Credits: https://gist.github.com/pkuczynski/8665367
 parse_yaml() {
   
-  local prefix=$2
+  local prefix="$2"
   local s='[[:space:]]*'
   local w='[a-zA-Z0-9_]*'
   local fs
   fs="$(echo @|tr @ '\034')"
 
+  # shellcheck disable=SC2086
   sed "h;s/^[^:]*//;x;s/:.*$//;y/-/_/;G;s/\n//" $1 |
   sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
       -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p" |
@@ -339,4 +340,31 @@ parse_yaml() {
 load_env_from_yaml(){
   # shellcheck disable=SC2046
   eval $(parse_yaml "${1}" SUIF_)
+}
+
+# Parameters
+# $1 - a csv string
+# $2 - comma character, default is ","
+csvStringToLines(){
+  local commaChar="${2:-,}"
+  echo "$1" | tr "$commaChar" '\n'
+}
+
+# Parameters
+# $1 - a text file containing lines
+# $2 - comma character, default is ","
+linesFileToCsvString(){
+  if [ ! -f "$1" ]; then
+    logE "[commonFunctions.sh::linesFileToCsvString()] - File not found: \"$1\""
+  fi
+  local commaChar="${2:-,}"
+  local firstLine=1
+  while read -r in; do
+    if [ $firstLine -eq 1 ]; then
+      firstLine=0
+    else
+      printf '%s' "$commaChar"
+    fi
+    printf '%s' "$in"
+  done < "$1"
 }
