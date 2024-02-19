@@ -83,6 +83,7 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/config/ ${SAG_HOME}/Integrat
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/Default/ ${SAG_HOME}/IntegrationServer/packages/Default/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/packages/WmAdmin/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmART/ ${SAG_HOME}/IntegrationServer/packages/WmART/
+COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/
 
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmCloud/ ${SAG_HOME}/IntegrationServer/packages/WmCloud/
@@ -102,7 +103,7 @@ ENV SAG_HOME=${__sag_home} \
     JRE_HOME=${__sag_home}/jvm/jvm/
 
 RUN groupadd -g ${__user_group_id} sagadmin ;\
-    useradd -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
+    useradd -l -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
 
 COPY --from=packer --chown=${__user_group_id}:${__user_group_id} ${SAG_HOME} ${SAG_HOME}
 
