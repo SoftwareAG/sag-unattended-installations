@@ -3,10 +3,13 @@
 export SUIF_TAG=${SUIF_TAG:-main}
 export SUIF_HOME=${SUIF_HOME:-"/tmp/SUIF_HOME"}
 export SUIF_TEMPLATE=${SUIF_TEMPLATE:-"MSR/1015/jdbc"}
+export SUIF_AUDIT_BASE_DIR=${SUIF_AUDIT_BASE_DIR:-/tmp/SUIF_AUDIT}
 
 git clone -b "${SUIF_TAG}" --single-branch \
   https://github.com/SoftwareAG/sag-unattended-installations.git \
   "${SUIF_HOME}"
+
+export SUIF_AUDIT_SESSION_DIR=${SUIF_AUDIT_BASE_DIR}/Setup
 
 # shellcheck source=SCRIPTDIR/../../../../01.scripts/commonFunctions.sh
 . "${SUIF_HOME}"/01.scripts/commonFunctions.sh
