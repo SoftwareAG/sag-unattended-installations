@@ -40,6 +40,7 @@ e2ei/11/TPS_10.15.0.0.LATEST/SCG/tppWS
 e2ei/11/WAR_10.15.0.0.LATEST/IntegrationServer/WAR
 e2ei/11/WFF_10.7.0.0.LATEST/IntegrationServer/WFF
 e2ei/11/WGL_8.0.0.9000.LATEST/Infrastructure/WGLSharedLibs
+e2ei/11/WIS_10.15.0.0.LATEST/Infrastructure/WISSharedBundles
 e2ei/11/WIS_10.15.0.0.LATEST/Infrastructure/WISSharedLibs
 e2ei/11/WMN_10.15.0.0.LATEST/WmMonitor/Monitor
 e2ei/11/WSC_10.15.0.0.LATEST/SCG/SCGCommon
