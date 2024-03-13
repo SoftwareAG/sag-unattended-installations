@@ -84,8 +84,10 @@ COPY --from=installer ${SAG_HOME}/IntegrationServer/config/ ${SAG_HOME}/Integrat
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/Default/ ${SAG_HOME}/IntegrationServer/packages/Default/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmAdmin/ ${SAG_HOME}/IntegrationServer/packages/WmAdmin/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmART/ ${SAG_HOME}/IntegrationServer/packages/WmART/
-COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmARTExtDC/
+COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmCDS/ ${SAG_HOME}/IntegrationServer/packages/WmCDS/
+COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/ ${SAG_HOME}/IntegrationServer/packages/WmISExtDC/
+COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmMonitor/ ${SAG_HOME}/IntegrationServer/packages/WmMonitor/
 
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmCloud/ ${SAG_HOME}/IntegrationServer/packages/WmCloud/
 COPY --from=installer ${SAG_HOME}/IntegrationServer/packages/WmJDBCAdapter/ ${SAG_HOME}/IntegrationServer/packages/WmJDBCAdapter/
