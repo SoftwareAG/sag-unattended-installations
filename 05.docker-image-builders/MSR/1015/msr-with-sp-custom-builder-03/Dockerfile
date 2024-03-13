@@ -114,7 +114,7 @@ ENV SAG_HOME=${__sag_home} \
     JRE_HOME=${__sag_home}/jvm/jvm/
 
 RUN groupadd -g ${__user_group_id} sagadmin ;\
-    useradd -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
+    useradd -l -u ${__user_group_id} -m -g ${__user_group_id} -d ${SAG_HOME} sagadmin
 
 # Need to ignore the following because SAG products need more than execution permissions on their home folder
 # trunk-ignore(terrascan/AC_DOCKER_00024)
