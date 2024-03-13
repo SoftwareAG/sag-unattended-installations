@@ -9,6 +9,7 @@ ARG __sag_home=/opt/softwareag
 
 RUN microdnf -y update ;\
     microdnf -y install \
+        findutils \
         gettext \
         git \
         gzip \
