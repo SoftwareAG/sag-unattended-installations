@@ -515,8 +515,8 @@ assureDownloadableFile() {
 # Parameters
 # $1 - OPTIONAL installer binary location, defaulted to ${SUIF_INSTALL_INSTALLER_BIN}, which is also defaulted to /tmp/installer.bin
 assureDefaultInstaller() {
-  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20231017-Linux_x86_64.bin"
-  local installerSha256Sum="2df4fbc15e6764a0399eaac62137bb6bd0b0f386ae0e3f8d5773f76273765b4f"
+  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20240105-Linux_x86_64.bin"
+  local installerSha256Sum="d9291faa1a8d94e5379c204c35d876c8b922fad24f3a5f0bd040507652a55469"
   SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
   local installerBin="${1:-$SUIF_INSTALL_INSTALLER_BIN}"
   if ! assureDownloadableFile "${installerBin}" "${installerUrl}" "${installerSha256Sum}"; then
@@ -885,6 +885,10 @@ checkEmpowerCredentials(){
     logE "[setupFunctions.sh:checkEmpowerCredentials()] - Getting token for user ${SUIF_EMPOWER_USER}: curl failed with result ${resultCurl}; cannot continue"
     return 2
   fi
+
+ if [ "a${resultJson%% *}b" = "ab" ]; then
+  logE "setupFunctions.sh:checkEmpowerCredentials()] - Getting token for user ${SUIF_EMPOWER_USER}: curl returned an empty string"
+ fi
 
   if [ -n "${resultJson##*access_token*}" ]; then
     logE "[setupFunctions.sh:checkEmpowerCredentials()] - Provided credentials are incorrect, cannot continue. Result of attempted Empower login with user ${SUIF_EMPOWER_USER} is: ${resultJson}"
