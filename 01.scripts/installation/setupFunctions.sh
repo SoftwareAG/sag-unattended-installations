@@ -888,6 +888,7 @@ checkEmpowerCredentials(){
 
  if [ "a${resultJson%% *}b" = "ab" ]; then
   logE "setupFunctions.sh:checkEmpowerCredentials()] - Getting token for user ${SUIF_EMPOWER_USER}: curl returned an empty string"
+  return 4
  fi
 
   if [ -n "${resultJson##*access_token*}" ]; then
