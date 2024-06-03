@@ -878,7 +878,7 @@ checkEmpowerCredentials(){
   curl --location --request POST 'https://sdc.softwareag.com/services/auth' \
   --header 'Content-Type: application/json' \
   --data-raw '{"username": "'"${SUIF_EMPOWER_USER}"'","password": "'"${SUIF_EMPOWER_PASSWORD}"'"}' \
-  > /dev/null 2>&1
+  2> /dev/null
   )
   resultCurl=$?
   if [ ! ${resultCurl} -eq 0 ]; then
