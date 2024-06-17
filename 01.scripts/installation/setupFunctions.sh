@@ -33,6 +33,10 @@ init() {
   export SUIF_INSTALL_DECLARED_HOSTNAME="${SUIF_INSTALL_DECLARED_HOSTNAME:-localhost}"
   ## Framework - Patch
   export SUIF_SUM_HOME="${SUIF_SUM_HOME:-/opt/sag/sum}"
+
+  ## Section 3 - Extra portability
+  export SUIF_TEMP_FS_QUICK="${SUIF_TEMP_FS_QUICK:-/dev/shm}"
+  # in some UX systems, /dev/shm is not available, allow for explicit setting
 }
 
 init
@@ -67,11 +71,12 @@ installProducts() {
   local debugLevel="${3:-"verbose"}"
   local d
   d=$(date +%y-%m-%dT%H.%M.%S_%3N)
+  local tempInstallScript="${SUIF_TEMP_FS_QUICK}/install.wmscript"
 
   # apply environment substitutions
-  envsubst <"${2}" >/dev/shm/install.wmscript || return 5
+  envsubst <"${2}" >"${tempInstallScript}" || return 5
 
-  local installCmd="${1} -readScript /dev/shm/install.wmscript -console"
+  local installCmd="${1} -readScript \"${tempInstallScript}\" -console"
   local installCmd="${installCmd} -debugLvl ${debugLevel}"
   if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
     local installCmd="${installCmd} -scriptErrorInteract yes"
@@ -88,13 +93,14 @@ installProducts() {
     logE "[setupFunctions.sh:installProducts()] - Product installation failed, code ${RESULT_installProducts}"
     logD "[setupFunctions.sh:installProducts()] - Dumping the install.wmscript file into the session audit folder..."
     if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
-      cp /dev/shm/install.wmscript "${SUIF_AUDIT_SESSION_DIR}/"
+      cp "${tempInstallScript}" "${SUIF_AUDIT_SESSION_DIR}/"
     fi
     logE "[setupFunctions.sh:installProducts()] - Looking for APP_ERROR in the debug file..."
     grep 'APP_ERROR' "${SUIF_AUDIT_SESSION_DIR}/debugInstall.log"
     logE "[setupFunctions.sh:installProducts()] - returning code 4"
     return 4
   fi
+  rm -f "${tempInstallScript}"
 }
 
 # Parameters - bootstrapSum
@@ -197,7 +203,7 @@ removeDiagnoserPatch() {
 
   local d
   d=$(date +%y-%m-%dT%H.%M.%S_%3N)
-  local tmpScriptFile="/dev/shm/fixes.${d}.wmscript.txt"
+  local tmpScriptFile="${SUIF_TEMP_FS_QUICK}/fixes.${d}.wmscript.txt"
 
   {
     echo "installSP=Y"
@@ -262,6 +268,7 @@ patchInstallation() {
   local d
   d=$(date +%y-%m-%dT%H.%M.%S_%3N)
   local epm="${4:-"N"}"
+  local fixesScriptFile="${SUIF_TEMP_FS_QUICK}/fixes.wmscript.txt"
 
   {
     echo "installSP=${epm}"
@@ -273,7 +280,7 @@ patchInstallation() {
       local dKey="${5:-"5437713_PIE-68082_5"}"
       echo "diagnoserKey=${dKey}"
     fi
-  } >/dev/shm/fixes.wmscript.txt
+  } >"${fixesScriptFile}"
 
   local crtDir
   crtDir=$(pwd)
@@ -287,7 +294,7 @@ patchInstallation() {
 
   logI "[setupFunctions.sh:patchInstallation()] - Applying fixes from image ${1} to installation ${PRODUCTS_HOME} using SUM in ${SUM_HOME}..."
 
-  controlledExec "./UpdateManagerCMD.sh -readScript /dev/shm/fixes.wmscript.txt" "${d}.PatchInstallation"
+  controlledExec "./UpdateManagerCMD.sh -readScript \"${fixesScriptFile}\"" "${d}.PatchInstallation"
   RESULT_controlledExec=$?
 
   logI "[setupFunctions.sh:patchInstallation()] - Taking a snapshot of fixes after the patching..."
@@ -304,19 +311,19 @@ patchInstallation() {
       mkdir -p "${SUIF_AUDIT_SESSION_DIR}/UpdateManager"
       cp -r "${SUM_HOME}"/logs "${SUIF_AUDIT_SESSION_DIR}"/
       cp -r "${SUM_HOME}"/UpdateManager/logs "${SUIF_AUDIT_SESSION_DIR}"/UpdateManager/
-      cp /dev/shm/fixes.wmscript.txt "${SUIF_AUDIT_SESSION_DIR}"/
+      cp "${fixesScriptFile}" "${SUIF_AUDIT_SESSION_DIR}"/
     fi
     return 2
   fi
 
   if [ "${SUIF_DEBUG_ON}" -ne 0 ]; then
     # if we are debugging, we want to see the generated script
-    cp /dev/shm/fixes.wmscript.txt "${SUIF_AUDIT_SESSION_DIR}/fixes.${d}.wmscript.txt"
+    cp "${fixesScriptFile}" "${SUIF_AUDIT_SESSION_DIR}/fixes.${d}.wmscript.txt"
   fi
 
-  rm -f /dev/shm/fixes.wmscript.txt
+  rm -f "${fixesScriptFile}"
 }
-
+w
 # Parameters - setupProductsAndFixes
 # $1 - Installer binary file
 # $2 - Script file for installer
@@ -351,10 +358,11 @@ setupProductsAndFixes() {
   fi
   # apply environment substitutions
   # Note: this is done twice for reusability reasons
-  envsubst <"${2}" >/dev/shm/install.wmscript.tmp
+  local installWmscriptFile="${SUIF_TEMP_FS_QUICK}/install.wmscript.tmp"
+  envsubst <"${2}" >"${installWmscriptFile}"
 
   local lProductImageFile
-  lProductImageFile=$(grep imageFile /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+  lProductImageFile=$(grep imageFile "${installWmscriptFile}" | cut -d "=" -f 2)
 
   # note no inline returns from now as we need to clean locally allocated resources
   if [ ! -f "${lProductImageFile}" ]; then
@@ -362,7 +370,7 @@ setupProductsAndFixes() {
     RESULT_setupProductsAndFixes=6
   else
     local lInstallDir
-    lInstallDir=$(grep InstallDir /dev/shm/install.wmscript.tmp | cut -d "=" -f 2)
+    lInstallDir=$(grep InstallDir "${installWmscriptFile}" | cut -d "=" -f 2)
     if [ -d "${lInstallDir}" ]; then
       logW "[setupFunctions.sh:setupProductsAndFixes()] - Install folder already present..."
       # shellcheck disable=SC2012,SC2046
@@ -424,6 +432,7 @@ setupProductsAndFixes() {
       fi
     fi
   fi
+  rm -f "${installWmscriptFile}"
   return "${RESULT_setupProductsAndFixes}"
 }
 
@@ -675,7 +684,7 @@ generateFixesImageFromTemplate() {
 # $4 -> OPTIONAL - platform string, default LNXAMD64
 # NOTE: default URLs for download are fit for Europe. Use the ones without "-hq" for Americas
 # NOTE: pass SDC credentials in env variables SUIF_EMPOWER_USER and SUIF_EMPOWER_PASSWORD
-# NOTE: /dev/shm/productsImagesList.txt may be created upfront if image caches are available
+# NOTE: ${SUIF_TEMP_FS_QUICK}/productsImagesList.txt may be created upfront if image caches are available
 generateProductsImageFromTemplate() {
 
   local lDebugOn="${SUIF_DEBUG_ON:-0}"
@@ -743,8 +752,8 @@ generateProductsImageFromTemplate() {
   fi
 
   logI "[setupFunctions.sh:generateProductsImageFromTemplate()] - Creating the volatile script ..."
-  local lVolatileScriptFile="/dev/shm/SUIF/setup/templates/${1}/createProductImage.wmscript"
-  mkdir -p "/dev/shm/SUIF/setup/templates/${1}/"
+  local lVolatileScriptFile="${SUIF_TEMP_FS_QUICK}/SUIF/setup/templates/${1}/createProductImage.wmscript"
+  mkdir -p "${SUIF_TEMP_FS_QUICK}/SUIF/setup/templates/${1}/"
   cp "${lPermanentScriptFile}" "${lVolatileScriptFile}"
   echo "Username=${SUIF_EMPOWER_USER}" >>"${lVolatileScriptFile}"
   echo "Password=${SUIF_EMPOWER_PASSWORD}" >>"${lVolatileScriptFile}"
@@ -763,8 +772,8 @@ generateProductsImageFromTemplate() {
   lCmd="${lCmd} -scriptErrorInteract no"
 
   # avoid downloading what we already have
-  if [ -s /dev/shm/productsImagesList.txt ]; then
-    lCmd="${lCmd} -existingImages /dev/shm/productsImagesList.txt"
+  if [ -s "${SUIF_TEMP_FS_QUICK}/productsImagesList.txt" ]; then
+    lCmd="${lCmd} -existingImages \"${SUIF_TEMP_FS_QUICK}/productsImagesList.txt\""
   fi
 
   logI "[setupFunctions.sh:generateProductsImageFromTemplate()] - Creating the product image ${lProductsImageFile}... This may take some time..."
