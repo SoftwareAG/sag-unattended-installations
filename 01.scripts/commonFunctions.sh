@@ -207,6 +207,7 @@ huntForSuifFile() {
     fi
     logI "[commonFunctions.sh:huntForSuifFile()] - File ${SUIF_CACHE_HOME}/${1}/${2} not found in local cache, attempting download"
     mkdir -p "${SUIF_CACHE_HOME}/${1}"
+    logI "[commonFunctions.sh:huntForSuifFile()] - Downloading from ${SUIF_HOME_URL}/${1}/${2} ..."
     curl "${SUIF_HOME_URL}/${1}/${2}" --silent -o "${SUIF_CACHE_HOME}/${1}/${2}"
     local RESULT_curl=$?
     if [ ${RESULT_curl} -ne 0 ]; then
