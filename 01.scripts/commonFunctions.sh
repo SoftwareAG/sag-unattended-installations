@@ -53,7 +53,7 @@ init() {
     fi
   else
     # by default use master branch
-    export SUIF_HOME_URL="${SUIF_HOME_URL:-"https://raw.githubusercontent.com/SoftwareAG/sag-unattended-installations/main/"}"
+    export SUIF_HOME_URL="${SUIF_HOME_URL:-"https://raw.githubusercontent.com/SoftwareAG/sag-unattended-installations/main"}"
     export SUIF_CACHE_HOME="${SUIF_CACHE_HOME:-"/tmp/suifCacheHome"}"
     mkdir -p "${SUIF_CACHE_HOME}"
   fi
