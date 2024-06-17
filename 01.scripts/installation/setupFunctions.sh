@@ -736,6 +736,7 @@ generateProductsImageFromTemplate() {
       return 1
     fi
 
+    logI "[setupFunctions.sh:generateProductsImageFromTemplate()] - Creating permanent product image creation script from template file ${SUIF_CACHE_HOME}/02.templates/01.setup/${1}/template.wmscript "
     mkdir -p "${lProductImageOutputDir}/${1}"
     {
       echo "###Generated"
