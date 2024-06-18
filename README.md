@@ -12,6 +12,7 @@
     - [06.docker-image-builders-test](#06docker-image-builders-test)
     - [10.Labs](#10labs)
   - [Important notes](#important-notes)
+  - [Acknowledgements](#acknowledgements)
 
 Collection of scripts to be "curled" during unattended cloud installations for Software AG products
 
@@ -53,6 +54,14 @@ Compound examples of environments
 
 - All files must have unix style end lines even when using docker desktop for Windows. Clone accordingly!
 - On February 2023 a breaking correction has been introduced, variable `SUIF_PATCH_SUM_BOOSTSTRAP_BIN` has been refactored to `SUIF_PATCH_SUM_BOOTSTRAP_BIN`.
+
+## Acknowledgements
+
+This repository is using some other libraries under the hood. These are not copied directly, but may be downloaded on demand at runtime.
+
+These libraries include:
+
+- [shunit2](https://github.com/kward/shunit2) - Apache 2 license [here](https://github.com/kward/shunit2/blob/master/LICENSE)
 
 ------------------------------
 
