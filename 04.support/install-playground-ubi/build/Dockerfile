@@ -13,6 +13,7 @@ ENV SUIF_INSTALL_InstallDir=${__install_dir} \
 
 RUN microdnf -y update ;\
     microdnf -y install \
+      findutils \
       gettext \
       gzip \
       less \
