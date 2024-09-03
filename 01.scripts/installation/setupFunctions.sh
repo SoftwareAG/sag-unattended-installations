@@ -323,7 +323,7 @@ patchInstallation() {
 
   rm -f "${fixesScriptFile}"
 }
-w
+
 # Parameters - setupProductsAndFixes
 # $1 - Installer binary file
 # $2 - Script file for installer
@@ -524,8 +524,8 @@ assureDownloadableFile() {
 # Parameters
 # $1 - OPTIONAL installer binary location, defaulted to ${SUIF_INSTALL_INSTALLER_BIN}, which is also defaulted to /tmp/installer.bin
 assureDefaultInstaller() {
-  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20240105-Linux_x86_64.bin"
-  local installerSha256Sum="d9291faa1a8d94e5379c204c35d876c8b922fad24f3a5f0bd040507652a55469"
+  local installerUrl="https://empowersdc.softwareag.com/ccinstallers/SoftwareAGInstaller20240626-Linux_x86_64.bin"
+  local installerSha256Sum="2cdb193d718423e6514cf66543185887d9963836779d97b1e07e80801dab2efc"
   SUIF_INSTALL_INSTALLER_BIN="${SUIF_INSTALL_INSTALLER_BIN:-/tmp/installer.bin}"
   local installerBin="${1:-$SUIF_INSTALL_INSTALLER_BIN}"
   if ! assureDownloadableFile "${installerBin}" "${installerUrl}" "${installerSha256Sum}"; then
