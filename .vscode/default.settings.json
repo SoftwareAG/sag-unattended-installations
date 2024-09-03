@@ -1,9 +1,17 @@
 {
+  "cSpell.enableFiletypes": [
+    "!wmscript"
+  ],
   "dotenv.enableAutocloaking": true,
+  "editor.useTabStops": false,
+  "editor.tabSize": 2,
   "files.associations": {
     "*.env*": "dotenv",
     "*.wmscript": "properties"
   },
-  "editor.useTabStops": false,
-  "editor.tabSize": 2
+  "cSpell.words": [
+    "elasicvue",
+    "gettext",
+    "SUIF"
+  ]
 }
