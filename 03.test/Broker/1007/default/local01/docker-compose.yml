@@ -1,0 +1,63 @@
+version: '3.9'
+
+volumes:
+  brk01-install-home: {}
+  brk01-data: {}
+  brk01-audit: {}
+  brk01-sum-home: {}
+  brk01-temp:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
+services:
+  brk01:
+    build:
+      context: ../../../../Framework/GenericUbiMinimalSandbox/build
+      args:
+        - __suif_audit_base_dir=${SUIF_AUDIT_BASE_DIR}
+        - __suif_home=${SUIF_HOME}
+        - __suif_install_image_file=${SUIF_INSTALL_IMAGE_FILE}
+        - __suif_install_install_dir=${SUIF_INSTALL_INSTALL_DIR}
+        - __suif_install_installer_bin_mount_point=${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
+        - __suif_local_scripts_home=${SUIF_TEST_LOCAL_SCRIPTS_DIR}
+        - __suif_patch_fixes_image_file=${SUIF_PATCH_FIXES_IMAGE_FILE}
+        - __suif_patch_sum_bootstrap_bin_mount_point=${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+        - __suif_sag_user_grp_id=1804
+        - __suif_sag_user_name=sag
+        - __suif_sum_home=${SUIF_SUM_HOME}
+        - __suif_work_dir=${SUIF_WORK_DIR}
+    image: brk1007default-test01
+    container_name: brk1007default-test01
+    hostname: brk1007default-test01
+    volumes:
+      - brk01-temp:/tmp/
+      # the following must match the Dokerfile folders, otherwise permissions on FS will not work
+      - brk01-install-home:${SUIF_INSTALL_INSTALL_DIR}/
+      - brk01-audit:${SUIF_AUDIT_BASE_DIR}/
+      - brk01-sum-home:${SUIF_SUM_HOME}
+      - ./scripts/:${SUIF_LOCAL_SCRIPTS_HOME}/
+      # These must be provided, they are prerequisites
+      # - ${H_BRK_LICENSE_FILE}:${SUIF_SETUP_TEMPLATE_BRK_LICENSE_FILE}
+      - ${H_SUIF_PRODUCTS_IMAGE_FILE}:${SUIF_INSTALL_IMAGE_FILE}
+      - ${H_SUIF_INSTALLER_BIN}:${SUIF_INSTALL_INSTALLER_BIN_MOUNT_POINT}
+      - ${H_SUIF_SUM_BOOTSTRAP_BIN}:${SUIF_PATCH_SUM_BOOTSTRAP_BIN_MOUNT_POINT}
+      - ${H_SUIF_FIXES_IMAGE_FILE}:${SUIF_PATCH_FIXES_IMAGE_FILE}
+      - ../../../../../:${SUIF_HOME}/
+    environment:
+      - SUIF_HOME
+      - SUIF_AUDIT_BASE_DIR
+      - SUIF_INSTALL_INSTALLER_BIN
+      - SUIF_INSTALL_IMAGE_FILE
+      - SUIF_PATCH_SUM_BOOTSTRAP_BIN
+      - SUIF_PATCH_FIXES_IMAGE_FILE
+      - SUIF_PATCH_AVAILABLE
+      - SUIF_INSTALL_INSTALL_DIR
+      # - SUIF_SETUP_TEMPLATE_BRK_LICENSE_FILE
+      - SUIF_INSTALL_TIME_ADMIN_PASSWORD
+      - SUIF_LOCAL_SCRIPTS_HOME
+      - SUIF_ONLINE_MODE
+      - SUIF_SDC_ONLINE_MODE
+      - SUIF_DEBUG_ON
+      - SUIF_SUM_HOME
+    entrypoint: ${SUIF_LOCAL_SCRIPTS_HOME}/containerEntrypoint.sh

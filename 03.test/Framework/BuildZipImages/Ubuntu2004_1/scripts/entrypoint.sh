@@ -8,11 +8,11 @@
 
 # our SUIF related parameters
 
-assureVariables(){
-  SUIF_INSTALL_INSTALLER_BIN="${TEST_OUTPUT_FOLDER}/installer.bin"
+assureVariables() {
+  SUIF_INSTALL_INSTALLER_BIN="${TEST_OUTPUT_FOLDER}/installer1.bin"
   export SUIF_INSTALL_INSTALLER_BIN
 
-  SUIF_PATCH_SUM_BOOTSTRAP_BIN="${TEST_OUTPUT_FOLDER}/sum-bootstrap.bin"
+  SUIF_PATCH_SUM_BOOTSTRAP_BIN="${TEST_OUTPUT_FOLDER}/sum-bootstrap1.bin"
   export SUIF_PATCH_SUM_BOOTSTRAP_BIN
 
   SUIF_PRODUCT_IMAGES_SHARED_DIRECTORY="${TEST_OUTPUT_FOLDER}/products"
@@ -35,7 +35,7 @@ assureVariables(){
   SUIF_PRODUCT_IMAGES_PLATFORM="LNXAMD64"
   export SUIF_PRODUCT_IMAGES_PLATFORM
 
-  TEST_Templates=${TEST_Templates:-"MSR/1011/lean"}
+  TEST_Templates=${TEST_Templates:-"MSR/1015/lean"}
   export TEST_Templates
 }
 
@@ -44,9 +44,9 @@ assureVariables
 . "${SUIF_HOME}/01.scripts/commonFunctions.sh"
 . "${SUIF_HOME}/01.scripts/installation/setupFunctions.sh"
 
-checkEmpowerCredentials    || logW "Provided Empower credentials are incorrect!"
-assureDefaultInstaller     || logW "Default installer not assured! Eventually clean the output folder."
-assureDefaultSumBoostrap   || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
+checkEmpowerCredentials || logW "Provided Empower credentials are incorrect!"
+assureDefaultInstaller || logW "Default installer not assured! Eventually clean the output folder."
+assureDefaultSumBoostrap || logW "Default Update Manager Bootstrap not assured! Eventually clean the output folder."
 
 logI "Installing Update Manager..."
 # mkdir -p "${SUIF_SUM_HOME}"
@@ -76,7 +76,7 @@ processTemplate() {
       "${SUIF_INSTALL_INSTALLER_BIN}" \
       "${SUIF_PRODUCT_IMAGES_SHARED_DIRECTORY}" \
       "${SUIF_PRODUCT_IMAGES_PLATFORM}"
-    
+
     logI "Products file generated for template ${template}"
   fi
 

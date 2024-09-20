@@ -1,0 +1,52 @@
+version: '3.8'
+
+volumes:
+
+  ora-db-is-core-data-vol: {}
+  # ora-db-mws-data-vol: {}
+  esb-suif-audit-dir: {}
+  esb-suif-install-home: {}
+
+
+services:
+
+  ora-db-is-core:
+    image: container-registry.oracle.com/database/express:18.4.0-xe
+    container_name: ora-db-is-core
+    volumes:
+      - ora-db-is-core-data-vol:/opt/oracle/oradata
+    environment:
+      - ORACLE_PWD=${ORA_DB_SYSADMIN_PASS}
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - ${SUIF_TEST_PORT_PREFIX}21:1521
+      - ${SUIF_TEST_PORT_PREFIX}25:5500
+
+  adminer:
+    image: adminer
+    ports:
+      - ${SUIF_TEST_PORT_PREFIX}80:8080
+
+  esb-monolith1:
+    image: esb-monolith1
+    build:
+      context: ../../../../Framework/GenericUbiMinimalSandbox/build
+      args:
+        - __suif_audit_base_dir=/app/audit
+        - __suif_home=/mnt/suif
+        - __suif_install_image_file=/mnt/products.zip
+        - __suif_install_install_dir=/app/sag/1005/esb
+        - __suif_install_installer_bin=/mnt/installer.bin
+        - __suif_local_scripts_home=/mnt/scripts/local
+        - __suif_patch_fixes_image_file=/mnt/fixes.zip
+        - __suif_patch_sum_bootstrap_bin=/mnt/sum-bootstrap.bin
+        - __suif_sag_user_grp_id=1804
+        - __suif_sag_user_name=sag
+        - __suif_sum_home=/app/sum11
+      volumes:
+        - ./scripts/:/mnt/scripts/local/
+        - esb-suif-audit-dir:/app/audit
+
+      environment:
+        - 
+      entrypoint: /mnt/scripts/local/entrypoint.sh

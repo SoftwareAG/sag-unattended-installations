@@ -2,20 +2,25 @@
 
 # This scripts apply the post-setup configuration for the current template
 
-if [ ! "`type -t huntForSuifFile`X" == "functionX" ]; then
+# shellcheck disable=SC2143
+if [ ! "$(command -V 'huntForSuifFile1' 2>/dev/null | grep -qwi function)" ]; then
     echo "sourcing commonFunctions.sh again (lost?)"
     if [ ! -f "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh" ]; then
         echo "Panic, framework issue!"
-        exit 500
+        exit 201
     fi
+
+     # shellcheck source=SCRIPTDIR/../../../../../01.scripts/commonFunctions.sh
     . "$SUIF_CACHE_HOME/01.scripts/commonFunctions.sh"
 fi
 
+# shellcheck disable=SC2046
 if [ ! $(which envsubst) ]; then
     logE "This template requires envsubst to be installed!"
     exit 1
 fi
 
+# shellcheck disable=SC2046
 if [ ! $(which curl) ]; then
     logE "This template requires curl to be installed!"
     exit 2
@@ -33,6 +38,7 @@ fi
 chmod u+x "${SUIF_CACHE_HOME}/${thisFolder}/setEnvDefaults.sh" 
 
 logI "Sourcing variables from ${SUIF_CACHE_HOME}/${thisFolder}/setEnvDefaults.sh"
+# shellcheck source=SCRIPTDIR/setEnvDefaults.sh
 . "${SUIF_CACHE_HOME}/${thisFolder}/setEnvDefaults.sh"
 
 
